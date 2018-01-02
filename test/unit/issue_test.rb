@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 require File.expand_path('../../test_helper', __FILE__)
 
 class IssueTest < ActiveSupport::TestCase
