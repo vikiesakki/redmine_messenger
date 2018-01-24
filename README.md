@@ -1,10 +1,12 @@
-# Messenger plugin for Redmine
+Messenger plugin for Redmine
+============================
 
 This plugin posts updates to issues in your Redmine installation to [Slack](https://slack.com/), [Rocket.Chat](https://rocket.chat/) or [Mattermost](https://about.mattermost.com/) channel.
 
 [![Dependency Status](https://gemnasium.com/badges/github.com/AlphaNodes/redmine_messenger.svg)](https://gemnasium.com/github.com/AlphaNodes/redmine_messenger) ![Jenkins Build Status](https://pm.alphanodes.com/jenkins/buildStatus/icon?job=Devel-build-redmine-messenger)
 
-## Features
+Features
+--------
 
 * Post information to messenger channel
   * post issue updates
@@ -19,7 +21,8 @@ This plugin posts updates to issues in your Redmine installation to [Slack](http
 * parent project support (inherit messenger settings from parent project)
 * multiple channel support (define one or more channels to deliver note)
 
-## Screenshot
+Screenshot
+----------
 
 Mattermost output:
 
@@ -29,7 +32,8 @@ Redmine configuration:
 
 ![screenshot](https://raw.githubusercontent.com/alphanodes/redmine_messenger/master/assets/images/screenshot_redmine_settings.png)
 
-## Prepare your messenger service
+Prepare your messenger service
+------------------------------
 
 ### Slack
 
@@ -44,18 +48,21 @@ Go to Mattermost documentation [Incoming Webhooks](https://docs.mattermost.com/d
 Go to Rocket.Chat documentation [Incoming WebHook Scripting](https://rocket.chat/docs/administrator-guides/integrations/) for more information to set up Incoming WebHook
 
 
-## Requirements
+Requirements
+------------
 
 * Redmine version >= 3.0.0
 * Ruby version >= 2.1.5
 
 
-## Installation
+Installation
+------------
 
 Install ``redmine_messenger`` plugin for `Redmine`
 
     cd $REDMINE_ROOT
     git clone git://github.com/alphanodes/redmine_messenger.git plugins/redmine_messenger
+    bundle install --without development test
     bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 Restart Redmine (application server) and you should see the plugin show up in the Plugins page.
@@ -66,7 +73,8 @@ visible to users, you can find each channel's handle by navigating inside the ch
 and clicking the down-arrow and selecting view info).
 
 
-## Uninstall
+Uninstall
+---------
 
 Uninstall ``redmine_messenger``
 
@@ -77,7 +85,8 @@ Uninstall ``redmine_messenger``
 Restart Redmine (application server)
 
 
-## Credits
+Credits
+-------
 
 The source code is forked from
 

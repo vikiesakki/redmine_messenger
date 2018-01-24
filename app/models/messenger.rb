@@ -4,6 +4,10 @@ require 'net/http'
 class Messenger
   include Redmine::I18n
 
+  def self.default_url_options
+    { only_path: true, script_name: Redmine::Utils.relative_url_root }
+  end
+
   def self.speak(msg, channels, url, options)
     url ||= RedmineMessenger.settings[:messenger_url]
 
@@ -32,18 +36,14 @@ class Messenger
       uri = URI(url)
       params[:channel] = channel
       http_options = { use_ssl: uri.scheme == 'https' }
-      unless RedmineMessenger.setting?(:messenger_verify_ssl)
-        http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE
-      end
+      http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting?(:messenger_verify_ssl)
 
       begin
         req = Net::HTTP::Post.new(uri)
         req.set_form_data(payload: params.to_json)
         Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
           response = http.request(req)
-          unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
-            Rails.logger.warn(response)
-          end
+          Rails.logger.warn(response) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
         end
       rescue StandardError => e
         Rails.logger.warn("cannot connect to #{url}")
@@ -53,13 +53,13 @@ class Messenger
   end
 
   def self.object_url(obj)
-    if Setting.host_name.to_s =~ %r{/\A(https?\:\/\/)?(.+?)(\:(\d+))?(\/.+)?\z/i}
+    if Setting.host_name.to_s =~ %r{\A(https?\://)?(.+?)(\:(\d+))?(/.+)?\z}i
       host = Regexp.last_match(2)
       port = Regexp.last_match(4)
       prefix = Regexp.last_match(5)
       Rails.application.routes.url_for(obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix))
     else
-      Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol))
+      Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: ''))
     end
   end
 
@@ -88,9 +88,7 @@ class Messenger
     # parent project based
     parent_field = textfield_for_project(proj.parent, config)
     return parent_field if parent_field.present?
-    if RedmineMessenger.settings[config].present?
-      return RedmineMessenger.settings[config]
-    end
+    return RedmineMessenger.settings[config] if RedmineMessenger.settings[config].present?
     ''
   end
 

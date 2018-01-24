@@ -25,19 +25,17 @@ module RedmineMessenger
           if description.present? && Messenger.setting_for_project(project, :new_include_description)
             attachment[:text] = ERB::Util.html_escape(description)
           end
-          attachment[:fields] = [{
-            title: I18n.t(:field_status),
-            value: ERB::Util.html_escape(status.to_s),
-            short: true
-          }, {
-            title: I18n.t(:field_priority),
-            value: ERB::Util.html_escape(priority.to_s),
-            short: true
-          }, {
-            title: I18n.t(:field_assigned_to),
-            value: ERB::Util.html_escape(assigned_to.to_s),
-            short: true
-          }]
+          attachment[:fields] = [{ title: I18n.t(:field_status),
+                                   value: ERB::Util.html_escape(status.to_s),
+                                   short: true },
+                                 { title: I18n.t(:field_priority),
+                                   value: ERB::Util.html_escape(priority.to_s),
+                                   short: true }]
+          if assigned_to.present?
+            attachment[:fields] << { title: I18n.t(:field_assigned_to),
+                                     value: ERB::Util.html_escape(assigned_to.to_s),
+                                     short: true }
+          end
 
           if RedmineMessenger.setting?(:display_watchers)
             attachment[:fields] << {
@@ -70,7 +68,23 @@ module RedmineMessenger
           if current_journal.notes.present? && Messenger.setting_for_project(project, :updated_include_description)
             attachment[:text] = ERB::Util.html_escape(current_journal.notes)
           end
+
           fields = current_journal.details.map { |d| Messenger.detail_to_field d }
+          if status_id != status_id_was
+            fields << { title: I18n.t(:field_status),
+                        value: ERB::Util.html_escape(status.to_s),
+                        short: true }
+          end
+          if priority_id != priority_id_was
+            fields << { title: I18n.t(:field_priority),
+                        value: ERB::Util.html_escape(priority.to_s),
+                        short: true }
+          end
+          if assigned_to.present?
+            fields << { title: I18n.t(:field_assigned_to),
+                        value: ERB::Util.html_escape(assigned_to.to_s),
+                        short: true }
+          end
           attachment[:fields] = fields if fields.any?
 
           Messenger.speak(l(:label_messenger_issue_updated,

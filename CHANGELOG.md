@@ -1,46 +1,60 @@
 Changelog
 =========
 
-## 1.0.1
+1.0.2
+-----
 
-* Japanese translation has been added - thanks @Yoto
-* Default mentions has been added - thanks @xstasi
+- Bug fixed with issue urls, if Redmine is in subdirectory
+- slim is used as template engine
 
-## 1.0.0
+1.0.1
+-----
 
-* Redmine 3.4.x compatibility
-* Commit message issue bug fix
-* Some code cleanups
+- Japanese translation has been added - thanks @Yoto
+- Default mentions has been added - thanks @xstasi
 
-## 0.9.9
+1.0.0
+-----
 
-* All global messenger settings can be overwritten project based
-* Locale support added
-* Wiki added supported for notification
-* Contact added/updated supported for notification (if redmine_contacts is installed)
-* Password added/updated supported for notification (if redmine_passwords is installed)
-* DB entry added/updated supported for notification (if redmine_db is installed)
-* SSL verify can be disabled
-* Lots of refactoring and code cleanups
-* Swith from httpclient to net/http
-* Fork of redmine_rocketchat, redmine_slack and redmine_mattermost (base functions for all three messenger)
+- Redmine 3.4.x compatibility
+- Commit message issue bug fix
+- Some code cleanups
 
-## v0.6.1
+0.9.9
+-----
 
-unknown changes
+- All global messenger settings can be overwritten project based
+- Locale support added
+- Wiki added supported for notification
+- Contact added/updated supported for notification (if redmine_contacts is installed)
+- Password added/updated supported for notification (if redmine_passwords is installed)
+- DB entry added/updated supported for notification (if redmine_db is installed)
+- SSL verify can be disabled
+- Lots of refactoring and code cleanups
+- Swith from httpclient to net/http
+- Fork of redmine_rocketchat, redmine_slack and redmine_mattermost (base functions for all three messenger)
 
-## v0.4
-
-unknown changes
-
-## v0.3
-
-unknown changes
-
-## v0.2
+v0.6.1
+------
 
 unknown changes
 
-## v0.1
+v0.4
+----
+
+unknown changes
+
+v0.3
+----
+
+unknown changes
+
+v0.2
+----
+
+unknown changes
+
+v0.1
+----
 
 unknown changes
