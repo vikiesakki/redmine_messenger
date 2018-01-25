@@ -14,6 +14,7 @@ module RedmineMessenger
       module InstanceMethods
         def send_messenger_create
           return unless Messenger.setting_for_project(project, :post_contact)
+          return if is_private? && !Messenger.setting_for_project(project, :post_private_contacts)
           set_language_if_valid Setting.default_language
 
           channels = Messenger.channels_for_project project
@@ -29,6 +30,7 @@ module RedmineMessenger
 
         def send_messenger_update
           return unless Messenger.setting_for_project(project, :post_contact_updates)
+          return if is_private? && !Messenger.setting_for_project(project, :post_private_contacts)
           set_language_if_valid Setting.default_language
 
           channels = Messenger.channels_for_project project

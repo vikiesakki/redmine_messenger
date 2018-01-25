@@ -23,8 +23,10 @@ class MessengerSetting < ActiveRecord::Base
                   'post_wiki_updates',
                   'post_db',
                   'post_db_updates',
+                  'post_private_db',
                   'post_contact',
                   'post_contact_updates',
+                  'post_private_contacts',
                   'post_password',
                   'post_password_updates'
 

@@ -6,6 +6,7 @@ Changelog
 
 - Bug fixed with issue urls, if Redmine is in subdirectory
 - slim is used as template engine
+- add private contacts, db and passwords support (if plugins are installed)
 
 1.0.1
 -----

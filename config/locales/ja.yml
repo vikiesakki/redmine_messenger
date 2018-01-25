@@ -32,6 +32,8 @@ ja:
   label_settings_post_db: DB entry added?
   label_settings_post_password_updates: Password updates?
   label_settings_post_password: Password added?
+  label_settings_post_private_db: Private DB entries?
+  label_settings_post_private_contacts: Private contacts?
   label_settings_post_private_issues: プライベートチケットの更新
   label_settings_post_private_notes: プライベート注記の更新
   label_settings_post_updates: チケットの更新

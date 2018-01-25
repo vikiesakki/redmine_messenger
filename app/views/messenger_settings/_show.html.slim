@@ -49,6 +49,7 @@
         br
         = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db }
         = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db_updates }
+        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_db }
 
       - if RedmineMessenger::REDMINE_CONTACTS_SUPPORT && User.current.allowed_to?(:view_contacts, @project)
         br
@@ -57,6 +58,7 @@
         br
         = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact }
         = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact_updates }
+        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_contacts }
 
       - if Redmine::Plugin.installed?('redmine_passwords') && User.current.allowed_to?(:view_passwords, @project)
         br

@@ -72,6 +72,9 @@ p
   p
     = content_tag(:label, l(:label_settings_post_db_updates))
     = check_box_tag 'settings[post_db_updates]', 1, @settings[:post_db_updates].to_i == 1
+  p
+    = content_tag(:label, l(:label_settings_post_private_db))
+    = check_box_tag 'settings[post_private_db]', 1, @settings[:post_private_db].to_i == 1
 
 - if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
   br
@@ -84,6 +87,9 @@ p
   p
     = content_tag(:label, l(:label_settings_post_contact_updates))
     = check_box_tag 'settings[post_contact_updates]', 1, @settings[:post_contact_updates].to_i == 1
+  p
+    = content_tag(:label, l(:label_settings_post_private_contacts))
+    = check_box_tag 'settings[post_private_contacts]', 1, @settings[:post_private_contacts].to_i == 1
 
 - if Redmine::Plugin.installed?('redmine_passwords')
   br
