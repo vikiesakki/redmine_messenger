@@ -14,12 +14,14 @@ module RedmineMessenger
       module InstanceMethods
         def send_messenger_create
           return unless Messenger.setting_for_project(project, :post_password)
+          return if is_private?
           set_language_if_valid Setting.default_language
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
           return unless channels.present? && url
+
           Messenger.speak(l(:label_messenger_password_created,
                             project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
                             url: "<#{Messenger.object_url self}|#{name}>",
@@ -29,6 +31,7 @@ module RedmineMessenger
 
         def send_messenger_update
           return unless Messenger.setting_for_project(project, :post_password_updates)
+          return if is_private?
           set_language_if_valid Setting.default_language
 
           channels = Messenger.channels_for_project project

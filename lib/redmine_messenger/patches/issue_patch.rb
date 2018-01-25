@@ -37,7 +37,7 @@ module RedmineMessenger
                                      short: true }
           end
 
-          if RedmineMessenger.setting?(:display_watchers)
+          if RedmineMessenger.setting?(:display_watchers) && watcher_users.count > 0
             attachment[:fields] << {
               title: I18n.t(:field_watcher),
               value: ERB::Util.html_escape(watcher_users.join(', ')),
