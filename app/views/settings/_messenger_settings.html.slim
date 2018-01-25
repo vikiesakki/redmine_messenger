@@ -3,7 +3,7 @@
 br
 p
   = content_tag(:label, l(:label_settings_messenger_url))
-  = text_field_tag('settings[messenger_url]', @settings[:messenger_url], size: 60, placeholder: 'https://rocket.chat/hooks/my_rocket_chat_token')
+  = text_field_tag('settings[messenger_url]', @settings[:messenger_url], size: 60, placeholder: 'https://webhook.url')
   em.info = t(:messenger_url_info_html)
 p
   = content_tag(:label, l(:label_settings_messenger_icon))

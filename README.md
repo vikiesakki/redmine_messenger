@@ -1,7 +1,7 @@
 Messenger plugin for Redmine
 ============================
 
-This plugin posts updates to issues in your Redmine installation to [Slack](https://slack.com/), [Rocket.Chat](https://rocket.chat/) or [Mattermost](https://about.mattermost.com/) channel.
+This plugin posts updates to issues in your Redmine installation to [Slack](https://slack.com/), [Rocket.Chat](https://rocket.chat/), [Discord](https://discordapp.com/) or [Mattermost](https://about.mattermost.com/) channel.
 
 [![Dependency Status](https://gemnasium.com/badges/github.com/AlphaNodes/redmine_messenger.svg)](https://gemnasium.com/github.com/AlphaNodes/redmine_messenger) ![Jenkins Build Status](https://pm.alphanodes.com/jenkins/buildStatus/icon?job=Devel-build-redmine-messenger)
 
@@ -42,6 +42,11 @@ Go to Slack documentation [Incoming Webhooks](https://api.slack.com/incoming-web
 ### Mattermost
 
 Go to Mattermost documentation [Incoming Webhooks](https://docs.mattermost.com/developer/webhooks-incoming.html) for more information to set up Incoming WebHook
+
+### Discord
+
+Go to Discord documentation [Intro to Webhooks ](https://support.discordapp.com/hc/en-us/articles/228383668) for more information to set up Incoming WebHook
+You have to add /slack after your webhook url.
 
 ### Rocket.Chat
 
