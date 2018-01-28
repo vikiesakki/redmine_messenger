@@ -4,6 +4,10 @@ class Messenger
   include Redmine::I18n
 
   def self.markup_format(text)
+    # TODO: output format should be markdown, but at the moment there is no
+    #       solution without using pandoc (http://pandoc.org/), which requires
+    #       packages on os level
+    #
     # Redmine::WikiFormatting.html_parser.to_text(text)
     ERB::Util.html_escape(text)
   end
