@@ -1,9 +1,3 @@
-# This file is a part of redmine_reporting,
-# a reporting and statistics plugin for Redmine.
-#
-# Copyright (c) 2016-2018 AlphaNodes GmbH
-# https://alphanodes.com
-
 require File.expand_path('../../test_helper', __FILE__)
 
 class RoutingTest < Redmine::RoutingTest

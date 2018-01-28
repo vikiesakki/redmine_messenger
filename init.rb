@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 require 'redmine'
 require 'redmine_messenger'
 
