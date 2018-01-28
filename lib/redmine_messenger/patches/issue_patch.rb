@@ -21,7 +21,7 @@ module RedmineMessenger
 
           attachment = {}
           if description.present? && Messenger.setting_for_project(project, :new_include_description)
-            attachment[:text] = ERB::Util.html_escape(description)
+            attachment[:text] = Messenger.markup_format(description)
           end
           attachment[:fields] = [{ title: I18n.t(:field_status),
                                    value: ERB::Util.html_escape(status.to_s),
@@ -64,7 +64,7 @@ module RedmineMessenger
 
           attachment = {}
           if current_journal.notes.present? && Messenger.setting_for_project(project, :updated_include_description)
-            attachment[:text] = ERB::Util.html_escape(current_journal.notes)
+            attachment[:text] = Messenger.markup_format(current_journal.notes)
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field d }

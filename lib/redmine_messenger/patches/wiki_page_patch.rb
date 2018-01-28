@@ -37,7 +37,7 @@ module RedmineMessenger
           attachment = nil
           unless content.comments.empty?
             attachment = {}
-            attachment[:text] = ERB::Util.html_escape(content.comments.to_s)
+            attachment[:text] = Messenger.markup_format(content.comments.to_s)
           end
 
           Messenger.speak(l(:label_messenger_wiki_updated,

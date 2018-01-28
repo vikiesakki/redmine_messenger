@@ -3,6 +3,11 @@ require 'net/http'
 class Messenger
   include Redmine::I18n
 
+  def self.markup_format(text)
+    # Redmine::WikiFormatting.html_parser.to_text(text)
+    ERB::Util.html_escape(text)
+  end
+
   def self.default_url_options
     { only_path: true, script_name: Redmine::Utils.relative_url_root }
   end
