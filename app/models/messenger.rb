@@ -1,4 +1,3 @@
-# Redmine Messenger plugin for Redmine
 require 'net/http'
 
 class Messenger

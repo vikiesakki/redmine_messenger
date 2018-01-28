@@ -1,11 +1,11 @@
 .box.tabular.messenger_settings
   - @messenger_setting = MessengerSetting.find_or_create(@project.id)
+  = form_tag(project_reporting_sla_path(project_id: @project), method: :put, class: 'tabular') do
   = labelled_form_for :setting,
                       @messenger_setting,
-                      url: { controller: 'messenger_settings',
-                             action: 'save', id: @project, tab: 'messenger',
-                             partial: 'messenger_settings/save',
-                             setting_id: @messenger_setting.id } do |f|
+                      url: project_messenger_setting_path(project_id: @project),
+                      method: :put,
+                      class: 'tabular' do |f|
     = error_messages_for 'messenger_setting'
     .box
       .info = t(:messenger_settings_project_intro)

@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 module RedmineMessenger
   class MessengerListener < Redmine::Hook::Listener
     def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context = {})

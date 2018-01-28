@@ -1,10 +1,6 @@
-# Redmine Messenger plugin for Redmine
-
 class MessengerSetting < ActiveRecord::Base
   include Redmine::SafeAttributes
   belongs_to :project
-
-  validates :project_id, presence: true
 
   safe_attributes 'messenger_url',
                   'messenger_icon',
@@ -30,7 +26,7 @@ class MessengerSetting < ActiveRecord::Base
                   'post_password',
                   'post_password_updates'
 
-  attr_protected :id
+  attr_protected :id, :project_id
 
   def self.find_or_create(p_id)
     setting = MessengerSetting.find_by(project_id: p_id)

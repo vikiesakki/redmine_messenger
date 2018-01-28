@@ -13,7 +13,7 @@ Redmine::Plugin.register :redmine_messenger do
 
   requires_redmine version_or_higher: '3.0.0'
 
-  permission :manage_messenger, projects: :settings, messenger_settings: :save
+  permission :manage_messenger, projects: :settings, messenger_settings: :update
 
   settings default: {
     messenger_url: '',

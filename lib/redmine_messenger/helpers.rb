@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 module RedmineMessenger
   module Helpers
     def project_messenger_options(active)

@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 class CreateMessengerSettings < ActiveRecord::Migration
   def change
     create_table :messenger_settings do |t|

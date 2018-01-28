@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 Rails.configuration.to_prepare do
   module RedmineMessenger
     REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed?('redmine_contacts') ? true : false

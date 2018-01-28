@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 module RedmineMessenger
   module Patches
     module IssuePatch

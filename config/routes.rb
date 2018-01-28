@@ -1,7 +1,6 @@
-# Redmine Messenger plugin for Redmine
+# Plugin's routes
+# See: http://guides.rubyonrails.org/routing.html
 
-RedmineApp::Application.routes.draw do
-  match 'projects/:id/messenger_settings/save',
-        to: 'messenger_settings#save',
-        via: %i[post put patch]
+resources :projects do
+  resource :messenger_setting, only: %i[show update]
 end

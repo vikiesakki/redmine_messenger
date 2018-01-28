@@ -1,5 +1,3 @@
-# Redmine Messenger plugin for Redmine
-
 module RedmineMessenger
   module Patches
     module ProjectsHelperPatch
@@ -14,7 +12,6 @@ module RedmineMessenger
         def project_settings_tabs_with_messenger
           tabs = project_settings_tabs_without_messenger
           action = { name: 'messenger',
-                     controller: 'messenger_settings',
                      action: :show,
                      partial: 'messenger_settings/show',
                      label: :label_messenger }
