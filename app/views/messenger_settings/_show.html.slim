@@ -1,6 +1,5 @@
 .box.tabular.messenger_settings
   - @messenger_setting = MessengerSetting.find_or_create(@project.id)
-  = form_tag(project_reporting_sla_path(project_id: @project), method: :put, class: 'tabular') do
   = labelled_form_for :setting,
                       @messenger_setting,
                       url: project_messenger_setting_path(project_id: @project),
