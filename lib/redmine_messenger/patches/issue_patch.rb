@@ -107,6 +107,4 @@ module RedmineMessenger
   end
 end
 
-unless WikiPage.included_modules.include? RedmineMessenger::Patches::WikiPagePatch
-  WikiPage.send(:include, RedmineMessenger::Patches::WikiPagePatch)
-end
+Issue.send(:include, RedmineMessenger::Patches::IssuePatch) unless Issue.included_modules.include? RedmineMessenger::Patches::IssuePatch
