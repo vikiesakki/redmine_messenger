@@ -5,9 +5,6 @@ rvm:
   - 2.3.4
   - 2.2.7
 
-gemfile:
-  - $REDMINE_PATH/Gemfile
-
 env:
   - REDMINE_VER=3.4-stable DB=postgresql
   # - REDMINE_VER=master
