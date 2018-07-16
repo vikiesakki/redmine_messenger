@@ -36,10 +36,6 @@ module RedmineMessenger
       ActionController::TestUploadedFile.new(ActiveSupport::TestCase.fixture_path + "/files/#{name}", mime, true)
     end
 
-    def self.arrays_equal?(a1, a2)
-      (a1 - a2) - (a2 - a1) == []
-    end
-
     def self.create_fixtures(fixtures_directory, table_names, _class_names = {})
       ActiveRecord::FixtureSet.create_fixtures(fixtures_directory, table_names, _class_names = {})
     end
