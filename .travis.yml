@@ -23,8 +23,8 @@ before_install:
   - export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
   - export REDMINE_PATH=$HOME/redmine
   - export BUNDLE_GEMFILE=$REDMINE_PATH/Gemfile
-  - cd $REDMINE_PATH
   - git clone $REDMINE_GIT_REPO $REDMINE_PATH
+  - cd $REDMINE_PATH
   - if [[ "$REDMINE_VER" == "master" ]]; then wget https://www.redmine.org/attachments/download/21044/use_migration_context_with_test2.patch; fi
   - if [[ "$REDMINE_VER" == "master" ]]; then patch -p0 < use_migration_context_with_test2.patch; fi
   - if [[ "$REDMINE_VER" != "master" ]]; then git checkout -b $REDMINE_VER origin/$REDMINE_VER; fi
