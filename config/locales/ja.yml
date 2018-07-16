@@ -1,6 +1,7 @@
 # Japanese strings
 ja:
-  permission_manage_messenger: メッセンジャーの管理
+  default_mentionsl_info: Default people to notify, comma separated (e.g. @all, @here)
+  error_messenger_invalid_url: is not a valid URL
   label_messenger_contact_created: "[%{project_url}] コンタクト %{url} が *%{user}* によって作成されました。"
   label_messenger_contact_updated: "[%{project_url}] コンタクト %{url} が*%{user}* によって更新されました。"
   label_messenger_db_entry_created: "[%{project_url}] DB entry %{url} created by *%{user}*"
@@ -11,6 +12,7 @@ ja:
   label_messenger_password_created: "[%{project_url}] Kennwort %{url} created by *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Kennwort %{url} updated by *%{user}*"
   label_messenger_project_text_field_info: デフォルトの設定を使う場合空欄にしてください。
+  label_messenger_setting: メッセンジャーの設定
   label_messenger_settings_default: デフォルト
   label_messenger_settings_disabled: 無効
   label_messenger_settings_enabled: 有効
@@ -32,8 +34,8 @@ ja:
   label_settings_post_db: DB entry added?
   label_settings_post_password_updates: Password updates?
   label_settings_post_password: Password added?
-  label_settings_post_private_db: Private DB entries?
   label_settings_post_private_contacts: Private contacts?
+  label_settings_post_private_db: Private DB entries?
   label_settings_post_private_issues: プライベートチケットの更新
   label_settings_post_private_notes: プライベート注記の更新
   label_settings_post_updates: チケットの更新
@@ -50,5 +52,4 @@ ja:
   messenger_url_info_html: 'メッセンジャー サービスで <a target="_blank" href="https://github.com/AlphaNodes/redmine_messenger#prepare-your-messenger-service">内向きのウェブフック</a>のURLを作成して下さい。プロジェクト毎に設定を変えたい場合は空欄として下さい。'
   messenger_verify_ssl_info_html: 'メッセンジャー サービスが自己署名証明書や不正な証明書を使っている場合、無効として下さい。'
   messenger_wiki_intro: メッセンジャーに送信するWikiのイベントにチェックを入れて下さい。
-  label_messenger_setting: メッセンジャーの設定
-  default_mentionsl_info: Default people to notify, comma separated (e.g. @all, @here)
+  permission_manage_messenger: メッセンジャーの管理

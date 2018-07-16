@@ -1,6 +1,7 @@
 # German strings
 de:
-  permission_manage_messenger: Messenger verwalten
+  default_mentionsl_info: Benutzer, die immer mit Mentions benachrichtet werden sollen. Mehrere Namen können mit Komma getrennt angegeben werden (z.B. @all, @here).
+  error_messenger_invalid_url: "ist keine gültige URL"
   label_messenger_contact_created: "[%{project_url}] Kontakt %{url} erstellt von *%{user}*"
   label_messenger_contact_updated: "[%{project_url}] Kontakt %{url} aktualisiert von *%{user}*"
   label_messenger_db_entry_created: "[%{project_url}] DB Eintrag %{url} erstellt von *%{user}*"
@@ -11,6 +12,7 @@ de:
   label_messenger_password_created: "[%{project_url}] Kennwort %{url} erstellt von *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Kennwort %{url} aktualisiert von *%{user}*"
   label_messenger_project_text_field_info: Leer lassen für Systemstandard.
+  label_messenger_setting: Messenger Einstellung
   label_messenger_settings_default: Standardeinstellung
   label_messenger_settings_disabled: Deaktiviert
   label_messenger_settings_enabled: Aktiviert
@@ -32,8 +34,8 @@ de:
   label_settings_post_db: Neue DB Einträge?
   label_settings_post_password_updates: Passwort Updates?
   label_settings_post_password: Neue Passwörter?
-  label_settings_post_private_db: Private DB Einträge?
   label_settings_post_private_contacts: Private Kontakte?
+  label_settings_post_private_db: Private DB Einträge?
   label_settings_post_private_issues: Private Ticket Updates?
   label_settings_post_private_notes: Private Notizen?
   label_settings_post_updates: Ticket Updates?
@@ -50,5 +52,4 @@ de:
   messenger_url_info_html: 'Generiere eine <a target="_blank" href="https://github.com/AlphaNodes/redmine_messenger#prepare-your-messenger-service">Incoming WebHook</a> URL vom Messenger Service. Um nur aus bestimmten Projekten Nachrichten zu versenden, kann diese URL leer bleiben und in den Projekteinstellungen gesetzt werden.'
   messenger_verify_ssl_info_html: 'Falls der Messenger Service ein ungültiges oder selbst erstelltes (self-signed) SSL Zertifikat verwendet bitte deaktivieren.'
   messenger_wiki_intro: Legen Sie fest welche Einträge oder Änderungen für Wikis im angegebenen Messenger Channel versendet werden.
-  label_messenger_setting: Messenger Einstellung
-  default_mentionsl_info: Benutzer, die immer mit Mentions benachrichtet werden sollen. Mehrere Namen können mit Komma getrennt angegeben werden (z.B. @all, @here).
+  permission_manage_messenger: Messenger verwalten
