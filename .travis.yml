@@ -9,6 +9,7 @@ gemfile:
   - $REDMINE_PATH/Gemfile
 
 env:
+  - SKIP_COVERAGE=1
   - REDMINE_VER=3.4-stable DB=postgresql
   # - REDMINE_VER=master
 
