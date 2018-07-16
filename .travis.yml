@@ -9,7 +9,6 @@ gemfile:
   - $REDMINE_PATH/Gemfile
 
 env:
-  - SKIP_COVERAGE=1
   - REDMINE_VER=3.4-stable DB=postgresql
   # - REDMINE_VER=master
 
@@ -31,14 +30,18 @@ before_install:
   - cp test/support/database-$DB-travis.yml $REDMINE_PATH/config/database.yml
   - cd $REDMINE_PATH
 
+install: "echo skip bundle install"
+
 before_script:
   # - bundle exec rake redmine:load_default_data REDMINE_LANG=en
   # - bundle exec rake db:structure:dump
+  - bundle install
   - bundle exec rake db:create
   - bundle exec rake db:migrate
   - bundle exec rake redmine:plugins:migrate
 
 script:
+  - export SKIP_COVERAGE=1
   - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:units NAME=$PLUGIN_NAME; fi
   - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:functionals NAME=$PLUGIN_NAME; fi
   - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:integration NAME=$PLUGIN_NAME; fi
