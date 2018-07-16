@@ -7,7 +7,7 @@ rvm:
 
 env:
   - REDMINE_VER=3.4-stable DB=postgresql
-  - REDMINE_VER=master
+  - REDMINE_VER=master DB=postgresql
 
 sudo: true
 cache: bundler
