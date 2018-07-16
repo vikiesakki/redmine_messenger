@@ -7,7 +7,7 @@ Redmine::Plugin.register :redmine_messenger do
   url 'https://github.com/alphanodes/redmine_messenger'
   author_url 'https://alphanodes.com/'
   description 'Messenger integration for Slack, Discord, Rocketchat and Mattermost support'
-  version '1.0.2'
+  version '1.0.3'
 
   requires_redmine version_or_higher: '3.0.0'
 

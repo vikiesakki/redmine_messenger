@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.3
+-----
+
+- Redmine 4 support
+
+
 1.0.2
 -----
 
