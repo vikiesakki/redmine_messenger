@@ -46,7 +46,3 @@ module RedmineMessenger
     end
   end
 end
-
-unless Password.included_modules.include? RedmineMessenger::Patches::PasswordPatch
-  Password.send(:include, RedmineMessenger::Patches::PasswordPatch)
-end

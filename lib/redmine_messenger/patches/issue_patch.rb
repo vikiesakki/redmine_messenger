@@ -106,5 +106,3 @@ module RedmineMessenger
     end
   end
 end
-
-Issue.send(:include, RedmineMessenger::Patches::IssuePatch) unless Issue.included_modules.include? RedmineMessenger::Patches::IssuePatch
