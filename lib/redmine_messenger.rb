@@ -16,16 +16,15 @@ Rails.configuration.to_prepare do
   end
 
   # Patches
-  require_dependency 'redmine_messenger/patches/issue_patch'
-  require_dependency 'redmine_messenger/patches/wiki_page_patch'
+  Issue.send(:include, RedmineMessenger::Patches::IssuePatch)
+  WikiPage.send(:include, RedmineMessenger::Patches::WikiPagePatch)
   ProjectsController.send :helper, MessengerProjectsHelper
-
-  require 'redmine_messenger/patches/contact_patch' if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
-  require 'redmine_messenger/patches/db_entry_patch' if RedmineMessenger::REDMINE_DB_SUPPORT
-  require 'redmine_messenger/patches/password_patch' if Redmine::Plugin.installed?('redmine_passwords')
+  Contact.send(:include, RedmineMessenger::Patches::ContactPatch) if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
+  DbEntry.send(:include, RedmineMessenger::Patches::DbEntryPatch) if RedmineMessenger::REDMINE_DB_SUPPORT
+  Password.send(:include, RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')
 
   # Global helpers
-  require_dependency 'redmine_messenger/helpers'
+  ActionView::Base.send :include, RedmineMessenger::Helpers
 
   # Hooks
   require_dependency 'redmine_messenger/hooks'

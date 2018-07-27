@@ -50,7 +50,3 @@ module RedmineMessenger
     end
   end
 end
-
-unless WikiPage.included_modules.include? RedmineMessenger::Patches::WikiPagePatch
-  WikiPage.send(:include, RedmineMessenger::Patches::WikiPagePatch)
-end

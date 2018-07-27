@@ -45,7 +45,3 @@ module RedmineMessenger
     end
   end
 end
-
-unless Contact.included_modules.include? RedmineMessenger::Patches::ContactPatch
-  Contact.send(:include, RedmineMessenger::Patches::ContactPatch)
-end

@@ -46,7 +46,3 @@ module RedmineMessenger
     end
   end
 end
-
-unless DbEntry.included_modules.include? RedmineMessenger::Patches::DbEntryPatch
-  DbEntry.send(:include, RedmineMessenger::Patches::DbEntryPatch)
-end
