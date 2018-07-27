@@ -18,7 +18,7 @@ Rails.configuration.to_prepare do
   # Patches
   require_dependency 'redmine_messenger/patches/issue_patch'
   require_dependency 'redmine_messenger/patches/wiki_page_patch'
-  require_dependency 'redmine_messenger/patches/projects_helper_patch'
+  ProjectsController.send :helper, MessengerProjectsHelper
 
   require 'redmine_messenger/patches/contact_patch' if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
   require 'redmine_messenger/patches/db_entry_patch' if RedmineMessenger::REDMINE_DB_SUPPORT
