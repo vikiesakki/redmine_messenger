@@ -35,7 +35,7 @@ module RedmineMessenger
           return unless channels.present? && url
 
           attachment = nil
-          unless content.comments.empty?
+          if !content.nil? && content.comments.present?
             attachment = {}
             attachment[:text] = Messenger.markup_format(content.comments.to_s)
           end
