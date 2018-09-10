@@ -73,22 +73,27 @@ class Messenger
 
   def self.url_for_project(proj)
     return if proj.blank?
+
     # project based
     pm = MessengerSetting.find_by(project_id: proj.id)
     return pm.messenger_url if !pm.nil? && pm.messenger_url.present?
+
     # parent project based
     parent_url = url_for_project(proj.parent)
     return parent_url if parent_url.present?
     # system based
     return RedmineMessenger.settings[:messenger_url] if RedmineMessenger.settings[:messenger_url].present?
+
     nil
   end
 
   def self.textfield_for_project(proj, config)
     return if proj.blank?
+
     # project based
     pm = MessengerSetting.find_by(project_id: proj.id)
     return pm.send(config) if !pm.nil? && pm.send(config).present?
+
     default_textfield(proj, config)
   end
 
@@ -97,15 +102,18 @@ class Messenger
     parent_field = textfield_for_project(proj.parent, config)
     return parent_field if parent_field.present?
     return RedmineMessenger.settings[config] if RedmineMessenger.settings[config].present?
+
     ''
   end
 
   def self.channels_for_project(proj)
     return [] if proj.blank?
+
     # project based
     pm = MessengerSetting.find_by(project_id: proj.id)
     if !pm.nil? && pm.messenger_channel.present?
       return [] if pm.messenger_channel == '-'
+
       return pm.messenger_channel.split(',').map(&:strip).uniq
     end
     default_project_channels(proj)
@@ -120,11 +128,13 @@ class Messenger
        RedmineMessenger.settings[:messenger_channel] != '-'
       return RedmineMessenger.settings[:messenger_channel].split(',').map(&:strip).uniq
     end
+
     []
   end
 
   def self.setting_for_project(proj, config)
     return false if proj.blank?
+
     @setting_found = 0
     # project based
     pm = MessengerSetting.find_by(project_id: proj.id)
@@ -144,6 +154,7 @@ class Messenger
     end
     # system based
     return true if RedmineMessenger.settings[config].present? && RedmineMessenger.setting?(config)
+
     false
   end
 
