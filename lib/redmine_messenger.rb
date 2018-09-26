@@ -6,7 +6,11 @@ Rails.configuration.to_prepare do
     REDMINE_PASSWORDS_SUPPORT = Redmine::Plugin.installed?('redmine_passwords') ? true : false
 
     def self.settings
-      ActionController::Parameters.new(Setting[:plugin_redmine_messenger])
+      if Rails.version >= '5.2'
+        Setting[:plugin_redmine_messenger]
+      else
+        ActionController::Parameters.new(Setting[:plugin_redmine_messenger])
+      end
     end
 
     def self.setting?(value)
