@@ -27,7 +27,7 @@ Metrics/ModuleLength:
   Max: 500
 
 Metrics/PerceivedComplexity:
-  Max: 20
+  Max: 25
 
 Rails/SkipsModelValidations:
   Enabled: false
