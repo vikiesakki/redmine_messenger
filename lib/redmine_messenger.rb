@@ -6,10 +6,18 @@ Rails.configuration.to_prepare do
     REDMINE_PASSWORDS_SUPPORT = Redmine::Plugin.installed?('redmine_passwords') ? true : false
 
     def self.settings
-      if Rails.version >= '5.2'
-        Setting[:plugin_redmine_messenger]
+      if Setting[:plugin_redmine_messenger].class == Hash
+        if Rails.version >= '5.2'
+          # convert Rails 4 data
+          new_settings = ActiveSupport::HashWithIndifferentAccess.new(Setting[:plugin_redmine_messenger])
+          Setting.plugin_redmine_messenger = new_settings
+          new_settings
+        else
+          ActionController::Parameters.new(Setting[:plugin_redmine_messenger])
+        end
       else
-        ActionController::Parameters.new(Setting[:plugin_redmine_messenger])
+        # Rails 5 uses ActiveSupport::HashWithIndifferentAccess
+        Setting[:plugin_redmine_messenger]
       end
     end
 
