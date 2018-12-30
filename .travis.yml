@@ -1,16 +1,19 @@
 language: ruby
 
 rvm:
-  - 2.4.4
-  - 2.3.7
+  - 2.4.5
+  - 2.3.8
   - 2.2.10
 
 env:
+  - REDMINE_VER=4.0-stable DB=postgresql
   - REDMINE_VER=3.4-stable DB=postgresql
-  - REDMINE_VER=master DB=postgresql
 
 sudo: true
 cache: bundler
+
+addons:
+  postgresql: "9.6"
 
 notifications:
   webhooks:
@@ -18,9 +21,6 @@ notifications:
       secure: "lwJzu9BU7AVhHnROzEA6agagwsqVAaTzgtvwTlw4CwSUv0ypNXNi9kjJUvOgSit3BnkSccC9xYlYNOYw5OOmsmjyUDU4/LUVqd0DRQjW3FXU9EFFPGQq9srJikHOHobfnutxGwMYFE4ftLI08PzsL7bYEg39Ps3pwwWsiIKnKKI0DPmdQH5PzC63jF/EByrLZsfqGHOirgXDnxmwgmrQ14vOpp3lHjgNgx9wNALpSgAztKeK1Wd8KayLYXweu+LQx9IwJfLqvk6hhWW15vjkIhvK7ooYSGXx+Hlwg3jyFSyX5jButUT4vwlWdJeAoNO/sWpdKXv4AifGXYsbcF/LMHCaaVgwBm/pe/YlK2LrqFlpm7MFuqyO1w4AnIA7rC8wZp/dUU5bJITZgN3sTAbLyTIbF8cbMfbDy3IWP8Oub7K/0ATUD7vNBVuyxfdGG61xOv/RDQhzrGwUArJ/xJfdU77MZkQUnaGb0vcwmRLIxyPdZWPz9ntzCbBxFblPWApCw+CWOeM3OuR6tdVqSVuZx3aG87TTzW+S9lLe8PJ5HYgA6+rPkc04zolJMftnFVlUl3LQIKvV2QkPSnr9bcePR5YSoJJKLBVofUsg/btVkQ1OxhWn53Td/nQp7u8qosmyQjCjMiP6Po1e9Enr89FY8Yxkw2dQba5sumQRbB39bj0="
     on_success: change
     on_failure: always
-
-addons:
-  postgresql: "9.6"
 
 before_install:
   - export PLUGIN_NAME=redmine_messenger
