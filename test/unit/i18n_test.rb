@@ -22,7 +22,7 @@ class I18nTest < ActiveSupport::TestCase
                                            'config',
                                            'locales',
                                            '*.yml')].size
-    assert_equal lang_files_count, 3
+    assert_equal lang_files_count, 4
     valid_languages.each do |lang|
       assert set_language_if_valid(lang)
     end

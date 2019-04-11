@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.4
+-----
+
+- Frensh translation added - thanks to @ZerooCool
+
 1.0.3
 -----
 

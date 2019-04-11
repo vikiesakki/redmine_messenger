@@ -1,3 +1,5 @@
+require: rubocop-performance
+
 Rails:
   Enabled: true
 
@@ -38,6 +40,9 @@ Rails/CreateTableWithTimestamps:
 # we drop this, if we drop Rails 4.2 support
 Rails/ApplicationRecord:
     Enabled: false
+
+Performance/ChainArrayAllocation:
+  Enabled: true
 
 Style/AutoResourceCleanup:
   Enabled: true
