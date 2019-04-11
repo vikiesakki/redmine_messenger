@@ -114,7 +114,7 @@ class Messenger
     if !pm.nil? && pm.messenger_channel.present?
       return [] if pm.messenger_channel == '-'
 
-      return pm.messenger_channel.split(',').map(&:strip).uniq!
+      return pm.messenger_channel.split(',').map!(&:strip).uniq
     end
     default_project_channels(proj)
   end
@@ -126,7 +126,7 @@ class Messenger
     # system based
     if RedmineMessenger.settings[:messenger_channel].present? &&
        RedmineMessenger.settings[:messenger_channel] != '-'
-      return RedmineMessenger.settings[:messenger_channel].split(',').map(&:strip).uniq!
+      return RedmineMessenger.settings[:messenger_channel].split(',').map!(&:strip).uniq
     end
 
     []
