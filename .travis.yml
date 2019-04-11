@@ -1,7 +1,7 @@
 language: ruby
 
 rvm:
-  - 2.4.6
+  - 2.4.5
   - 2.3.8
   - 2.2.10
 
@@ -10,7 +10,6 @@ env:
   - REDMINE_VER=3.4-stable DB=postgresql
 
 sudo: true
-cache: bundler
 
 addons:
   postgresql: "9.6"
