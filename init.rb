@@ -1,3 +1,5 @@
+raise "\n\033[31mredmine_messenger requires ruby 2.3 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.3'
+
 require 'redmine'
 require 'redmine_messenger'
 
@@ -7,7 +9,7 @@ Redmine::Plugin.register :redmine_messenger do
   url 'https://github.com/alphanodes/redmine_messenger'
   author_url 'https://alphanodes.com/'
   description 'Messenger integration for Slack, Discord, Rocketchat and Mattermost support'
-  version '1.0.4'
+  version '1.0.5'
 
   requires_redmine version_or_higher: '3.0.0'
 

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.5
+-----
+
+- ruby 2.3.x or newer is required
+
+
 1.0.4
 -----
 

@@ -29,7 +29,7 @@ class Messenger
 
     username = Messenger.textfield_for_project(options[:project], :messenger_username)
     params[:username] = username if username.present?
-    params[:attachments] = [options[:attachment]] if options[:attachment] && options[:attachment].any?
+    params[:attachments] = [options[:attachment]] if options[:attachment]&.any?
 
     icon = Messenger.textfield_for_project(options[:project], :messenger_icon)
     if icon.present?
