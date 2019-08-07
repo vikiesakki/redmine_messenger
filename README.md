@@ -57,7 +57,7 @@ Requirements
 ------------
 
 * Redmine version >= 3.0.0
-* Ruby version >= 2.3.0
+* Ruby version >= 2.4.0
 
 
 Installation
