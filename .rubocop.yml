@@ -1,5 +1,6 @@
 require:
   - rubocop-performance
+  - rubocop-rails
 
 Rails:
   Enabled: true
@@ -15,32 +16,37 @@ Metrics/BlockLength:
   Max: 60
 
 Metrics/ClassLength:
-  Max: 500
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Max: 20
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 140
 
 Metrics/MethodLength:
   Max: 60
 
 Metrics/ModuleLength:
-  Max: 500
+  Enabled: false
 
 Metrics/PerceivedComplexity:
   Max: 25
 
-Rails/SkipsModelValidations:
+Rails/ApplicationJob:
+  Enabled: false
+
+Rails/ApplicationRecord:
   Enabled: false
 
 Rails/CreateTableWithTimestamps:
   Enabled: false
 
-# we drop this, if we drop Rails 4.2 support
-Rails/ApplicationRecord:
-    Enabled: false
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
 
 Performance/ChainArrayAllocation:
   Enabled: true

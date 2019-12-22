@@ -1,4 +1,4 @@
-class CreateMessengerSettings < Rails.version < '5.2' ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
+class CreateMessengerSettings < ActiveRecord::Migration[4.2]
   def change
     create_table :messenger_settings do |t|
       t.references :project, null: false, index: true

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.6
+-----
+
+- Redmine 4 is required
+- Redmine 4.1 support
+
+
 1.0.5
 -----
 

@@ -56,7 +56,7 @@ Go to Rocket.Chat documentation [Incoming WebHook Scripting](https://rocket.chat
 Requirements
 ------------
 
-* Redmine version >= 3.0.0
+* Redmine version >= 4.0.0
 * Ruby version >= 2.4.0
 
 

@@ -2,9 +2,9 @@ language: ruby
 dist: xenial
 
 rvm:
-  - 2.6.3
-  - 2.5.5
-  - 2.4.6
+  - 2.6.5
+  - 2.5.7
+  - 2.4.9
 
 services:
   - mysql
@@ -12,22 +12,11 @@ services:
 
 env:
   - REDMINE_VER=4.0-stable DB=postgresql
-  - REDMINE_VER=3.4-stable DB=postgresql
+  - REDMINE_VER=master DB=postgresql
   - REDMINE_VER=4.0-stable DB=mysql
-  - REDMINE_VER=3.4-stable DB=mysql
+  - REDMINE_VER=master DB=mysql
 
 sudo: true
-
-matrix:
-  exclude:
-  - rvm: 2.6.3
-    env: REDMINE_VER=3.4-stable DB=mysql
-  - rvm: 2.6.3
-    env: REDMINE_VER=3.4-stable DB=postgresql
-  - rvm: 2.5.5
-    env: REDMINE_VER=3.4-stable DB=mysql
-  - rvm: 2.5.5
-    env: REDMINE_VER=3.4-stable DB=postgresql
 
 notifications:
   webhooks:
@@ -54,7 +43,4 @@ before_script:
 
 script:
   - export SKIP_COVERAGE=1
-  - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:units NAME=$PLUGIN_NAME; fi
-  - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:functionals NAME=$PLUGIN_NAME; fi
-  - if [[ "$REDMINE_VER" == "master" ]]; then bundle exec rake redmine:plugins:test:integration NAME=$PLUGIN_NAME; fi
-  - if [[ "$REDMINE_VER" != "master" ]]; then bundle exec rake redmine:plugins:test NAME=$PLUGIN_NAME RUBYOPT="-W0"; fi
+  - bundle exec rake redmine:plugins:test NAME=$PLUGIN_NAME RUBYOPT="-W0"
