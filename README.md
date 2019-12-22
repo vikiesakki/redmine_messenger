@@ -59,6 +59,7 @@ Requirements
 * Redmine version >= 4.0.0
 * Ruby version >= 2.4.0
 
+If you want to use it with Redmine 3.x, use git tag 1.0.5
 
 Installation
 ------------
