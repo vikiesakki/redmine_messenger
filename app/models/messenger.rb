@@ -158,9 +158,9 @@ class Messenger
       escape = true
 
       if detail.property == 'cf'
-        key = CustomField.find(detail.prop_key).name rescue nil
+        key = CustomField.find(detail.prop_key)&.name
         title = key
-        field_format = CustomField.find(detail.prop_key).field_format rescue nil
+        field_format = CustomField.find(detail.prop_key)&.field_format
       elsif detail.property == 'attachment'
         key = 'attachment'
         title = I18n.t :label_attachment

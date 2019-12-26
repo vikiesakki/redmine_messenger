@@ -9,29 +9,11 @@ AllCops:
   TargetRubyVersion: 2.3
   TargetRailsVersion: 5.2
 
-Metrics/AbcSize:
+Metrics:
   Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Max: 20
 
 Layout/LineLength:
   Max: 140
-
-Metrics/MethodLength:
-  Max: 60
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Max: 25
 
 Rails/ApplicationJob:
   Enabled: false
