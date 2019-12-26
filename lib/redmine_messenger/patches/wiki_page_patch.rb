@@ -21,7 +21,7 @@ module RedmineMessenger
           return unless channels.present? && url
 
           Messenger.speak(l(:label_messenger_wiki_created,
-                            project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
+                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
                             url: "<#{Messenger.object_url self}|#{title}>",
                             user: User.current),
                           channels, url, project: project)
@@ -44,7 +44,7 @@ module RedmineMessenger
           end
 
           Messenger.speak(l(:label_messenger_wiki_updated,
-                            project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
+                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
                             url: "<#{Messenger.object_url self}|#{title}>",
                             user: content.author),
                           channels, url, project: project, attachment: attachment)
