@@ -4,8 +4,8 @@ module RedmineMessenger
       def self.included(base)
         base.send(:include, InstanceMethods)
         base.class_eval do
-          after_create :send_messenger_create
-          after_update :send_messenger_update
+          after_create_commit :send_messenger_create
+          after_update_commit :send_messenger_update
         end
       end
 

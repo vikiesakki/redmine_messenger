@@ -156,14 +156,19 @@ class Messenger
       field_format = nil
       key = nil
       escape = true
+      value = detail.value.to_s
 
       if detail.property == 'cf'
         key = CustomField.find(detail.prop_key)&.name
-        title = key
-        field_format = CustomField.find(detail.prop_key)&.field_format
+        unless key.nil?
+          title = key
+          field_format = CustomField.find(detail.prop_key)&.field_format
+          value = IssuesController.helpers.format_value(detail.value, detail.custom_field) if detail.value.present?
+        end
       elsif detail.property == 'attachment'
         key = 'attachment'
         title = I18n.t :label_attachment
+        value = detail.value.to_s
       else
         key = detail.prop_key.to_s.sub('_id', '')
         title = if key == 'parent'
@@ -171,10 +176,10 @@ class Messenger
                 else
                   I18n.t "field_#{key}"
                 end
+        value = detail.value.to_s
       end
 
       short = true
-      value = detail.value.to_s
 
       case key
       when 'title', 'subject', 'description'
