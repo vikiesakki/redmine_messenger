@@ -63,8 +63,8 @@ module RedmineMessenger
           set_language_if_valid Setting.default_language
 
           attachment = {}
-          if current_journal.notes.present? && Messenger.setting_for_project(project, :updated_include_description)
-            attachment[:text] = Messenger.markup_format(current_journal.notes)
+          if saved_change_to_description? && Messenger.setting_for_project(project, :updated_include_description)
+            attachment[:text] = Messenger.markup_format(description)
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field d }
@@ -88,7 +88,7 @@ module RedmineMessenger
 
           Messenger.speak(l(:label_messenger_issue_updated,
                             project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
-                            url: send_messenger_mention_url(project, current_journal.notes),
+                            url: send_messenger_mention_url(project, description),
                             user: current_journal.user),
                           channels, url, attachment: attachment, project: project)
         end
