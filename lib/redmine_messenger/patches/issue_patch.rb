@@ -68,12 +68,13 @@ module RedmineMessenger
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field d }
-          if status_id != status_id_was
+          if saved_change_to_status_id?
             fields << { title: I18n.t(:field_status),
                         value: ERB::Util.html_escape(status.to_s),
                         short: true }
           end
-          if priority_id != priority_id_was
+
+          if saved_change_to_priority_id?
             fields << { title: I18n.t(:field_priority),
                         value: ERB::Util.html_escape(priority.to_s),
                         short: true }
