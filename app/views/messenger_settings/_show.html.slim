@@ -1,12 +1,17 @@
-.box.tabular.messenger_settings
-  - @messenger_setting = MessengerSetting.find_or_create(@project.id)
-  = labelled_form_for :setting,
-                      @messenger_setting,
-                      url: project_messenger_setting_path(project_id: @project),
-                      method: :put,
-                      class: 'tabular' do |f|
-    = error_messages_for 'messenger_setting'
-    .box
+= error_messages_for 'messenger_setting'
+
+- @messenger_setting = MessengerSetting.find_or_create(@project.id)
+= labelled_form_for :setting,
+                    @messenger_setting,
+                    url: project_messenger_setting_path(project_id: @project),
+                    method: :put,
+                    class: 'tabular' do |f|
+
+  fieldset#messenger_settings.box.tabular
+    - if User.current.admin?
+      .contextual
+        = link_to l(:label_administration), plugin_settings_path(id: 'redmine_messenger'), class: 'icon icon-settings'
+
       .info = t(:messenger_settings_project_intro)
       br
       p
@@ -21,50 +26,50 @@
       = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :messenger_username, size: 30 }
       = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :messenger_verify_ssl }
 
+  fieldset#messenger_settings.box.tabular
+    legend = l(:label_issue_plural)
+    .info = t(:messenger_issue_intro)
+    br
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :auto_mentions }
+    = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :default_mentions, size: 30 }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :display_watchers }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_updates }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :new_include_description }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :updated_include_description }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_issues }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_notes }
+
+  fieldset#messenger_settings.box.tabular
+    legend = l(:label_wiki)
+    .info = t(:messenger_wiki_intro)
+    br
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_wiki }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_wiki_updates }
+
+  - if RedmineMessenger::REDMINE_DB_SUPPORT && User.current.allowed_to?(:view_db_entries, @project)
+    fieldset#messenger_settings.box.tabular
+      legend = l(:label_db_entry_plural)
+      .info = t(:messenger_db_intro)
       br
-      h3 = l(:label_issue_plural)
-      .info = t(:messenger_issue_intro)
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db_updates }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_db }
+
+  - if RedmineMessenger::REDMINE_CONTACTS_SUPPORT && User.current.allowed_to?(:view_contacts, @project)
+    fieldset#messenger_settings.box.tabular
+      legend = l(:label_contact_plural)
+      .info = t(:messenger_contacts_intro)
       br
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :auto_mentions }
-      = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :default_mentions, size: 30 }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :display_watchers }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_updates }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :new_include_description }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :updated_include_description }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_issues }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_notes }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact_updates }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_contacts }
 
-      br
-      h3 = l(:label_wiki)
-      .info = t(:messenger_wiki_intro)
-      br
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_wiki }
-      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_wiki_updates }
+  - if Redmine::Plugin.installed?('redmine_passwords') && User.current.allowed_to?(:view_passwords, @project)
+    fieldset#messenger_settings.box.tabular
+    legend = l(:label_settings_post_password)
+    .info = t(:messenger_passwords_intro)
+    br
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password_updates }
 
-      - if RedmineMessenger::REDMINE_DB_SUPPORT && User.current.allowed_to?(:view_db_entries, @project)
-        br
-        h3 = l(:label_db_entry_plural)
-        .info = t(:messenger_db_intro)
-        br
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db }
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db_updates }
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_db }
-
-      - if RedmineMessenger::REDMINE_CONTACTS_SUPPORT && User.current.allowed_to?(:view_contacts, @project)
-        br
-        h3 = l(:label_contact_plural)
-        .info = t(:messenger_contacts_intro)
-        br
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact }
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_contact_updates }
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_private_contacts }
-
-      - if Redmine::Plugin.installed?('redmine_passwords') && User.current.allowed_to?(:view_passwords, @project)
-        br
-        h3 = l(:label_settings_post_password)
-        .info = t(:messenger_passwords_intro)
-        br
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password }
-        = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password_updates }
-
-    = submit_tag l(:button_save)
+  = submit_tag l(:button_save)
