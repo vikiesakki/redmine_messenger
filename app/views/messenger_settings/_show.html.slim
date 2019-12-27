@@ -66,10 +66,10 @@
 
   - if Redmine::Plugin.installed?('redmine_passwords') && User.current.allowed_to?(:view_passwords, @project)
     fieldset#messenger_settings.box.tabular
-    legend = l(:label_settings_post_password)
-    .info = t(:messenger_passwords_intro)
-    br
-    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password }
-    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password_updates }
+      legend = l(:label_settings_post_password)
+      .info = t(:messenger_passwords_intro)
+      br
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password }
+      = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password_updates }
 
   = submit_tag l(:button_save)
