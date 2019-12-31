@@ -63,8 +63,17 @@ module RedmineMessenger
           set_language_if_valid Setting.default_language
 
           attachment = {}
-          if saved_change_to_description? && Messenger.setting_for_project(project, :updated_include_description)
-            attachment[:text] = Messenger.markup_format(description)
+          if Messenger.setting_for_project(project, :updated_include_description)
+            attachment[:text] = Messenger.markup_format(description) if saved_change_to_description?
+
+            if current_journal.notes.present?
+              if attachment[:text].present?
+                attachment[:text] << content_tag('p', l(:label_comment))
+                attachment[:text] << Messenger.markup_format(current_journal.notes)
+              else
+                attachment[:text] = Messenger.markup_format(current_journal.notes)
+              end
+            end
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field d }
