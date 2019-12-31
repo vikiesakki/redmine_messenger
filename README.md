@@ -68,7 +68,7 @@ Install ``redmine_messenger`` plugin for `Redmine`
 
     cd $REDMINE_ROOT
     git clone https://github.com/AlphaNodes/redmine_messenger.git plugins/redmine_messenger
-    bundle install --without development test
+    bundle update
     bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 Make sure that the directory is named `redmine_messenger` (you cannot use another name for it)!
