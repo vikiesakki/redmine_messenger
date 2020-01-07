@@ -1,4 +1,5 @@
 require 'net/http'
+require 'uri'
 
 class Messenger
   include Redmine::I18n
@@ -11,7 +12,7 @@ class Messenger
       #
       # Redmine::WikiFormatting.html_parser.to_text(text)
 
-      text = text.to_s
+      text = +text.to_s
       text.gsub!('&', '&amp;')
       text.gsub!('<', '&lt;')
       text.gsub!('>', '&gt;')
@@ -51,13 +52,12 @@ class Messenger
         params[:channel] = channel
         http_options = { use_ssl: uri.scheme == 'https' }
         http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting?(:messenger_verify_ssl)
-
         begin
           req = Net::HTTP::Post.new(uri)
           req.set_form_data(payload: params.to_json)
           Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
             response = http.request(req)
-            Rails.logger.warn(response) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
+            Rails.logger.warn(response.inspect) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
           end
         rescue StandardError => e
           Rails.logger.warn("cannot connect to #{url}")
