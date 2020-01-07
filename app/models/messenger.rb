@@ -184,41 +184,39 @@ class Messenger
       when 'title', 'subject', 'description'
         short = false
       when 'tracker'
-        tracker = Tracker.find(detail.value)
-        value = tracker.to_s if tracker.present?
+        value = object_field_value(Tracker, detail.value)
       when 'project'
-        project = Project.find(detail.value)
-        value = project.to_s if project.present?
+        value = object_field_value(Project, detail.value)
       when 'status'
-        status = IssueStatus.find(detail.value)
-        value = status.to_s if status.present?
+        value = object_field_value(IssueStatus, detail.value)
       when 'priority'
-        priority = IssuePriority.find(detail.value)
-        value = priority.to_s if priority.present?
+        value = object_field_value(IssuePriority, detail.value)
       when 'category'
-        category = IssueCategory.find(detail.value)
-        value = category.to_s if category.present?
+        value = object_field_value(IssueCategory, detail.value)
       when 'assigned_to'
-        user = User.find(detail.value)
-        value = user.to_s if user.present?
+        value = object_field_value(User, detail.value)
       when 'fixed_version'
-        fixed_version = Version.find(detail.value)
-        value = fixed_version.to_s if fixed_version.present?
+        value = object_field_value(Version, detail.value)
       when 'attachment'
         attachment = Attachment.find(detail.prop_key)
-        value = "<#{Messenger.object_url attachment}|#{markup_format(attachment.filename)}>" if attachment.present?
-        escape = false
+        value = if attachment.present?
+                  escape = false
+                  "<#{Messenger.object_url attachment}|#{markup_format(attachment.filename)}>"
+                else
+                  detail.prop_key.to_s
+                end
+
       when 'parent'
         issue = Issue.find(detail.value)
-        value = "<#{Messenger.object_url issue}|#{markup_format(issue)}>" if issue.present?
-        escape = false
+        value = if issue.present?
+                  escape = false
+                  "<#{Messenger.object_url issue}|#{markup_format(issue)}>"
+                else
+                  detail.value.to_s
+                end
       end
 
-      if detail.property == 'cf' && field_format == 'version'
-        version = Version.find(detail.value)
-        value = version.to_s if version.present?
-      end
-
+      value = object_field_value(Version, detail.value) if detail.property == 'cf' && field_format == 'version'
       value = if value.present?
                 if escape
                   markup_format(value)
@@ -243,6 +241,11 @@ class Messenger
     end
 
     private
+
+    def object_field_value(klass, id)
+      obj = klass.find_by(id: id)
+      obj.nil? ? id.to_s : obj.to_s
+    end
 
     def extract_usernames(text)
       text = '' if text.nil?

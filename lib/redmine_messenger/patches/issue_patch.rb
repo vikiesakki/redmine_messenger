@@ -88,11 +88,7 @@ module RedmineMessenger
                         value: Messenger.markup_format(priority.to_s),
                         short: true }
           end
-          if assigned_to.present?
-            fields << { title: I18n.t(:field_assigned_to),
-                        value: Messenger.markup_format(assigned_to.to_s),
-                        short: true }
-          end
+
           attachment[:fields] = fields if fields.any?
 
           Messenger.speak(l(:label_messenger_issue_updated,
