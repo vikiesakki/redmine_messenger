@@ -1,5 +1,6 @@
-require 'redmine'
-require 'redmine_messenger'
+raise "\n\033[31mredmine_messenger requires ruby 2.3 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.3'
+
+require_dependency 'redmine_messenger'
 
 Redmine::Plugin.register :redmine_messenger do
   name 'Redmine Messenger'
@@ -7,9 +8,9 @@ Redmine::Plugin.register :redmine_messenger do
   url 'https://github.com/alphanodes/redmine_messenger'
   author_url 'https://alphanodes.com/'
   description 'Messenger integration for Slack, Discord, Rocketchat and Mattermost support'
-  version '1.0.3'
+  version '1.0.6'
 
-  requires_redmine version_or_higher: '3.0.0'
+  requires_redmine version_or_higher: '4.0.0'
 
   permission :manage_messenger, projects: :settings, messenger_settings: :update
 
@@ -38,4 +39,14 @@ Redmine::Plugin.register :redmine_messenger do
     post_password: '0',
     post_password_updates: '0'
   }, partial: 'settings/messenger_settings'
+end
+
+begin
+  if ActiveRecord::Base.connection.table_exists?(Setting.table_name)
+    Rails.configuration.to_prepare do
+      RedmineMessenger.setup
+    end
+  end
+rescue ActiveRecord::NoDatabaseError
+  Rails.logger.error 'database not created yet'
 end

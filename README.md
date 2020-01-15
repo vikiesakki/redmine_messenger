@@ -56,9 +56,10 @@ Go to Rocket.Chat documentation [Incoming WebHook Scripting](https://rocket.chat
 Requirements
 ------------
 
-* Redmine version >= 3.0.0
-* Ruby version >= 2.1.5
+* Redmine version >= 4.0.0
+* Ruby version >= 2.4.0
 
+If you want to use it with Redmine 3.x, use git tag 1.0.5
 
 Installation
 ------------
@@ -66,10 +67,11 @@ Installation
 Install ``redmine_messenger`` plugin for `Redmine`
 
     cd $REDMINE_ROOT
-    git clone git://github.com/alphanodes/redmine_messenger.git plugins/redmine_messenger
-    bundle install --without development test
+    git clone https://github.com/AlphaNodes/redmine_messenger.git plugins/redmine_messenger
+    bundle update
     bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
+Make sure that the directory is named `redmine_messenger` (you cannot use another name for it)!
 Restart Redmine (application server) and you should see the plugin show up in the Plugins page.
 Under the configuration options, set the Messenger API URL to the URL for an
 Incoming WebHook integration in your Messenger account and also set the Messenger

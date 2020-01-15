@@ -1,6 +1,25 @@
 Changelog
 =========
 
+1.0.6
+-----
+
+- Redmine 4 is required. Use git tag 1.0.5, if you use an older version.
+- Redmine 4.1 support
+- Fix problems with changed fields, description and notes
+- fix problems with quotes #38
+
+1.0.5
+-----
+
+- ruby 2.4.x or newer is required
+
+
+1.0.4
+-----
+
+- Frensh translation added - thanks to @ZerooCool
+
 1.0.3
 -----
 
