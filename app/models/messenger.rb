@@ -185,6 +185,8 @@ class Messenger
         short = false
       when 'tracker'
         value = object_field_value(Tracker, detail.value)
+      when 'estimated_hours'
+        value = format_hours(value)
       when 'project'
         value = object_field_value(Project, detail.value)
       when 'status'
