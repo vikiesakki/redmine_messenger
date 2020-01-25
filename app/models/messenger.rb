@@ -151,23 +151,41 @@ class Messenger
       false
     end
 
-    def detail_to_field(detail)
+    def detail_to_field(detail, prj = nil)
       field_format = nil
       key = nil
       escape = true
       value = detail.value.to_s
-
       if detail.property == 'cf'
         key = CustomField.find(detail.prop_key)&.name
         unless key.nil?
           title = key
           field_format = CustomField.find(detail.prop_key)&.field_format
+
           value = IssuesController.helpers.format_value(detail.value, detail.custom_field) if detail.value.present?
         end
       elsif detail.property == 'attachment'
         key = 'attachment'
         title = I18n.t :label_attachment
         value = detail.value.to_s
+      elsif detail.property == 'attr' &&
+            detail.prop_key == 'db_relation'
+        return { short: true } unless Messenger.setting_for_project(prj, :post_db)
+
+        title = I18n.t :field_db_relation
+        if detail.value.present?
+          entry = DbEntry.visible.find_by(id: detail.value)
+          value = entry.present? ? entry.name : detail.value.to_s
+        end
+      elsif detail.property == 'attr' &&
+            detail.prop_key == 'password_relation'
+        return { short: true } unless Messenger.setting_for_project(prj, :post_password)
+
+        title = I18n.t :field_password_relation
+        if detail.value.present?
+          entry = Password.visible.find_by(id: detail.value)
+          value = entry.present? ? entry.name : detail.value.to_s
+        end
       else
         key = detail.prop_key.to_s.sub('_id', '')
         title = if key == 'parent'
