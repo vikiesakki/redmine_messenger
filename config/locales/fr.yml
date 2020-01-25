@@ -1,10 +1,4 @@
 # French strings
-##########################################################################
-#            Translation by Zer00CooL - www.visionduweb.fr               #
-#                     Created for redmine_messenger                      #
-# Tested and optimized with Redmine and Slack for lecannabiste.com media #
-#                    Create 04/2019 -- Update 01/2020                    #
-##########################################################################
 fr:
   default_mentionsl_info: Personnes à notifier par défaut, séparées par des virgules (@all, @here)
   error_messenger_invalid_url: n'est pas une URL valide
@@ -15,6 +9,7 @@ fr:
   label_messenger_default_not_visible: Le paramètre par défaut n'est pas visible pour des raisons de sécurité
   label_messenger_issue_created: "[%{project_url}] Ticket %{url} créé par *%{user}*"
   label_messenger_issue_updated: "[%{project_url}] Ticket %{url} mis à jour par *%{user}*"
+  label_messenger_outgoing_webhook: Outgoing Webhook
   label_messenger_password_created: "[%{project_url}] Mot de passe %{url} créé par *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Mot de passe %{url} mis à jour par *%{user}*"
   label_messenger_project_text_field_info: Laissez ce champ vide pour le système par défaut.

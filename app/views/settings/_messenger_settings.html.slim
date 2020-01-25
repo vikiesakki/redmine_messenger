@@ -2,6 +2,7 @@
 br
 
 fieldset#messenger_settings.box.tabular
+  legend = l(:label_messenger_outgoing_webhook)
   p
     = content_tag(:label, l(:label_settings_messenger_url))
     = text_field_tag('settings[messenger_url]', @settings[:messenger_url], size: 60, placeholder: 'https://webhook.url')
@@ -64,7 +65,7 @@ fieldset#messenger_settings.box.tabular
 
 - if RedmineMessenger::REDMINE_DB_SUPPORT
   fieldset#messenger_settings.box.tabular
-    legend = l(:label_db_entry_plural)
+    legend = l(:field_db_entries)
     .info = t(:messenger_db_intro)
     br
     p
@@ -94,7 +95,7 @@ fieldset#messenger_settings.box.tabular
 
 - if Redmine::Plugin.installed?('redmine_passwords')
   fieldset#messenger_settings.box.tabular
-    legend = l(:label_password_plural)
+    legend = l(:field_passwords)
     .info = t(:messenger_passwords_intro)
     br
     p

@@ -9,6 +9,7 @@ en:
   label_messenger_default_not_visible: Default setting is not visible for security reasons
   label_messenger_issue_created: "[%{project_url}] Issue %{url} created by *%{user}*"
   label_messenger_issue_updated: "[%{project_url}] Issue %{url} updated by *%{user}*"
+  label_messenger_outgoing_webhook: Outgoing Webhook
   label_messenger_password_created: "[%{project_url}] Kennwort %{url} created by *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Kennwort %{url} updated by *%{user}*"
   label_messenger_project_text_field_info: Leave it blank for system default.

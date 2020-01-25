@@ -8,6 +8,7 @@
                     class: 'tabular' do |f|
 
   fieldset#messenger_settings.box.tabular
+    legend = l(:label_messenger_outgoing_webhook)
     - if User.current.admin?
       .contextual
         = link_to l(:label_administration), plugin_settings_path(id: 'redmine_messenger'), class: 'icon icon-settings'
@@ -48,7 +49,7 @@
 
   - if RedmineMessenger::REDMINE_DB_SUPPORT && User.current.allowed_to?(:view_db_entries, @project)
     fieldset#messenger_settings.box.tabular
-      legend = l(:label_db_entry_plural)
+      legend = l(:field_db_entries)
       .info = t(:messenger_db_intro)
       br
       = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_db }
@@ -66,7 +67,7 @@
 
   - if Redmine::Plugin.installed?('redmine_passwords') && User.current.allowed_to?(:view_passwords, @project)
     fieldset#messenger_settings.box.tabular
-      legend = l(:label_password_plural)
+      legend = l(:field_passwords)
       .info = t(:messenger_passwords_intro)
       br
       = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :post_password }

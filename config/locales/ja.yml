@@ -9,6 +9,7 @@ ja:
   label_messenger_default_not_visible: デフォルトの設定はセキュリティ上の理由により表示されません。
   label_messenger_issue_created: "[%{project_url}] チケット %{url} が *%{user}* によって作成されました。"
   label_messenger_issue_updated: "[%{project_url}] チケット %{url} が *%{user}* によって更新されました。"
+  label_messenger_outgoing_webhook: Outgoing Webhook
   label_messenger_password_created: "[%{project_url}] Kennwort %{url} created by *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Kennwort %{url} updated by *%{user}*"
   label_messenger_project_text_field_info: デフォルトの設定を使う場合空欄にしてください。
