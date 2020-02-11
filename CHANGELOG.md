@@ -8,6 +8,7 @@ Changelog
 - Redmine 4.1 support
 - Fix problems with changed fields, description and notes
 - fix problems with quotes #38
+- Redundant status and priority in messages #56
 
 1.0.5
 -----

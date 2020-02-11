@@ -77,17 +77,6 @@ module RedmineMessenger
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field(d, project) }
-          if saved_change_to_status_id?
-            fields << { title: I18n.t(:field_status),
-                        value: Messenger.markup_format(status.to_s),
-                        short: true }
-          end
-
-          if saved_change_to_priority_id?
-            fields << { title: I18n.t(:field_priority),
-                        value: Messenger.markup_format(priority.to_s),
-                        short: true }
-          end
 
           attachment[:fields] = fields if fields.any?
 
