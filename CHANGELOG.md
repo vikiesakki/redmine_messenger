@@ -7,8 +7,10 @@ Changelog
 - Redmine 4 is required. Use git tag 1.0.5, if you use an older version.
 - Redmine 4.1 support
 - Fix problems with changed fields, description and notes
-- fix problems with quotes #38
+- Fix problems with quotes #38
 - Redundant status and priority in messages #56
+- Show attachments for new issues
+- Show indicator for private comment on issue
 
 1.0.5
 -----

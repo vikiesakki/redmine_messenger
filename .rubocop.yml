@@ -44,3 +44,12 @@ Style/Documentation:
 
 Style/ExpandPathArguments:
   Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
+  Enabled: false
