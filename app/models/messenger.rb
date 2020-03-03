@@ -13,6 +13,8 @@ class Messenger
       # Redmine::WikiFormatting.html_parser.to_text(text)
 
       text = +text.to_s
+
+      # @see https://api.slack.com/reference/surfaces/formatting#escaping
       text.gsub!('&', '&amp;')
       text.gsub!('<', '&lt;')
       text.gsub!('>', '&gt;')

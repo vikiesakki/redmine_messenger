@@ -35,6 +35,12 @@ module RedmineMessenger
                                      short: true }
           end
 
+          attachments.each do |att|
+            attachment[:fields] << { title: I18n.t(:label_attachment),
+                                     value: "<#{Messenger.object_url att}|#{ERB::Util.html_escape(att.filename)}>",
+                                     short: true }
+          end
+
           if RedmineMessenger.setting?(:display_watchers) && watcher_users.count.positive?
             attachment[:fields] << {
               title: I18n.t(:field_watcher),
@@ -77,7 +83,7 @@ module RedmineMessenger
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field(d, project) }
-
+          fields << { title: I18n.t(:field_is_private), short: true } if current_journal.private_notes?
           attachment[:fields] = fields if fields.any?
 
           Messenger.speak(l(:label_messenger_issue_updated,
