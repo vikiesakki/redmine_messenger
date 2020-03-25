@@ -3,7 +3,7 @@ Messenger plugin for Redmine
 
 This plugin posts updates to issues in your Redmine installation to [Slack](https://slack.com/), [Rocket.Chat](https://rocket.chat/), [Discord](https://discordapp.com/) or [Mattermost](https://about.mattermost.com/) channel.
 
-[![Rate at redmine.org](https://img.shields.io/badge/rate%20at-redmine.org-blue.svg?style=fla)](https://www.redmine.org/plugins/redmine_messenger) [![Build Status](https://travis-ci.org/AlphaNodes/redmine_messenger.svg?branch=master)](https://travis-ci.org/AlphaNodes/redmine_messenger) ![Run RuboCop](https://github.com/AlphaNodes/redmine_messenger/workflows/Run%20RuboCop/badge.svg) ![Run Tests](https://github.com/AlphaNodes/redmine_messenger/workflows/Run%20Tests/badge.svg?event=status)
+[![Rate at redmine.org](https://img.shields.io/badge/rate%20at-redmine.org-blue.svg?style=fla)](https://www.redmine.org/plugins/redmine_messenger) [![Build Status](https://travis-ci.org/AlphaNodes/redmine_messenger.svg?branch=master)](https://travis-ci.org/AlphaNodes/redmine_messenger) ![Run RuboCop](https://github.com/AlphaNodes/redmine_messenger/workflows/Run%20RuboCop/badge.svg) ![Run Tests](https://github.com/AlphaNodes/redmine_messenger/workflows/Run%20Tests/badge.svg)
 
 Features
 --------
