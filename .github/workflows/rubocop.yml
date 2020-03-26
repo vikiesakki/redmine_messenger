@@ -1,10 +1,10 @@
 name: Run RuboCop
-on:
-  push:
-  pull_request:
+
+on: [push]
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
     - name: Set Gemfile
       run: |
         echo "">> Gemfile
-        echo "group :development, :test do">> Gemfile
+        echo "group :test do">> Gemfile
         echo "  gem 'rubocop', require: false" >> Gemfile
         echo "  gem 'rubocop-performance', require: false" >> Gemfile
         echo "  gem 'rubocop-rails', require: false" >> Gemfile
@@ -31,6 +31,4 @@ jobs:
 
     - name: Run RuboCop
       run: |
-        gem install bundler
-        bundle install --jobs 4 --retry 3
-        bundle exec rubocop
+        bundle exec rubocop -S
