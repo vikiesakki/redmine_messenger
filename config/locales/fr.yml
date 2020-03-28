@@ -9,7 +9,7 @@ fr:
   label_messenger_default_not_visible: Le paramètre par défaut n'est pas visible pour des raisons de sécurité
   label_messenger_issue_created: "[%{project_url}] Ticket %{url} créé par *%{user}*"
   label_messenger_issue_updated: "[%{project_url}] Ticket %{url} mis à jour par *%{user}*"
-  label_messenger_outgoing_webhook: Outgoing Webhook
+  label_messenger_outgoing_webhook: Webhook sortant
   label_messenger_password_created: "[%{project_url}] Mot de passe %{url} créé par *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Mot de passe %{url} mis à jour par *%{user}*"
   label_messenger_project_text_field_info: Laissez ce champ vide pour le système par défaut.
