@@ -9,7 +9,7 @@ fr:
   label_messenger_default_not_visible: Le paramètre par défaut n'est pas visible pour des raisons de sécurité
   label_messenger_issue_created: "[%{project_url}] Ticket %{url} créé par *%{user}*"
   label_messenger_issue_updated: "[%{project_url}] Ticket %{url} mis à jour par *%{user}*"
-  label_messenger_outgoing_webhook: Outgoing Webhook
+  label_messenger_outgoing_webhook: Webhook sortant
   label_messenger_password_created: "[%{project_url}] Mot de passe %{url} créé par *%{user}*"
   label_messenger_password_updated: "[%{project_url}] Mot de passe %{url} mis à jour par *%{user}*"
   label_messenger_project_text_field_info: Laissez ce champ vide pour le système par défaut.
@@ -23,10 +23,10 @@ fr:
   label_settings_auto_mentions: Convertir les noms en mentions
   label_settings_default_mentions: Personnes mentionnées par défaut
   label_settings_display_watchers: Afficher l'utilisateur assigné au ticket
-  label_settings_messenger_channel: Messenger - Nom du salon
-  label_settings_messenger_icon: Messenger - Icône affiché
-  label_settings_messenger_url: Messenger - URL WebHook entrant
-  label_settings_messenger_username: Messenger - Nom du robot
+  label_settings_messenger_channel: Nom du salon
+  label_settings_messenger_icon: Icône affiché
+  label_settings_messenger_url: URL WebHook entrant
+  label_settings_messenger_username: Nom du robot
   label_settings_messenger_verify_ssl: Vérifier SSL
   label_settings_new_include_description: Inclure la description des nouveaux tickets
   label_settings_post_contact_updates: Mises à jour de contact ?
@@ -48,9 +48,10 @@ fr:
   messenger_db_intro: Activer les modifications pour la base de données à envoyer au canal Messenger prédéfini.
   messenger_issue_intro: Activer les modifications pour les tickets à envoyer au canal Messenger prédéfini.
   messenger_passwords_intro: Activez les modifications pour les mots de passe devant être envoyés au canal Messenger prédéfini.
-  messenger_settings_intro: "Laissez l'URL de Messenger dans la zone d'administration vide afin de ne pas envoyer de messages de Redmine à Messenger. Peu importe ce que vous avez configuré ici. Si vous souhaitez envoyer des messages de tous les projets Redmine à Messenger, renseignez l’URL. Les messages seront envoyés au canal spécifique. Si vous souhaitez uniquement être averti par certains des projets (pas tous), laissez l'URL du messager ici vide et accédez à la configuration du projet spécifique."
+  messenger_settings_intro: "Laisser l'URL de Messenger dans la zone d'administration vide pour ne pas envoyer de messages de Redmine à Messenger. Peu importe ce que vous avez configuré ici. Si vous souhaitez envoyer des messages de tous les projets Redmine à Messenger, renseignez l’URL. Les messages seront envoyés au canal spécifique. Si vous souhaitez uniquement être averti par certains des projets (pas tous), laissez l'URL du messager ici vide et accédez à la configuration du projet spécifique."
   messenger_settings_project_intro: "Si vous laissez vide l'URL de Messenger dans la zone d'administration au cas où vous ne seriez pas averti globalement de toutes les modifications apportées au projet, vous pouvez configurer votre URL Messenger dans les paramètres du projet."
   messenger_url_info_html: 'Générer une adresse <a target="_blank" href="https://github.com/AlphaNodes/redmine_messenger#prepare-your-messenger-service">Incoming WebHook</a> pour le service global de Messenger. Laisser ce champ vide pour activer uniquement des projets spécifiques avec des paramètres personnalisés pour chaque projet.'
   messenger_verify_ssl_info_html: 'Désactiver cette vérification si votre service Messenger utilise un certificat SSL non valide ou auto-signé.'
   messenger_wiki_intro: Activer les notifications a envoyer au canal Messenger pour l'ensemble des wikis.
   permission_manage_messenger: Gérer Messenger
+
