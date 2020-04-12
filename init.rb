@@ -1,7 +1,5 @@
 raise "\n\033[31mredmine_messenger requires ruby 2.3 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.3'
 
-require_dependency 'redmine_messenger'
-
 Redmine::Plugin.register :redmine_messenger do
   name 'Redmine Messenger'
   author 'AlphaNodes GmbH'
@@ -41,12 +39,6 @@ Redmine::Plugin.register :redmine_messenger do
   }, partial: 'settings/messenger_settings'
 end
 
-begin
-  if ActiveRecord::Base.connection.table_exists?(Setting.table_name)
-    Rails.configuration.to_prepare do
-      RedmineMessenger.setup
-    end
-  end
-rescue ActiveRecord::NoDatabaseError
-  Rails.logger.error 'database not created yet'
+Rails.configuration.to_prepare do
+  RedmineMessenger.setup
 end

@@ -2,7 +2,7 @@ module RedmineMessenger
   module Patches
     module DbEntryPatch
       def self.included(base)
-        base.send(:include, InstanceMethods)
+        base.include InstanceMethods
         base.class_eval do
           after_create_commit :send_messenger_create
           after_update_commit :send_messenger_update
