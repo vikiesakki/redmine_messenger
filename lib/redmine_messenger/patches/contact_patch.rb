@@ -1,12 +1,13 @@
 module RedmineMessenger
   module Patches
     module ContactPatch
-      def self.included(base)
-        base.include InstanceMethods
-        base.class_eval do
-          after_create_commit :send_messenger_create
-          after_update_commit :send_messenger_update
-        end
+      extend ActiveSupport::Concern
+
+      included do
+        include InstanceMethods
+
+        after_create_commit :send_messenger_create
+        after_update_commit :send_messenger_update
       end
 
       module InstanceMethods
