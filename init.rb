@@ -39,6 +39,12 @@ Redmine::Plugin.register :redmine_messenger do
   }, partial: 'settings/messenger_settings'
 end
 
-Rails.configuration.to_prepare do
-  RedmineMessenger.setup
+begin
+  if ActiveRecord::Base.connection.table_exists?(Setting.table_name)
+    Rails.configuration.to_prepare do
+      RedmineMessenger.setup
+    end
+  end
+rescue ActiveRecord::NoDatabaseError
+  Rails.logger.error 'database not created yet'
 end
