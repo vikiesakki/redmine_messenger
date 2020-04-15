@@ -206,7 +206,7 @@ class Messenger
       when 'tracker'
         value = object_field_value(Tracker, detail.value)
       when 'estimated_hours'
-        value = format_hours(value)
+        value = format_hours(value.is_a?(String) ? (value.to_hours || value) : value)
       when 'project'
         value = object_field_value(Project, detail.value)
       when 'status'
