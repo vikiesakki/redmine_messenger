@@ -11,6 +11,7 @@ Changelog
 - Redundant status and priority in messages #56
 - Show attachments for new issues
 - Show indicator for private comment on issue
+- Ruby 2.4 or higher is required
 
 1.0.5
 -----
