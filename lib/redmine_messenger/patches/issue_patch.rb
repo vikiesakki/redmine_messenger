@@ -71,20 +71,13 @@ module RedmineMessenger
 
           attachment = {}
           if Messenger.setting_for_project(project, :updated_include_description)
-            attachment[:text] = Messenger.markup_format(description) if saved_change_to_description?
-
-            if current_journal.notes.present?
-              if attachment[:text].present?
-                attachment[:text] << content_tag('p', l(:label_comment))
-                attachment[:text] << Messenger.markup_format(current_journal.notes)
-              else
-                attachment[:text] = Messenger.markup_format(current_journal.notes)
-              end
-            end
+            attachment_text = Messenger.attachment_text_from_journal(current_journal)
+            attachment[:text] = attachment_text if attachment_text.present?
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field(d, project) }
           fields << { title: I18n.t(:field_is_private), short: true } if current_journal.private_notes?
+          fields.compact!
           attachment[:fields] = fields if fields.any?
 
           Messenger.speak(l(:label_messenger_issue_updated,

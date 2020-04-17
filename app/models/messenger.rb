@@ -37,10 +37,10 @@ class Messenger
         link_names: 1
       }
 
-      username = Messenger.textfield_for_project(options[:project], :messenger_username)
+      username = textfield_for_project(options[:project], :messenger_username)
       params[:username] = username if username.present?
       params[:attachments] = options[:attachment]&.any? ? [options[:attachment]] : []
-      icon = Messenger.textfield_for_project(options[:project], :messenger_icon)
+      icon = textfield_for_project(options[:project], :messenger_icon)
       if icon.present?
         if icon.start_with? ':'
           params[:icon_emoji] = icon
@@ -153,6 +153,22 @@ class Messenger
       false
     end
 
+    def attachment_text_from_journal(journal)
+      obj = journal.details.detect { |j| j.prop_key == 'description' && j.property == 'attr' }
+      text = obj.value if obj.present?
+
+      if journal.notes.present?
+        if text.present?
+          text << "\n\n*" + l(:label_comment) + "*\n"
+          text << journal.notes
+        else
+          text = journal.notes
+        end
+      end
+
+      text.present? ? markup_format(text) : nil
+    end
+
     def detail_to_field(detail, prj = nil)
       field_format = nil
       key = nil
@@ -172,7 +188,7 @@ class Messenger
         value = detail.value.to_s
       elsif detail.property == 'attr' &&
             detail.prop_key == 'db_relation'
-        return { short: true } unless Messenger.setting_for_project(prj, :post_db)
+        return { short: true } unless setting_for_project(prj, :post_db)
 
         title = I18n.t :field_db_relation
         if detail.value.present?
@@ -181,7 +197,7 @@ class Messenger
         end
       elsif detail.property == 'attr' &&
             detail.prop_key == 'password_relation'
-        return { short: true } unless Messenger.setting_for_project(prj, :post_password)
+        return { short: true } unless setting_for_project(prj, :post_password)
 
         title = I18n.t :field_password_relation
         if detail.value.present?
@@ -201,8 +217,10 @@ class Messenger
       short = true
 
       case key
-      when 'title', 'subject', 'description'
+      when 'title', 'subject'
         short = false
+      when 'description'
+        return
       when 'tracker'
         value = object_field_value(Tracker, detail.value)
       when 'estimated_hours'
@@ -223,7 +241,7 @@ class Messenger
         attachment = Attachment.find(detail.prop_key)
         value = if attachment.present?
                   escape = false
-                  "<#{Messenger.object_url attachment}|#{markup_format(attachment.filename)}>"
+                  "<#{object_url attachment}|#{markup_format(attachment.filename)}>"
                 else
                   detail.prop_key.to_s
                 end
@@ -232,7 +250,7 @@ class Messenger
         issue = Issue.find(detail.value)
         value = if issue.present?
                   escape = false
-                  "<#{Messenger.object_url issue}|#{markup_format(issue)}>"
+                  "<#{object_url issue}|#{markup_format(issue)}>"
                 else
                   detail.value.to_s
                 end
@@ -256,8 +274,7 @@ class Messenger
 
     def mentions(project, text)
       names = []
-      Messenger.textfield_for_project(project, :default_mentions)
-               .split(',').each { |m| names.push m.strip }
+      textfield_for_project(project, :default_mentions).split(',').each { |m| names.push m.strip }
       names += extract_usernames(text) unless text.nil?
       names.present? ? ' To: ' + names.uniq.join(', ') : nil
     end
