@@ -22,8 +22,8 @@ module RedmineMessenger
           return unless channels.present? && url
 
           Messenger.speak(l(:label_messenger_wiki_created,
-                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
-                            url: "<#{Messenger.object_url self}|#{title}>",
+                            project_url: Messenger.project_url_markdown(project),
+                            url: Messenger.url_markdown(self, title),
                             user: User.current),
                           channels, url, project: project)
         end
@@ -44,9 +44,10 @@ module RedmineMessenger
             attachment[:text] = Messenger.markup_format(content.comments.to_s)
           end
 
+          Rails.logger.debug "debug project_url: #{Messenger.project_url_markdown(project)}"
           Messenger.speak(l(:label_messenger_wiki_updated,
-                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
-                            url: "<#{Messenger.object_url self}|#{title}>",
+                            project_url: Messenger.project_url_markdown(project),
+                            url: Messenger.url_markdown(self, title),
                             user: content.author),
                           channels, url, project: project, attachment: attachment)
         end

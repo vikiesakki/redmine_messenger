@@ -12,6 +12,7 @@ Changelog
 - Show attachments for new issues
 - Show indicator for private comment on issue
 - Ruby 2.4 or higher is required
+- Fix project name with &
 
 1.0.5
 -----

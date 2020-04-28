@@ -51,7 +51,7 @@ module RedmineMessenger
           end
 
           Messenger.speak(l(:label_messenger_issue_created,
-                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
+                            project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
                             user: author),
                           channels, url, attachment: attachment, project: project)
@@ -81,7 +81,7 @@ module RedmineMessenger
           attachment[:fields] = fields if fields.any?
 
           Messenger.speak(l(:label_messenger_issue_updated,
-                            project_url: "<#{Messenger.object_url project}|#{Messenger.markup_format(project)}>",
+                            project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
                             user: current_journal.user),
                           channels, url, attachment: attachment, project: project)

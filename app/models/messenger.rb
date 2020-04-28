@@ -15,6 +15,7 @@ class Messenger
       text = +text.to_s
 
       # @see https://api.slack.com/reference/surfaces/formatting#escaping
+
       text.gsub!('&', '&amp;')
       text.gsub!('<', '&lt;')
       text.gsub!('>', '&gt;')
@@ -28,14 +29,11 @@ class Messenger
 
     def speak(msg, channels, url, options)
       url ||= RedmineMessenger.settings[:messenger_url]
+      return if url.blank? || channels.blank?
 
-      return if url.blank?
-      return if channels.blank?
+      params = { text: msg, link_names: 1 }
 
-      params = {
-        text: msg,
-        link_names: 1
-      }
+      Rails.logger.debug "debug speak: #{params.inspect}"
 
       username = textfield_for_project(options[:project], :messenger_username)
       params[:username] = username if username.present?
@@ -93,6 +91,14 @@ class Messenger
       return RedmineMessenger.settings[:messenger_url] if RedmineMessenger.settings[:messenger_url].present?
 
       nil
+    end
+
+    def project_url_markdown(project)
+      "[#{project.name}](#{object_url project})"
+    end
+
+    def url_markdown(obj, name)
+      "[#{name}](#{object_url obj})"
     end
 
     def textfield_for_project(proj, config)
