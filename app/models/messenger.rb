@@ -32,9 +32,6 @@ class Messenger
       return if url.blank? || channels.blank?
 
       params = { text: msg, link_names: 1 }
-
-      Rails.logger.debug "debug speak: #{params.inspect}"
-
       username = textfield_for_project(options[:project], :messenger_username)
       params[:username] = username if username.present?
       params[:attachments] = options[:attachment]&.any? ? [options[:attachment]] : []

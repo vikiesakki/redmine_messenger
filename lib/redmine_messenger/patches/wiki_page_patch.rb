@@ -44,7 +44,6 @@ module RedmineMessenger
             attachment[:text] = Messenger.markup_format(content.comments.to_s)
           end
 
-          Rails.logger.debug "debug project_url: #{Messenger.project_url_markdown(project)}"
           Messenger.speak(l(:label_messenger_wiki_updated,
                             project_url: Messenger.project_url_markdown(project),
                             url: Messenger.url_markdown(self, title),
