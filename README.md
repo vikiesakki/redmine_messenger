@@ -32,6 +32,22 @@ Redmine configuration:
 
 ![screenshot](https://raw.githubusercontent.com/alphanodes/redmine_messenger/master/assets/images/screenshot_redmine_settings.png)
 
+* **Convert names to mentions:** Automatically converts Redmine mentions into Slack mentions so a user is notified through Slack when mentioned in a Redmine note. Depends on Redmine Mentions plugin.
+
+* **Display watchers:** Issue watchers are included in notifications.
+
+* **Post issue updates:** All newly created notes on an issue generate a notification (does not include private issues).
+
+* **Description in new issue:** Include the text description of a new issue in the notification.
+
+* **Description in update issue:** Include the text encompassed in a note upon updating the issue in the notification.
+
+* **Post updates for private issue:** Same as *Post issue updates* but for private issues.
+
+* **Post private notes:** Same as *Description in update issue* but for private issues.
+
+* **Post wiki updates:** Generates a notification when a projects Wiki is updated.
+
 Prepare your messenger service
 ------------------------------
 
