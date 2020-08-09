@@ -38,7 +38,7 @@ module RedmineMessenger
 
           attachments.each do |att|
             attachment[:fields] << { title: I18n.t(:label_attachment),
-                                     value: "<#{Messenger.object_url att}|#{ERB::Util.html_escape(att.filename)}>",
+                                     value: "<#{Messenger.object_url att}|#{ERB::Util.html_escape att.filename}>",
                                      short: true }
           end
 
@@ -95,7 +95,7 @@ module RedmineMessenger
              Messenger.textfield_for_project(project, :default_mentions).present?
             mention_to = Messenger.mentions(project, text)
           end
-          "<#{Messenger.object_url(self)}|#{Messenger.markup_format(self)}>#{mention_to}"
+          "<#{Messenger.object_url self}|#{Messenger.markup_format self}>#{mention_to}"
         end
       end
     end

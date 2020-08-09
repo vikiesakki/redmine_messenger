@@ -3,9 +3,9 @@ class MessengerSettingsController < ApplicationController
   before_action :authorize
 
   def update
-    setting = MessengerSetting.find_or_create(@project.id)
-    if setting.update(allowed_params)
-      flash[:notice] = l(:notice_successful_update)
+    setting = MessengerSetting.find_or_create @project.id
+    if setting.update allowed_params
+      flash[:notice] = l :notice_successful_update
       redirect_to settings_project_path(@project, tab: 'messenger')
     else
       flash[:error] = setting.errors.full_messages.flatten.join("\n")

@@ -35,7 +35,7 @@ class Messenger
       username = textfield_for_project(options[:project], :messenger_username)
       params[:username] = username if username.present?
       params[:attachments] = options[:attachment]&.any? ? [options[:attachment]] : []
-      icon = textfield_for_project(options[:project], :messenger_icon)
+      icon = textfield_for_project options[:project], :messenger_icon
       if icon.present?
         if icon.start_with? ':'
           params[:icon_emoji] = icon
@@ -50,24 +50,24 @@ class Messenger
         http_options = { use_ssl: uri.scheme == 'https' }
         http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting?(:messenger_verify_ssl)
         begin
-          req = Net::HTTP::Post.new(uri)
-          req.set_form_data(payload: params.to_json)
+          req = Net::HTTP::Post.new uri
+          req.set_form_data payload: params.to_json
           Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
-            response = http.request(req)
+            response = http.request req
             Rails.logger.warn(response.inspect) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
           end
         rescue StandardError => e
-          Rails.logger.warn("cannot connect to #{url}")
-          Rails.logger.warn(e)
+          Rails.logger.warn "cannot connect to #{url}"
+          Rails.logger.warn e
         end
       end
     end
 
     def object_url(obj)
       if Setting.host_name.to_s =~ %r{\A(https?://)?(.+?)(:(\d+))?(/.+)?\z}i
-        host = Regexp.last_match(2)
-        port = Regexp.last_match(4)
-        prefix = Regexp.last_match(5)
+        host = Regexp.last_match 2
+        port = Regexp.last_match 4
+        prefix = Regexp.last_match 5
         Rails.application.routes.url_for(obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix))
       else
         Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: ''))
@@ -78,11 +78,11 @@ class Messenger
       return if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by(project_id: proj.id)
+      pm = MessengerSetting.find_by project_id: proj.id
       return pm.messenger_url if !pm.nil? && pm.messenger_url.present?
 
       # parent project based
-      parent_url = url_for_project(proj.parent)
+      parent_url = url_for_project proj.parent
       return parent_url if parent_url.present?
       # system based
       return RedmineMessenger.settings[:messenger_url] if RedmineMessenger.settings[:messenger_url].present?
@@ -102,15 +102,15 @@ class Messenger
       return if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by(project_id: proj.id)
+      pm = MessengerSetting.find_by project_id: proj.id
       return pm.send(config) if !pm.nil? && pm.send(config).present?
 
-      default_textfield(proj, config)
+      default_textfield proj, config
     end
 
     def default_textfield(proj, config)
       # parent project based
-      parent_field = textfield_for_project(proj.parent, config)
+      parent_field = textfield_for_project proj.parent, config
       return parent_field if parent_field.present?
       return RedmineMessenger.settings[config] if RedmineMessenger.settings[config].present?
 
@@ -127,7 +127,7 @@ class Messenger
 
         return pm.messenger_channel.split(',').map!(&:strip).uniq
       end
-      default_project_channels(proj)
+      default_project_channels proj
     end
 
     def setting_for_project(proj, config)
@@ -147,7 +147,7 @@ class Messenger
 
     def default_project_setting(proj, config)
       if proj.present? && proj.parent.present?
-        parent_setting = setting_for_project(proj.parent, config)
+        parent_setting = setting_for_project proj.parent, config
         return parent_setting if @setting_found == 1
       end
       # system based
@@ -162,7 +162,7 @@ class Messenger
 
       if journal.notes.present?
         if text.present?
-          text << "\n\n*" + l(:label_comment) + "*\n"
+          text << "\n\n*#{l :label_comment}*\n"
           text << journal.notes
         else
           text = journal.notes
@@ -195,7 +195,7 @@ class Messenger
 
         title = I18n.t :field_db_relation
         if detail.value.present?
-          entry = DbEntry.visible.find_by(id: detail.value)
+          entry = DbEntry.visible.find_by id: detail.value
           value = entry.present? ? entry.name : detail.value.to_s
         end
       elsif detail.property == 'attr' &&
@@ -204,7 +204,7 @@ class Messenger
 
         title = I18n.t :field_password_relation
         if detail.value.present?
-          entry = Password.visible.find_by(id: detail.value)
+          entry = Password.visible.find_by id: detail.value
           value = entry.present? ? entry.name : detail.value.to_s
         end
       else
@@ -225,35 +225,35 @@ class Messenger
       when 'description'
         return
       when 'tracker'
-        value = object_field_value(Tracker, detail.value)
+        value = object_field_value Tracker, detail.value
       when 'estimated_hours'
         value = format_hours(value.is_a?(String) ? (value.to_hours || value) : value)
       when 'project'
-        value = object_field_value(Project, detail.value)
+        value = object_field_value Project, detail.value
       when 'status'
-        value = object_field_value(IssueStatus, detail.value)
+        value = object_field_value IssueStatus, detail.value
       when 'priority'
-        value = object_field_value(IssuePriority, detail.value)
+        value = object_field_value IssuePriority, detail.value
       when 'category'
-        value = object_field_value(IssueCategory, detail.value)
+        value = object_field_value IssueCategory, detail.value
       when 'assigned_to'
-        value = object_field_value(User, detail.value)
+        value = object_field_value User, detail.value
       when 'fixed_version'
-        value = object_field_value(Version, detail.value)
+        value = object_field_value Version, detail.value
       when 'attachment'
         attachment = Attachment.find(detail.prop_key)
         value = if attachment.present?
                   escape = false
-                  "<#{object_url attachment}|#{markup_format(attachment.filename)}>"
+                  "<#{object_url attachment}|#{markup_format attachment.filename}>"
                 else
                   detail.prop_key.to_s
                 end
 
       when 'parent'
-        issue = Issue.find(detail.value)
+        issue = Issue.find detail.value
         value = if issue.present?
                   escape = false
-                  "<#{object_url issue}|#{markup_format(issue)}>"
+                  "<#{object_url issue}|#{markup_format issue}>"
                 else
                   detail.value.to_s
                 end
@@ -262,7 +262,7 @@ class Messenger
       value = object_field_value(Version, detail.value) if detail.property == 'cf' && field_format == 'version'
       value = if value.present?
                 if escape
-                  markup_format(value)
+                  markup_format value
                 else
                   value
                 end
@@ -279,13 +279,13 @@ class Messenger
       names = []
       textfield_for_project(project, :default_mentions).split(',').each { |m| names.push m.strip }
       names += extract_usernames(text) unless text.nil?
-      names.present? ? ' To: ' + names.uniq.join(', ') : nil
+      names.present? ? " To: #{names.uniq.join ', '}" : nil
     end
 
     private
 
     def object_field_value(klass, id)
-      obj = klass.find_by(id: id)
+      obj = klass.find_by id: id
       obj.nil? ? id.to_s : obj.to_s
     end
 
@@ -298,7 +298,7 @@ class Messenger
 
     def default_project_channels(proj)
       # parent project based
-      parent_channel = channels_for_project(proj.parent)
+      parent_channel = channels_for_project proj.parent
       return parent_channel if parent_channel.present?
       # system based
       if RedmineMessenger.settings[:messenger_channel].present? &&
