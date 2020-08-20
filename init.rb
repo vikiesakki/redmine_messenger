@@ -18,6 +18,7 @@ Redmine::Plugin.register :redmine_messenger do
     messenger_channel: 'redmine',
     messenger_username: 'robot',
     messenger_verify_ssl: '1',
+    messenger_direct_users_messages: '0',
     auto_mentions: '0',
     default_mentions: '',
     display_watchers: '0',

@@ -27,6 +27,7 @@
     = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :messenger_channel, size: 30 }
     = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :messenger_username, size: 30 }
     = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :messenger_verify_ssl }
+    = render partial: 'messenger_settings/messenger_select', locals: { f: f, mf: :messenger_direct_users_messages }
 
   fieldset#messenger_settings.box.tabular
     legend = l(:label_issue_plural)

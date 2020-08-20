@@ -17,6 +17,7 @@ Features
   * post db entry (if redmine_db is installed) updates
   * post password (if redmine_passwords is installed) updates
   * post contact (if redmine_contacts is installed) updates
+* Post information directly to users to be notified (users names should be the same in Redmine and chat). Tested with Rocket.Chat
 * overwrite messenger settings at project level
 * parent project support (inherit messenger settings from parent project)
 * multiple channel support (define one or more channels to deliver note)
