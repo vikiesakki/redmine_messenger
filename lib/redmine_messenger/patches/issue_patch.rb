@@ -17,12 +17,10 @@ module RedmineMessenger
 
           if Messenger.setting_for_project(project, :messenger_direct_users_messages)
             notified_users.each do |user|
-              if user.login != author.login
-                channels.append('@' + user.login)
-              end
+              channels.append "@#{user.login}" if user.login != author.login
             end
-          end   
-    
+          end
+
           return unless channels.present? && url
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
 
@@ -30,7 +28,7 @@ module RedmineMessenger
 
           attachment = {}
           if description.present? && Messenger.setting_for_project(project, :new_include_description)
-            attachment[:text] = Messenger.markup_format(description)
+            attachment[:text] = Messenger.markup_format description
           end
           attachment[:fields] = [{ title: I18n.t(:field_status),
                                    value: Messenger.markup_format(status.to_s),
@@ -58,11 +56,11 @@ module RedmineMessenger
             }
           end
 
-          Messenger.speak(l(:label_messenger_issue_created,
+          Messenger.speak l(:label_messenger_issue_created,
                             project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
                             user: author),
-                          channels, url, attachment: attachment, project: project)
+                          channels, url, attachment: attachment, project: project
         end
 
         def send_messenger_update
@@ -70,14 +68,12 @@ module RedmineMessenger
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
-          
+
           if Messenger.setting_for_project(project, :messenger_direct_users_messages)
             notified_users.each do |user|
-              if user.login != current_journal.user.login
-                channels.append('@' + user.login)
-              end
+              channels.append "@#{user.login}" if user.login != current_journal.user.login
             end
-          end  
+          end
 
           return unless channels.present? && url && Messenger.setting_for_project(project, :post_updates)
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
@@ -87,7 +83,7 @@ module RedmineMessenger
 
           attachment = {}
           if Messenger.setting_for_project(project, :updated_include_description)
-            attachment_text = Messenger.attachment_text_from_journal(current_journal)
+            attachment_text = Messenger.attachment_text_from_journal current_journal
             attachment[:text] = attachment_text if attachment_text.present?
           end
 
@@ -96,11 +92,11 @@ module RedmineMessenger
           fields.compact!
           attachment[:fields] = fields if fields.any?
 
-          Messenger.speak(l(:label_messenger_issue_updated,
+          Messenger.speak l(:label_messenger_issue_updated,
                             project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
                             user: current_journal.user),
-                          channels, url, attachment: attachment, project: project)
+                          channels, url, attachment: attachment, project: project
         end
 
         private
@@ -109,7 +105,7 @@ module RedmineMessenger
           mention_to = ''
           if Messenger.setting_for_project(project, :auto_mentions) ||
              Messenger.textfield_for_project(project, :default_mentions).present?
-            mention_to = Messenger.mentions(project, text)
+            mention_to = Messenger.mentions project, text
           end
           "<#{Messenger.object_url self}|#{Messenger.markup_format self}>#{mention_to}"
         end

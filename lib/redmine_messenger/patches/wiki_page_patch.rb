@@ -12,7 +12,7 @@ module RedmineMessenger
 
       module InstanceMethods
         def send_messenger_create
-          return unless Messenger.setting_for_project(project, :post_wiki)
+          return unless Messenger.setting_for_project project, :post_wiki
 
           set_language_if_valid Setting.default_language
 
@@ -21,15 +21,15 @@ module RedmineMessenger
 
           return unless channels.present? && url
 
-          Messenger.speak(l(:label_messenger_wiki_created,
+          Messenger.speak l(:label_messenger_wiki_created,
                             project_url: Messenger.project_url_markdown(project),
                             url: Messenger.url_markdown(self, title),
                             user: User.current),
-                          channels, url, project: project)
+                          channels, url, project: project
         end
 
         def send_messenger_update
-          return unless Messenger.setting_for_project(project, :post_wiki_updates)
+          return unless Messenger.setting_for_project project, :post_wiki_updates
 
           set_language_if_valid Setting.default_language
 
@@ -41,14 +41,14 @@ module RedmineMessenger
           attachment = nil
           if !content.nil? && content.comments.present?
             attachment = {}
-            attachment[:text] = Messenger.markup_format(content.comments.to_s)
+            attachment[:text] = Messenger.markup_format content.comments.to_s
           end
 
-          Messenger.speak(l(:label_messenger_wiki_updated,
+          Messenger.speak l(:label_messenger_wiki_updated,
                             project_url: Messenger.project_url_markdown(project),
                             url: Messenger.url_markdown(self, title),
                             user: content.author),
-                          channels, url, project: project, attachment: attachment)
+                          channels, url, project: project, attachment: attachment
         end
       end
     end

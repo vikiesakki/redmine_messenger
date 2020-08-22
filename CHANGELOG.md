@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.0.7
+-----
+- Added feature to send messages directly to users to be notified - thanks to @Ujifman
+
 1.0.6
 -----
 

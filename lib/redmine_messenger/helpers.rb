@@ -8,9 +8,9 @@ module RedmineMessenger
 
     def project_setting_messenger_default_value(value)
       if Messenger.default_project_setting(@project, value)
-        l(:label_messenger_settings_enabled)
+        l :label_messenger_settings_enabled
       else
-        l(:label_messenger_settings_disabled)
+        l :label_messenger_settings_disabled
       end
     end
   end

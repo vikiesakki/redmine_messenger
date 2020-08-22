@@ -49,7 +49,7 @@ module RedmineMessenger
                              "<#{revision_url}|#{Messenger.markup_format changeset.comments}>")
       attachment[:fields] = journal.details.map { |d| Messenger.detail_to_field d }
 
-      Messenger.speak(msg, channels, url, attachment: attachment, project: repository.project)
+      Messenger.speak msg, channels, url, attachment: attachment, project: repository.project
     end
   end
 end

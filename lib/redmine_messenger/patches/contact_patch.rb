@@ -12,7 +12,7 @@ module RedmineMessenger
 
       module InstanceMethods
         def send_messenger_create
-          return unless Messenger.setting_for_project(project, :post_contact)
+          return unless Messenger.setting_for_project project, :post_contact
           return if is_private? && !Messenger.setting_for_project(project, :post_private_contacts)
 
           set_language_if_valid Setting.default_language
@@ -22,15 +22,15 @@ module RedmineMessenger
 
           return unless channels.present? && url
 
-          Messenger.speak(l(:label_messenger_contact_created,
+          Messenger.speak l(:label_messenger_contact_created,
                             project_url: Messenger.project_url_markdown(project),
                             url: Messenger.url_markdown(self, name),
                             user: User.current),
-                          channels, url, project: project)
+                          channels, url, project: project
         end
 
         def send_messenger_update
-          return unless Messenger.setting_for_project(project, :post_contact_updates)
+          return unless Messenger.setting_for_project project, :post_contact_updates
           return if is_private? && !Messenger.setting_for_project(project, :post_private_contacts)
 
           set_language_if_valid Setting.default_language
@@ -40,11 +40,11 @@ module RedmineMessenger
 
           return unless channels.present? && url
 
-          Messenger.speak(l(:label_messenger_contact_updated,
+          Messenger.speak l(:label_messenger_contact_updated,
                             project_url: Messenger.project_url_markdown(project),
                             url: Messenger.url_markdown(self, name),
                             user: User.current),
-                          channels, url, project: project)
+                          channels, url, project: project
         end
       end
     end
