@@ -15,6 +15,14 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
+          if Messenger.setting_for_project(project, :messenger_direct_users_messages)
+            notified_users.each do |user|
+              if user.login != author.login
+                channels.append('@' + user.login)
+              end
+            end
+          end   
+    
           return unless channels.present? && url
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
 
@@ -62,6 +70,14 @@ module RedmineMessenger
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
+          
+          if Messenger.setting_for_project(project, :messenger_direct_users_messages)
+            notified_users.each do |user|
+              if user.login != current_journal.user.login
+                channels.append('@' + user.login)
+              end
+            end
+          end  
 
           return unless channels.present? && url && Messenger.setting_for_project(project, :post_updates)
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
