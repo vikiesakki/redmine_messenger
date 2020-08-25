@@ -16,7 +16,9 @@ module RedmineMessenger
           url = Messenger.url_for_project project
 
           if Messenger.setting_for_project(project, :messenger_direct_users_messages)
-            notified_users.each do |user|
+            to_be_notified = notified_users + watcher_users
+            to_be_notified = to_be_notified.compact.uniq
+            to_be_notified.each do |user|
               channels.append "@#{user.login}" if user.login != author.login
             end
           end
@@ -70,7 +72,9 @@ module RedmineMessenger
           url = Messenger.url_for_project project
 
           if Messenger.setting_for_project(project, :messenger_direct_users_messages)
-            notified_users.each do |user|
+            to_be_notified = notified_users + watcher_users
+            to_be_notified = to_be_notified.compact.uniq
+            to_be_notified.each do |user|
               channels.append "@#{user.login}" if user.login != current_journal.user.login
             end
           end
