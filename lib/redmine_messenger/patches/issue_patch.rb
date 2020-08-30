@@ -111,7 +111,11 @@ module RedmineMessenger
              Messenger.textfield_for_project(project, :default_mentions).present?
             mention_to = Messenger.mentions project, text
           end
-          "<#{Messenger.object_url self}|#{Messenger.markup_format self}>#{mention_to}"
+          if current_journal.nil?
+            "<#{Messenger.object_url self}|#{Messenger.markup_format self}>#{mention_to}"
+          else
+            "<#{Messenger.object_url self}#change-#{current_journal.id}|#{Messenger.markup_format self}>#{mention_to}"
+          end
         end
       end
     end
