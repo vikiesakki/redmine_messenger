@@ -22,7 +22,7 @@ module RedmineMessenger
     end
 
     def settings
-      if Setting[:plugin_redmine_messenger].instance_of? Hash
+      if Setting[:plugin_redmine_messenger].is_a? Hash
         new_settings = ActiveSupport::HashWithIndifferentAccess.new(Setting[:plugin_redmine_messenger])
         Setting.plugin_redmine_messenger = new_settings
         new_settings
