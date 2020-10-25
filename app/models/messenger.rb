@@ -240,7 +240,7 @@ class Messenger
       when 'fixed_version'
         value = object_field_value Version, detail.value
       when 'attachment'
-        attachment = Attachment.find(detail.prop_key)
+        attachment = Attachment.find_by id: detail.prop_key
         value = if attachment.present?
                   escape = false
                   "<#{object_url attachment}|#{markup_format attachment.filename}>"
@@ -249,7 +249,7 @@ class Messenger
                 end
 
       when 'parent'
-        issue = Issue.find detail.value
+        issue = Issue.find_by id: detail.value
         value = if issue.present?
                   escape = false
                   "<#{object_url issue}|#{markup_format issue}>"
