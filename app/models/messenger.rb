@@ -249,7 +249,7 @@ class Messenger
                 end
 
       when 'parent'
-        issue = Issue.find detail.value
+        issue = Issue.find_by id: detail.value
         value = if issue.present?
                   escape = false
                   "<#{object_url issue}|#{markup_format issue}>"
