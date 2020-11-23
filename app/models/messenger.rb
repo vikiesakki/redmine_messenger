@@ -236,7 +236,7 @@ class Messenger
       when 'category'
         value = object_field_value IssueCategory, detail.value
       when 'assigned_to', 'author'
-        value = object_field_value User, detail.value
+        value = object_field_value Principal, detail.value
       when 'fixed_version'
         value = object_field_value Version, detail.value
       when 'attachment'
