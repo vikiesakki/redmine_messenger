@@ -88,6 +88,11 @@ module RedmineMessenger
           end
 
           fields = current_journal.details.map { |d| Messenger.detail_to_field(d, project) }
+          if current_journal.notes.present?
+            fields << { title: I18n.t(:label_comment),
+                        value: Messenger.markup_format(current_journal.notes),
+                        short: false }
+          end
           fields << { title: I18n.t(:field_is_private), short: true } if current_journal.private_notes?
           fields.compact!
           attachment[:fields] = fields if fields.any?
