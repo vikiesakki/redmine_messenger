@@ -159,16 +159,6 @@ class Messenger
     def attachment_text_from_journal(journal)
       obj = journal.details.detect { |j| j.prop_key == 'description' && j.property == 'attr' }
       text = obj.value if obj.present?
-
-      if journal.notes.present?
-        if text.present?
-          text << "\n\n*#{l :label_comment}*\n"
-          text << journal.notes
-        else
-          text = journal.notes
-        end
-      end
-
       text.present? ? markup_format(text) : nil
     end
 
