@@ -240,7 +240,7 @@ class Messenger
                   detail.prop_key.to_s
                 end
 
-      when 'parent'
+      when 'parent', 'copied_from'
         issue = Issue.find_by id: detail.value
         value = if issue.present?
                   escape = false
