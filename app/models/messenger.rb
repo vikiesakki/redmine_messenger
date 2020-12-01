@@ -201,6 +201,8 @@ class Messenger
         key = detail.prop_key.to_s.sub('_id', '')
         title = if key == 'parent'
                   I18n.t "field_#{key}_issue"
+                elsif key == 'copied_from'
+                  I18n.t "label_#{key}"
                 else
                   I18n.t "field_#{key}"
                 end
@@ -238,7 +240,7 @@ class Messenger
                   detail.prop_key.to_s
                 end
 
-      when 'parent'
+      when 'parent', 'copied_from'
         issue = Issue.find_by id: detail.value
         value = if issue.present?
                   escape = false
