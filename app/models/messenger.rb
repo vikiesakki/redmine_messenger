@@ -199,9 +199,10 @@ class Messenger
         end
       else
         key = detail.prop_key.to_s.sub('_id', '')
-        title = if key == 'parent'
+        title = case key
+                when 'parent'
                   I18n.t "field_#{key}_issue"
-                elsif key == 'copied_from'
+                when 'copied_from'
                   I18n.t "label_#{key}"
                 else
                   I18n.t "field_#{key}"

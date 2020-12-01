@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.8
+-----
+
+- Drop testing with travis - we use github actions
+
 1.0.7
 -----
 - Added feature to send messages directly to users to be notified - thanks to @Ujifman
