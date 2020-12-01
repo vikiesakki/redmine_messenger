@@ -25,9 +25,9 @@ Features
 Screenshot
 ----------
 
-Mattermost output:
+Rocket.Chat output:
 
-![screenshot](https://raw.githubusercontent.com/alphanodes/redmine_messenger/master/assets/images/screenshot_mattermost.png)
+![screenshot](https://raw.githubusercontent.com/alphanodes/redmine_messenger/master/assets/images/screenshot_rocketchat.png)
 
 Redmine configuration:
 
