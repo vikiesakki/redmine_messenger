@@ -1,8 +1,6 @@
 module RedmineMessenger
-  REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed?('redmine_contacts') ? true : false
-  REDMINE_DB_SUPPORT = Redmine::Plugin.installed?('redmine_db') ? true : false
-  # this does not work at the moment, because redmine loads passwords after messener plugin
-  REDMINE_PASSWORDS_SUPPORT = Redmine::Plugin.installed?('redmine_passwords') ? true : false
+  REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed? 'redmine_contacts'
+  REDMINE_DB_SUPPORT = Redmine::Plugin.installed? 'redmine_db'
 
   class << self
     def setup
