@@ -1,6 +1,6 @@
 # Brazilian Portuguese strings
 pt-BR:
-  default_mentionsl_info: Pessoas a notificar, separadas por vírgula (ex: @all, @here)
+  default_mentionsl_info: "Pessoas a notificar, separadas por vírgula (ex: @all, @here)"
   label_messenger_contact_created: "%{project_url} - Contato %{url} criado por *%{user}*"
   label_messenger_contact_updated: "%{project_url} - Contato %{url} atualizado por *%{user}*"
   label_messenger_db_entry_created: "%{project_url} - Entrada de dado %{url} criada por *%{user}*"

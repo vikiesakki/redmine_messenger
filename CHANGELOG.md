@@ -5,6 +5,7 @@ Changelog
 -----
 
 - Drop testing with travis - we use github actions
+- Add translation pt-BR - thanks to @lucianocosta
 
 1.0.7
 -----
