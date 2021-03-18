@@ -29,7 +29,7 @@ linters:
       - Lint/Void
       - Metrics/BlockLength
       - Metrics/BlockNesting
-      - Metrics/LineLength
+      - Layout/LineLength
       - Naming/FileName
       - Rails/OutputSafety
       - Style/ConditionalAssignment

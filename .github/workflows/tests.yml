@@ -36,8 +36,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_USER: root
-          MYSQL_PASSWORD: ''
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_PASSWORD: 'BestPasswordEver'
         ports:
           - 3306:3306
         options: >-
@@ -49,7 +48,7 @@ jobs:
     steps:
       - name: Verify MySQL connection from host
         run: |
-          mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port 3306 -uroot -pBestPasswordEver -e "SHOW DATABASES"
         if: matrix.db == 'mysql'
 
       - name: Checkout Redmine
