@@ -24,7 +24,8 @@ jobs:
           MYSQL_USER: root
           MYSQL_PASSWORD: 'BestPasswordEver'
         ports:
-          - 33306:3306
+          # will assign a random free host port
+          - 3306/tcp
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -34,7 +35,7 @@ jobs:
     steps:
       - name: Verify MySQL connection from host
         run: |
-          mysql --host 127.0.0.1 --port 33306 -uroot -pBestPasswordEver -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -pBestPasswordEver -e "SHOW DATABASES"
 
       - name: Checkout Redmine
         uses: actions/checkout@v2
@@ -82,6 +83,7 @@ jobs:
       - name: Run Redmine rake tasks
         env:
           RAILS_ENV: test
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: |
           bundle exec rake generate_secret_token
@@ -91,13 +93,13 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          REDMINE_VERSION: ${{ matrix.redmine }}
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:test NAME=redmine_messenger RUBYOPT="-W0"
 
       - name: Run uninstall test
         env:
           RAILS_ENV: test
-          REDMINE_VERSION: ${{ matrix.redmine }}
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:migrate NAME=redmine_messenger VERSION=0
