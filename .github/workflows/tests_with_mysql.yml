@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Verify MySQL connection from host
         run: |
-          mysql --host 127.0.0.1 --port 3306 -uroot -pBestPasswordEver -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port 33306 -uroot -pBestPasswordEver -e "SHOW DATABASES"
 
       - name: Checkout Redmine
         uses: actions/checkout@v2
