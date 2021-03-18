@@ -24,7 +24,7 @@ jobs:
           MYSQL_USER: root
           MYSQL_PASSWORD: 'BestPasswordEver'
         ports:
-          - 3306:3306
+          - 33306:3306
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
