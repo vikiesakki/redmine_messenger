@@ -14,9 +14,9 @@ jobs:
       matrix:
         ruby: ['2.7', '2.6', '2.4']
         redmine: ['4.0-stable', '4.1-stable', 'master']
-        exclude:
+        include:
           - ruby: '2.7'
-            redmine: ['4.0-stable', '4.1-stable']
+            redmine: 'master'
       fail-fast: false
 
     services:
