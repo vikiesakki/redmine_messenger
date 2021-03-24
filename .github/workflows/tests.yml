@@ -14,9 +14,11 @@ jobs:
       matrix:
         ruby: ['2.6', '2.4']
         redmine: ['4.0-stable', '4.1-stable', 'master']
+        db: ['postgres', 'mysql']
         include:
           - ruby: '2.7'
-            redmine: 'master'
+            redmine: master
+            db: postgres
       fail-fast: false
 
     services:
