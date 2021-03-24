@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['2.7', '2.6', '2.4']
+        ruby: ['2.6', '2.4']
         redmine: ['4.0-stable', '4.1-stable', 'master']
         include:
           - ruby: '2.7'
