@@ -1,4 +1,4 @@
-name: Tests with PostgreSQL
+name: Tests
 on:
   push:
   pull_request:
@@ -12,8 +12,11 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['2.6', '2.4']
+        ruby: ['2.7', '2.6', '2.4']
         redmine: ['4.0-stable', '4.1-stable', 'master']
+        exclude:
+          - ruby: '2.7'
+            redmine: ['4.0-stable', '4.1-stable']
       fail-fast: false
 
     services:
@@ -31,7 +34,25 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 'BestPasswordEver'
+        ports:
+          # will assign a random free host port
+          - 3306/tcp
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
+      - name: Verify MySQL connection from host
+        run: |
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -pBestPasswordEver -e "SHOW DATABASES"
+        if: matrix.db == 'mysql'
+
       - name: Checkout Redmine
         uses: actions/checkout@v2
         with:
@@ -54,7 +75,7 @@ jobs:
           build-essential
           cmake
           libicu-dev
-          libpq-dev
+          libmysqlclient-dev
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -67,7 +88,7 @@ jobs:
         run: |
           sed -i '/rubocop/d' Gemfile
           rm -f .rubocop*
-          cp plugins/redmine_messenger/test/support/database-postgres.yml config/database.yml
+          cp plugins/redmine_messenger/test/support/database-mysql.yml config/database.yml
           cp plugins/redmine_messenger/test/support/configuration.yml config/configuration.yml
 
       - name: Install Ruby dependencies
@@ -78,6 +99,7 @@ jobs:
       - name: Run Redmine rake tasks
         env:
           RAILS_ENV: test
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: |
           bundle exec rake generate_secret_token
@@ -87,13 +109,13 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          REDMINE_VERSION: ${{ matrix.redmine }}
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:test NAME=redmine_messenger RUBYOPT="-W0"
 
       - name: Run uninstall test
         env:
           RAILS_ENV: test
-          REDMINE_VERSION: ${{ matrix.redmine }}
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:migrate NAME=redmine_messenger VERSION=0
