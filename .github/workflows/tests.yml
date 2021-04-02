@@ -19,6 +19,9 @@ jobs:
           - ruby: '2.7'
             redmine: 4.2-stable
             db: postgres
+        exclude:
+          - ruby: '2.4'
+            redmine: master
       fail-fast: false
 
     services:
