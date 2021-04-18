@@ -1,4 +1,4 @@
-$VERBOSE = nil
+# frozen_string_literal: true
 
 if ENV['JENKINS']
   require 'simplecov'

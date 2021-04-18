@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 
@@ -16,9 +18,9 @@ class Messenger
 
       # @see https://api.slack.com/reference/surfaces/formatting#escaping
 
-      text.gsub!('&', '&amp;')
-      text.gsub!('<', '&lt;')
-      text.gsub!('>', '&gt;')
+      text.gsub! '&', '&amp;'
+      text.gsub! '<', '&lt;'
+      text.gsub! '>', '&gt;'
 
       text
     end
@@ -32,7 +34,7 @@ class Messenger
       return if url.blank? || channels.blank?
 
       params = { text: msg, link_names: 1 }
-      username = textfield_for_project(options[:project], :messenger_username)
+      username = textfield_for_project options[:project], :messenger_username
       params[:username] = username if username.present?
       params[:attachments] = options[:attachment]&.any? ? [options[:attachment]] : []
       icon = textfield_for_project options[:project], :messenger_icon
@@ -45,16 +47,16 @@ class Messenger
       end
 
       channels.each do |channel|
-        uri = URI(url)
+        uri = URI url
         params[:channel] = channel
         http_options = { use_ssl: uri.scheme == 'https' }
-        http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting?(:messenger_verify_ssl)
+        http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting? :messenger_verify_ssl
         begin
           req = Net::HTTP::Post.new uri
           req.set_form_data payload: params.to_json
-          Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
+          Net::HTTP.start uri.hostname, uri.port, http_options do |http|
             response = http.request req
-            Rails.logger.warn(response.inspect) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
+            Rails.logger.warn response.inspect unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
           end
         rescue StandardError => e
           Rails.logger.warn "cannot connect to #{url}"
@@ -68,9 +70,9 @@ class Messenger
         host = Regexp.last_match 2
         port = Regexp.last_match 4
         prefix = Regexp.last_match 5
-        Rails.application.routes.url_for(obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix))
+        Rails.application.routes.url_for obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix)
       else
-        Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: ''))
+        Rails.application.routes.url_for obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: '')
       end
     end
 
@@ -103,7 +105,7 @@ class Messenger
 
       # project based
       pm = MessengerSetting.find_by project_id: proj.id
-      return pm.send(config) if !pm.nil? && pm.send(config).present?
+      return pm.send config if !pm.nil? && pm.send(config).present?
 
       default_textfield proj, config
     end
@@ -121,7 +123,7 @@ class Messenger
       return [] if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by(project_id: proj.id)
+      pm = MessengerSetting.find_by project_id: proj.id
       if !pm.nil? && pm.messenger_channel.present?
         return [] if pm.messenger_channel == '-'
 
@@ -135,14 +137,14 @@ class Messenger
 
       @setting_found = 0
       # project based
-      pm = MessengerSetting.find_by(project_id: proj.id)
+      pm = MessengerSetting.find_by project_id: proj.id
       unless pm.nil? || pm.send(config).zero?
         @setting_found = 1
         return false if pm.send(config) == 1
         return true if pm.send(config) == 2
         # 0 = use system based settings
       end
-      default_project_setting(proj, config)
+      default_project_setting proj, config
     end
 
     def default_project_setting(proj, config)
@@ -173,7 +175,7 @@ class Messenger
           title = key
           field_format = CustomField.find(detail.prop_key)&.field_format
 
-          value = IssuesController.helpers.format_value(detail.value, detail.custom_field) if detail.value.present?
+          value = IssuesController.helpers.format_value detail.value, detail.custom_field if detail.value.present?
         end
       elsif detail.property == 'attachment'
         key = 'attachment'
@@ -181,7 +183,7 @@ class Messenger
         value = detail.value.to_s
       elsif detail.property == 'attr' &&
             detail.prop_key == 'db_relation'
-        return { short: true } unless setting_for_project(prj, :post_db)
+        return { short: true } unless setting_for_project prj, :post_db
 
         title = I18n.t :field_db_relation
         if detail.value.present?
@@ -190,7 +192,7 @@ class Messenger
         end
       elsif detail.property == 'attr' &&
             detail.prop_key == 'password_relation'
-        return { short: true } unless setting_for_project(prj, :post_password)
+        return { short: true } unless setting_for_project prj, :post_password
 
         title = I18n.t :field_password_relation
         if detail.value.present?
@@ -198,7 +200,7 @@ class Messenger
           value = entry.present? ? entry.name : detail.value.to_s
         end
       else
-        key = detail.prop_key.to_s.sub('_id', '')
+        key = detail.prop_key.to_s.sub '_id', ''
         title = case key
                 when 'parent'
                   I18n.t "field_#{key}_issue"
@@ -251,7 +253,7 @@ class Messenger
                 end
       end
 
-      value = object_field_value(Version, detail.value) if detail.property == 'cf' && field_format == 'version'
+      value = object_field_value Version, detail.value if detail.property == 'cf' && field_format == 'version'
       value = if value.present?
                 if escape
                   markup_format value
@@ -270,7 +272,7 @@ class Messenger
     def mentions(project, text)
       names = []
       textfield_for_project(project, :default_mentions).split(',').each { |m| names.push m.strip }
-      names += extract_usernames(text) unless text.nil?
+      names += extract_usernames text unless text.nil?
       names.present? ? " To: #{names.uniq.join ', '}" : nil
     end
 
@@ -282,7 +284,8 @@ class Messenger
     end
 
     def extract_usernames(text)
-      text = '' if text.nil?
+      return [] if text.blank?
+
       # messenger usernames may only contain lowercase letters, numbers,
       # dashes, dots and underscores and must start with a letter or number.
       text.scan(/@[a-z0-9][a-z0-9_\-.]*/).uniq

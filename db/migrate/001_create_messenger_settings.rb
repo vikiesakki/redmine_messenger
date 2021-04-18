@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMessengerSettings < ActiveRecord::Migration[4.2]
   def change
     create_table :messenger_settings do |t|

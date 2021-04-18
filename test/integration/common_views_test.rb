@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path '../../test_helper', __FILE__
 
 class CommonViewsTest < Redmine::IntegrationTest
@@ -21,14 +23,14 @@ class CommonViewsTest < Redmine::IntegrationTest
   end
 
   test 'View user' do
-    log_user('admin', 'admin')
+    log_user 'admin', 'admin'
     get '/users/2'
     assert_response :success
   end
 
   test 'View issue' do
-    log_user('admin', 'admin')
-    EnabledModule.create(project_id: 1, name: 'issue_tracking')
+    log_user 'admin', 'admin'
+    EnabledModule.create project_id: 1, name: 'issue_tracking'
     issue = Issue.where(id: 1).first
     issue.save
     get '/issues/1'

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.9
+-----
+
+- Redmine 4.1 is required. Use git tag 1.0.8, if you use an older version.
+- Redmine 4.2 support
+- Ruby 2.5 or higher is required
+
 1.0.8
 -----
 
@@ -9,6 +16,7 @@ Changelog
 
 1.0.7
 -----
+
 - Added feature to send messages directly to users to be notified - thanks to @Ujifman
 
 1.0.6
@@ -29,7 +37,6 @@ Changelog
 
 - ruby 2.4.x or newer is required
 
-
 1.0.4
 -----
 
@@ -39,7 +46,6 @@ Changelog
 -----
 
 - Redmine 4 support
-
 
 1.0.2
 -----

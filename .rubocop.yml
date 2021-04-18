@@ -6,12 +6,16 @@ Rails:
   Enabled: true
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   TargetRailsVersion: 5.2
   NewCops: enable
 
 Metrics:
   Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: true
+  CountKeywordArgs: false
 
 Layout/LineLength:
   Max: 140
@@ -37,13 +41,42 @@ Performance/ChainArrayAllocation:
 Style/AutoResourceCleanup:
   Enabled: true
 
+Style/ExpandPathArguments:
+  Enabled: true
+  Exclude:
+    - test/**/*
+
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
+  Exclude:
+    - '/**/*.rsb'
+
+Style/OptionHash:
+  Enabled: true
+  SuspiciousParamNames:
+    - options
+    - api_options
+    - opts
+    - args
+    - params
+    - parameters
+    - settings
+  Exclude:
+    - lib/redmine_messenger/patches/*.rb
+
+Style/ReturnNil:
+  Enabled: true
+
+Style/UnlessLogicalOperators:
+  Enabled: true
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  AllowParenthesesInMultilineCall: true
+  AllowParenthesesInChaining: true
+  EnforcedStyle: omit_parentheses
 
 Style/Documentation:
-  Enabled: false
-
-Style/ExpandPathArguments:
   Enabled: false
 
 Style/HashTransformKeys:

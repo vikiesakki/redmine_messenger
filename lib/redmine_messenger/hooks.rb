@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedmineMessenger
   class MessengerListener < Redmine::Hook::Listener
     def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context = {})
@@ -17,9 +19,9 @@ module RedmineMessenger
       repository = changeset.repository
 
       if Setting.host_name.to_s =~ %r{/\A(https?://)?(.+?)(:(\d+))?(/.+)?\z/i}
-        host = Regexp.last_match(2)
-        port = Regexp.last_match(4)
-        prefix = Regexp.last_match(5)
+        host = Regexp.last_match 2
+        port = Regexp.last_match 4
+        prefix = Regexp.last_match 5
         revision_url = Rails.application.routes.url_for(
           controller: 'repositories',
           action: 'revision',

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedmineMessenger
   module Patches
     module ContactPatch

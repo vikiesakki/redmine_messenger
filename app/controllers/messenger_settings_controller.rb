@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MessengerSettingsController < ApplicationController
   before_action :find_project_by_project_id
   before_action :authorize
@@ -8,10 +10,10 @@ class MessengerSettingsController < ApplicationController
       flash[:notice] = l :notice_successful_update
       redirect_to settings_project_path(@project, tab: 'messenger')
     else
-      flash[:error] = setting.errors.full_messages.flatten.join("\n")
+      flash[:error] = setting.errors.full_messages.flatten.join "\n"
       respond_to do |format|
         format.html { redirect_back_or_default(settings_project_path(@project, tab: 'messenger')) }
-        format.api  { render_validation_errors(setting) }
+        format.api  { render_validation_errors setting }
       end
     end
   end

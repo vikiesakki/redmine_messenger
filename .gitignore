@@ -7,3 +7,4 @@ Gemfile.lock
 docs/_build
 docs/_static
 docs/_templates
+.enable_dev

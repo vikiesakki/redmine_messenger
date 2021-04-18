@@ -73,10 +73,11 @@ Go to Rocket.Chat documentation [Incoming WebHook Scripting](https://rocket.chat
 Requirements
 ------------
 
-* Redmine version >= 4.0.0
-* Ruby version >= 2.4.0
+* Redmine version >= 4.1.0
+* Ruby version >= 2.5.0
 
 If you want to use it with Redmine 3.x, use git tag 1.0.5
+If you want to use it with Redmine 4.0, use git tag 1.0.8
 
 Installation
 ------------

@@ -1,4 +1,6 @@
-raise "\n\033[31mredmine_messenger requires ruby 2.4 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.4'
+# frozen_string_literal: true
+
+raise "\n\033[31mredmine_messenger requires ruby 2.5 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.4'
 
 Redmine::Plugin.register :redmine_messenger do
   name 'Redmine Messenger'
@@ -8,7 +10,7 @@ Redmine::Plugin.register :redmine_messenger do
   description 'Messenger integration for Slack, Discord, Rocketchat and Mattermost support'
   version RedmineMessenger::VERSION
 
-  requires_redmine version_or_higher: '4.0.0'
+  requires_redmine version_or_higher: '4.1.0'
 
   permission :manage_messenger, projects: :settings, messenger_settings: :update
 

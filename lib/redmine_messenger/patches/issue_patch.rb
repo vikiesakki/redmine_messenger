@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedmineMessenger
   module Patches
     module IssuePatch
@@ -15,7 +17,7 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
-          if Messenger.setting_for_project(project, :messenger_direct_users_messages)
+          if Messenger.setting_for_project project, :messenger_direct_users_messages
             messenger_to_be_notified.each do |user|
               channels.append "@#{user.login}" unless user == author
             end
@@ -69,7 +71,7 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
-          if Messenger.setting_for_project(project, :messenger_direct_users_messages)
+          if Messenger.setting_for_project project, :messenger_direct_users_messages
             messenger_to_be_notified.each do |user|
               channels.append "@#{user.login}" unless user == current_journal.user
             end
@@ -82,12 +84,12 @@ module RedmineMessenger
           set_language_if_valid Setting.default_language
 
           attachment = {}
-          if Messenger.setting_for_project(project, :updated_include_description)
+          if Messenger.setting_for_project project, :updated_include_description
             attachment_text = Messenger.attachment_text_from_journal current_journal
             attachment[:text] = attachment_text if attachment_text.present?
           end
 
-          fields = current_journal.details.map { |d| Messenger.detail_to_field(d, project) }
+          fields = current_journal.details.map { |d| Messenger.detail_to_field d, project }
           if current_journal.notes.present?
             fields << { title: I18n.t(:label_comment),
                         value: Messenger.markup_format(current_journal.notes),
