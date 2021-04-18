@@ -69,15 +69,16 @@ You have to add /slack after your webhook url.
 
 Go to Rocket.Chat documentation [Incoming WebHook Scripting](https://rocket.chat/docs/administrator-guides/integrations/) for more information to set up Incoming WebHook
 
-
 Requirements
 ------------
 
 * Redmine version >= 4.1.0
 * Ruby version >= 2.5.0
 
-If you want to use it with Redmine 3.x, use git tag 1.0.5
-If you want to use it with Redmine 4.0, use git tag 1.0.8
+### Older versions
+
+* If you want to use it with Redmine 3.x, use git tag 1.0.5
+* If you want to use it with Redmine 4.0, use git tag 1.0.7
 
 Installation
 ------------
@@ -97,7 +98,6 @@ Channel to the channel's handle (be careful, this is not the channel's display n
 visible to users, you can find each channel's handle by navigating inside the channel
 and clicking the down-arrow and selecting view info).
 
-
 Uninstall
 ---------
 
@@ -109,14 +109,13 @@ Uninstall ``redmine_messenger``
 
 Restart Redmine (application server)
 
-
 Credits
 -------
 
 The source code is forked from
 
-  - [redmine_rocketchat](https://github.com/phlegx/redmine_rocketchat)
-  - [redmine_mattermost](https://github.com/altsol/redmine_mattermost)
-  - [redmine-slack](https://github.com/sciyoshi/redmine-slack)
+* [redmine_rocketchat](https://github.com/phlegx/redmine_rocketchat)
+* [redmine_mattermost](https://github.com/altsol/redmine_mattermost)
+* [redmine-slack](https://github.com/sciyoshi/redmine-slack)
 
 Special thanks to the original author and contributors for making this awesome hook for Redmine. This fork is just refactored to use Messenger-namespaced configuration options in order to use all hooks for Rocket.Chat, Mattermost AND Slack in a Redmine installation.
