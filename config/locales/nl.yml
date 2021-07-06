@@ -5,13 +5,13 @@ en:
   label_messenger_contact_updated: "%{project_url} - Contact %{url} bijgewerkt door *%{user}*"
   label_messenger_db_entry_created: "%{project_url} - DB entry %{url} aangemaakt door *%{user}*"
   label_messenger_db_entry_updated: "%{project_url} - DB entry %{url} bijgewerkt door *%{user}*"
-  label_messenger_default_not_visible: Default setting is not visible for security reasons
+  label_messenger_default_not_visible: Standaardwaarde is niet zichtbaar vanwege beveiligingsredenen.
   label_messenger_issue_created: "%{project_url} - Issue %{url} aangemaakt door *%{user}*"
   label_messenger_issue_updated: "%{project_url} - Issue %{url} bijgewerkt door *%{user}*"
-  label_messenger_outgoing_webhook: Outgoing Webhook
+  label_messenger_outgoing_webhook: Uitgaande Webhook
   label_messenger_password_created: "%{project_url} - Wachtwoord %{url} aangemaakt door *%{user}*"
   label_messenger_password_updated: "%{project_url} - Wachtwoord %{url} bijgewerkt door *%{user}*"
-  label_messenger_project_text_field_info: Leave it blank for system default.
+  label_messenger_project_text_field_info: Laat leeg voor systeeminstelling.
   label_messenger_setting: Messenger Instellingen
   label_messenger_settings_default: Systeeminstelling
   label_messenger_settings_disabled: Uitgeschakeld
@@ -41,9 +41,9 @@ en:
   label_settings_post_private_notes: Private notes bijwerkingen?
   label_settings_post_updates: Issue bijwerkingen?
   label_settings_post_wiki_updates: Wiki bijwerkingen?
-  label_settings_post_wiki: Stuur Wiki toegevoegd?
+  label_settings_post_wiki: Wiki toegevoegd?
   label_settings_updated_include_description: Beschrijving in bijwerking issue?
-  messenger_channel_info_html: 'Hier kun je het kanaal opgeven dat gebruikt moet worden. Meerdere kanalen kunnen worden gebruikt, gescheiden met een komma'
+  messenger_channel_info_html: 'Hier kun je het kanaal opgeven dat gebruikt moet worden. Meerdere kanalen kunnen worden gebruikt, gescheiden door een komma'
   messenger_contacts_intro: Activeer de bijwerkingen voor Issues die gestuurd moeten worden naar het van tevoren gekozen kanaal.
   messenger_db_intro: Activeer de bijwerkingen van de database die gestuurd moeten worden naar het van tevoren gekozen kanaal.
   messenger_issue_intro: Activeer de bijwerkingen voor Issues die gestuurd moeten worden naar het van tevoren gekozen kanaal.
