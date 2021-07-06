@@ -1,5 +1,5 @@
-# English strings
-en:
+# Dutch strings
+nl:
   default_mentionsl_info: Standaard gebruikers om op de hoogte te stellen, gescheiden door een komma (e.g. @all, @here)
   label_messenger_contact_created: "%{project_url} - Contact %{url} aangemaakt door *%{user}*"
   label_messenger_contact_updated: "%{project_url} - Contact %{url} bijgewerkt door *%{user}*"
