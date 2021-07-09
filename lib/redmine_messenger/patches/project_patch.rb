@@ -6,7 +6,7 @@ module RedmineMessenger
       extend ActiveSupport::Concern
 
       included do
-        has_one :messenger_setting
+        has_one :messenger_setting, dependent: :destroy
       end
     end
   end
