@@ -10,6 +10,7 @@ module RedmineMessenger
     def setup
       # Patches
       Issue.include RedmineMessenger::Patches::IssuePatch
+      Project.include RedmineMessenger::Patches::ProjectPatch
       WikiPage.include RedmineMessenger::Patches::WikiPagePatch
       ProjectsController.send :helper, MessengerProjectsHelper
       Contact.include RedmineMessenger::Patches::ContactPatch if RedmineMessenger::REDMINE_CONTACTS_SUPPORT

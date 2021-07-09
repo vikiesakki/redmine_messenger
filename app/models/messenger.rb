@@ -80,7 +80,7 @@ class Messenger
       return if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by project_id: proj.id
+      pm = proj.messenger_setting
       return pm.messenger_url if !pm.nil? && pm.messenger_url.present?
 
       # parent project based
@@ -104,7 +104,7 @@ class Messenger
       return if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by project_id: proj.id
+      pm = proj.messenger_setting
       return pm.send config if !pm.nil? && pm.send(config).present?
 
       default_textfield proj, config
@@ -123,7 +123,7 @@ class Messenger
       return [] if proj.blank?
 
       # project based
-      pm = MessengerSetting.find_by project_id: proj.id
+      pm = proj.messenger_setting
       if !pm.nil? && pm.messenger_channel.present?
         return [] if pm.messenger_channel == '-'
 
@@ -137,7 +137,7 @@ class Messenger
 
       @setting_found = 0
       # project based
-      pm = MessengerSetting.find_by project_id: proj.id
+      pm = proj.messenger_setting
       unless pm.nil? || pm.send(config).zero?
         @setting_found = 1
         return false if pm.send(config) == 1
