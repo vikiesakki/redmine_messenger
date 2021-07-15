@@ -4,8 +4,7 @@
 = labelled_form_for :setting,
                     @messenger_setting,
                     url: project_messenger_setting_path(project_id: @project),
-                    method: :put,
-                    class: 'tabular' do |f|
+                    method: :put do |f|
 
   fieldset#messenger_settings.box.tabular
     legend = l :label_messenger_outgoing_webhook
