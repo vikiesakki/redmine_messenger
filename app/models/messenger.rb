@@ -297,7 +297,6 @@ class Messenger
 
     def perform(url, params)
       uri = URI url
-      params[:channel] = channel
       http_options = { use_ssl: uri.scheme == 'https' }
       http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting? :messenger_verify_ssl
       begin
