@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.10
+-----
+
+- Web service is called asynchron which does not block performance while sending message
+
 1.0.9
 -----
 
