@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-raise "\n\033[31mredmine_messenger requires ruby 2.5 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.5'
+raise "\n\033[31mredmine_messenger requires ruby 2.6 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.6'
 
 Redmine::Plugin.register :redmine_messenger do
   name 'Redmine Messenger'
