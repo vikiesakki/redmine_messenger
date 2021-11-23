@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'redmine_messenger/version'
-
 module RedmineMessenger
+  VERSION = '1.0.10'
   REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed? 'redmine_contacts'
   REDMINE_DB_SUPPORT = Redmine::Plugin.installed? 'redmine_db'
 
@@ -21,7 +20,7 @@ module RedmineMessenger
       ActionView::Base.include RedmineMessenger::Helpers
 
       # Hooks
-      require_dependency 'redmine_messenger/hooks'
+      RedmineMessenger::Hooks
     end
 
     def settings

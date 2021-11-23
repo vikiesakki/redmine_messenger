@@ -42,6 +42,8 @@ Redmine::Plugin.register :redmine_messenger do
   }, partial: 'settings/messenger_settings'
 end
 
-Rails.configuration.to_prepare do
-  RedmineMessenger.setup
+if Rails.version > '6.0'
+  ActiveSupport.on_load(:active_record) { RedmineMessenger.setup }
+else
+  Rails.configuration.to_prepare { RedmineMessenger.setup }
 end
