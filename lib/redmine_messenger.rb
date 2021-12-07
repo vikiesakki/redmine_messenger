@@ -5,39 +5,29 @@ module RedmineMessenger
   REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed? 'redmine_contacts'
   REDMINE_DB_SUPPORT = Redmine::Plugin.installed? 'redmine_db'
 
+  include RedminePluginKit::PluginBase
+
   class << self
+    private
+
     def setup
       # Patches
-      Issue.include RedmineMessenger::Patches::IssuePatch
-      Project.include RedmineMessenger::Patches::ProjectPatch
-      WikiPage.include RedmineMessenger::Patches::WikiPagePatch
-      ProjectsController.send :helper, MessengerProjectsHelper
-      Contact.include RedmineMessenger::Patches::ContactPatch if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
-      DbEntry.include RedmineMessenger::Patches::DbEntryPatch if RedmineMessenger::REDMINE_DB_SUPPORT
-      Password.include RedmineMessenger::Patches::PasswordPatch if Redmine::Plugin.installed? 'redmine_passwords'
+      loader.add_patch %w[Issue
+                          Project
+                          WikiPage]
+
+      loader.add_patch 'Contact' if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
+      loader.add_patch 'DbEntry' if RedmineMessenger::REDMINE_DB_SUPPORT
+      loader.add_patch 'Password' if Redmine::Plugin.installed? 'redmine_passwords'
+
+      # Helper
+      loader.add_helper [{ controller: 'Projects', helper: 'MessengerProjects' }]
 
       # Global helpers
-      ActionView::Base.include RedmineMessenger::Helpers
+      loader.add_global_helper RedmineMessenger::Helpers
 
-      # Hooks
-      RedmineMessenger::Hooks
-    end
-
-    def settings
-      if Setting[:plugin_redmine_messenger].is_a? Hash
-        new_settings = ActiveSupport::HashWithIndifferentAccess.new Setting[:plugin_redmine_messenger]
-        Setting.plugin_redmine_messenger = new_settings
-        new_settings
-      else
-        # Rails 5 uses ActiveSupport::HashWithIndifferentAccess
-        Setting[:plugin_redmine_messenger]
-      end
-    end
-
-    def setting?(value)
-      return true if settings[value].to_i == 1
-
-      false
+      # Apply patches and helper
+      loader.apply!
     end
   end
 end

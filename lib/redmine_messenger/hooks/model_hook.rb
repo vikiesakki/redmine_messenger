@@ -2,7 +2,13 @@
 
 module RedmineMessenger
   module Hooks
-    class MessengerListener < Redmine::Hook::Listener
+    class ModelHook < Redmine::Hook::Listener
+      def after_plugins_loaded(_context = {})
+        return if Rails.version < '6.0'
+
+        RedmineMessenger.setup!
+      end
+
       def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context = {})
         issue = context[:issue]
         journal = issue.current_journal

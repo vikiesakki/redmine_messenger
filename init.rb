@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-raise "\n\033[31mredmine_messenger requires ruby 2.6 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.6'
+loader = RedminePluginKit::Loader.new plugin_id: 'redmine_messenger'
 
 Redmine::Plugin.register :redmine_messenger do
   name 'Redmine Messenger'
@@ -42,8 +42,5 @@ Redmine::Plugin.register :redmine_messenger do
   }, partial: 'settings/messenger_settings'
 end
 
-if Rails.version > '6.0'
-  ActiveSupport.on_load(:active_record) { RedmineMessenger.setup }
-else
-  Rails.configuration.to_prepare { RedmineMessenger.setup }
-end
+RedminePluginKit::Loader.persisting { loader.load_model_hooks! }
+RedminePluginKit::Loader.to_prepare { RedmineMessenger.setup! } if Rails.version < '6.0'

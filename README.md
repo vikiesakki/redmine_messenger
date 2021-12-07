@@ -73,7 +73,7 @@ Requirements
 ------------
 
 * Redmine version >= 4.1.0
-* Ruby version >= 2.5.0
+* Ruby version >= 2.6.0
 
 ### Older versions
 
