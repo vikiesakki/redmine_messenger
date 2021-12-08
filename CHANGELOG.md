@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.12
+------
+
+- Fixed settings bug introducted with version 1.0.11
+
 1.0.11
 ------
 
