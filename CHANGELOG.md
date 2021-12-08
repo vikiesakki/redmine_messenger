@@ -1,8 +1,16 @@
 Changelog
 =========
 
+1.0.11
+------
+
+- Upcoming Redmine 5 support
+- Ruby 3 support
+- Ruby 2.6 or higher is required
+- Use redmine_plugin_kit as plugin loader
+
 1.0.10
------
+------
 
 - Web service is called asynchron which does not block performance while sending message
 
