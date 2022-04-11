@@ -11,6 +11,7 @@ group :development do
   # - remove REDMINE/.rubocop* files
   if File.file? File.expand_path './.enable_dev', __dir__
     gem 'rubocop', require: false
+    gem 'rubocop-minitest', require: false
     gem 'rubocop-performance', require: false
     gem 'rubocop-rails', require: false
     gem 'slim_lint', require: false
