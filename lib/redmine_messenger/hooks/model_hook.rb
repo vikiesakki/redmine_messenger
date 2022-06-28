@@ -20,8 +20,8 @@ module RedmineMessenger
         return unless channels.present? && url && issue.changes.any? && Messenger.setting_for_project(issue.project, :post_updates)
         return if issue.is_private? && !Messenger.setting_for_project(issue.project, :post_private_issues)
 
-        msg = "[#{Messenger.markup_format issue.project}]" \
-              " #{Messenger.markup_format journal.user.to_s} updated <#{Messenger.object_url issue}|#{Messenger.markup_format issue}>"
+        msg = "[#{Messenger.markup_format issue.project}] " \
+              "#{Messenger.markup_format journal.user.to_s} updated <#{Messenger.object_url issue}|#{Messenger.markup_format issue}>"
 
         repository = changeset.repository
 
