@@ -77,11 +77,11 @@ class Messenger
     end
 
     def project_url_markdown(project)
-      "[#{project.name}](#{object_url project})"
+      "<#{object_url project}|#{project.name}>"
     end
 
     def url_markdown(obj, name)
-      "[#{name}](#{object_url obj})"
+      "<#{object_url obj}|#{name}>"
     end
 
     def textfield_for_project(proj, config)
