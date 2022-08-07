@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.13
+------
+
+- Slack compatible url formating, see #100
+
 1.0.12
 ------
 
