@@ -12,7 +12,7 @@ class MessengerSettingsController < ApplicationController
     else
       flash[:error] = setting.errors.full_messages.flatten.join "\n"
       respond_to do |format|
-        format.html { redirect_back_or_default(settings_project_path(@project, tab: 'messenger')) }
+        format.html { redirect_to settings_project_path(@project, tab: 'messenger') }
         format.api  { render_validation_errors setting }
       end
     end
