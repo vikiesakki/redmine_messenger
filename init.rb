@@ -10,7 +10,7 @@ Redmine::Plugin.register :redmine_messenger do
   description 'Messenger integration for Slack, Discord, Rocketchat and Mattermost support'
   version RedmineMessenger::VERSION
 
-  requires_redmine version_or_higher: '4.1.0'
+  requires_redmine version_or_higher: '4.2.0'
 
   permission :manage_messenger, projects: :settings, messenger_settings: :update
 
