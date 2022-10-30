@@ -26,8 +26,10 @@ class I18nTest < ActiveSupport::TestCase
       assert set_language_if_valid(lang)
       case lang.to_s
       when 'en'
+
         assert_equal 'Messenger username', l(:label_settings_messenger_username)
       when 'de', 'fr', 'ja', 'ko', 'pt-BR'
+
         assert_not l(:label_settings_messenger_username) == 'Messenger username', lang
       end
     end

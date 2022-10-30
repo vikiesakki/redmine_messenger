@@ -25,6 +25,7 @@ class CommonViewsTest < Redmine::IntegrationTest
   test 'View user' do
     log_user 'admin', 'admin'
     get '/users/2'
+
     assert_response :success
   end
 
@@ -34,6 +35,7 @@ class CommonViewsTest < Redmine::IntegrationTest
     issue = Issue.where(id: 1).first
     issue.save
     get '/issues/1'
+
     assert_response :success
   end
 end
