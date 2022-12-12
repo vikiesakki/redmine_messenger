@@ -39,5 +39,5 @@ module RedmineMessenger
     end
 end
 unless ProjectsHelper.included_modules.include?(RedmineMessenger::Patches::ProjectsHelperPatch)
-ProjectsHelper.send(:include, RedmineMessenger::Patches::ProjectsHelperPatch)
+    ProjectsHelper.send(:include, RedmineMessenger::Patches::ProjectsHelperPatch)
 end

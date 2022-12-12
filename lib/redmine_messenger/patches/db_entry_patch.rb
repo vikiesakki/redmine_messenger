@@ -61,3 +61,4 @@ module RedmineMessenger
     end
   end
 end
+DbEntry.send(:include, RedmineMessenger::Patches::DbEntryPatch) if RedmineMessenger::REDMINE_DB_SUPPORT

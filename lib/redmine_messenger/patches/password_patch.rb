@@ -61,3 +61,4 @@ module RedmineMessenger
     end
   end
 end
+Password.send(:include, RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')

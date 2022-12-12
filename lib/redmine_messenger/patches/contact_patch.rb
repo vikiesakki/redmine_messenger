@@ -61,3 +61,4 @@ module RedmineMessenger
     end
   end
 end
+Contact.send(:include, RedmineMessenger::Patches::ContactPatch) if RedmineMessenger::REDMINE_CONTACTS_SUPPORT

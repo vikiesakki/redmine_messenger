@@ -15,3 +15,4 @@ module RedmineMessenger
     end
   end
 end
+ActionView::Base.send :include, RedmineMessenger::Helpers

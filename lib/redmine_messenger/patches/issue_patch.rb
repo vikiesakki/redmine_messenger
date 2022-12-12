@@ -130,3 +130,4 @@ module RedmineMessenger
     end
   end
 end
+Issue.send(:include, RedmineMessenger::Patches::IssuePatch)

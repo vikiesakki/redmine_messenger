@@ -80,6 +80,7 @@ Rails.configuration.to_prepare do
   Password.send(:include, RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')
 
   # Global helpers
+  
 
   # Hooks
   require_dependency 'redmine_messenger/hooks'

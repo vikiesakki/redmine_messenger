@@ -64,3 +64,4 @@ module RedmineMessenger
     end
   end
 end
+WikiPage.send(:include, RedmineMessenger::Patches::WikiPagePatch)
