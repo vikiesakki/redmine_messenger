@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-require File.expand_path '../../test_helper', __FILE__
+require File.expand_path('../../test_helper', __FILE__)
 
 class I18nTest < ActiveSupport::TestCase
   include Redmine::I18n
@@ -19,21 +17,22 @@ class I18nTest < ActiveSupport::TestCase
   end
 
   def test_locales_validness
-    lang_files_count = Dir[Rails.root.join('plugins/redmine_messenger/config/locales/*.yml')].size
-
-    assert_equal 7, lang_files_count
+    lang_files_count = Dir[Rails.root.join('plugins',
+                                           'redmine_messenger',
+                                           'config',
+                                           'locales',
+                                           '*.yml')].size
+    assert_equal lang_files_count, 4
     valid_languages.each do |lang|
       assert set_language_if_valid(lang)
-      case lang.to_s
-      when 'en'
-
-        assert_equal 'Messenger username', l(:label_settings_messenger_username)
-      when 'de', 'fr', 'ja', 'ko', 'pt-BR'
-
-        assert_not l(:label_settings_messenger_username) == 'Messenger username', lang
-      end
     end
-
-    set_language_if_valid 'en'
+    # check if parse error exists
+    ::I18n.locale = 'de'
+    assert_equal 'Messenger Benutzer', l(:label_settings_messenger_username)
+    ::I18n.locale = 'en'
+    assert_equal 'Messenger username', l(:label_settings_messenger_username)
+    ::I18n.locale = 'ja'
+    assert_equal 'メッセンジャーのユーザー名', l(:label_settings_messenger_username)
+    set_language_if_valid('en')
   end
 end

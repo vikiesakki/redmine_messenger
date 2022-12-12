@@ -1,19 +1,17 @@
-# frozen_string_literal: true
-
 class MessengerSettingsController < ApplicationController
   before_action :find_project_by_project_id
   before_action :authorize
 
   def update
-    setting = MessengerSetting.find_or_create @project.id
-    if setting.update allowed_params
-      flash[:notice] = l :notice_successful_update
+    setting = MessengerSetting.find_or_create(@project.id)
+    if setting.update(allowed_params)
+      flash[:notice] = l(:notice_successful_update)
       redirect_to settings_project_path(@project, tab: 'messenger')
     else
-      flash[:error] = setting.errors.full_messages.flatten.join "\n"
+      flash[:error] = setting.errors.full_messages.flatten.join("\n")
       respond_to do |format|
-        format.html { redirect_to settings_project_path(@project, tab: 'messenger') }
-        format.api  { render_validation_errors setting }
+        format.html { redirect_back_or_default(settings_project_path(@project, tab: 'messenger')) }
+        format.api  { render_validation_errors(setting) }
       end
     end
   end
@@ -26,7 +24,7 @@ class MessengerSettingsController < ApplicationController
                                     :messenger_channel,
                                     :messenger_username,
                                     :messenger_verify_ssl,
-                                    :messenger_direct_users_messages,
+                                    :zoho_channel,
                                     :auto_mentions,
                                     :default_mentions,
                                     :display_watchers,

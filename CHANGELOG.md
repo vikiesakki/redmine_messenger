@@ -1,71 +1,11 @@
 Changelog
 =========
 
-1.0.14
-------
-
-- Fix i18n bug: switch back to used language after sending message
-- Ruby 2.7 or higher is required. Maintained ruby versions are supported only, see <https://www.ruby-lang.org/en/downloads/>
-- Redmine 4.2 is required. Use git tag 1.0.15, if you use an older version.
-
-1.0.13
-------
-
-- Slack compatible url formating, see #100
-
-1.0.12
-------
-
-- Fixed settings bug introducted with version 1.0.11
-
-1.0.11
-------
-
-- Upcoming Redmine 5 support
-- Ruby 3 support
-- Ruby 2.6 or higher is required
-- Use redmine_plugin_kit as plugin loader
-
-1.0.10
-------
-
-- Web service is called asynchron which does not block performance while sending message
-
-1.0.9
------
-
-- Redmine 4.1 is required. Use git tag 1.0.8, if you use an older version.
-- Redmine 4.2 support
-- Ruby 2.5 or higher is required
-
-1.0.8
------
-
-- Drop testing with travis - we use github actions
-- Add translation pt-BR - thanks to @lucianocosta
-
-1.0.7
------
-
-- Added feature to send messages directly to users to be notified - thanks to @Ujifman
-
-1.0.6
------
-
-- Redmine 4 is required. Use git tag 1.0.5, if you use an older version.
-- Redmine 4.1 support
-- Fix problems with changed fields, description and notes
-- Fix problems with quotes #38
-- Redundant status and priority in messages #56
-- Show attachments for new issues
-- Show indicator for private comment on issue
-- Ruby 2.4 or higher is required
-- Fix project name with &
-
 1.0.5
 -----
 
-- ruby 2.4.x or newer is required
+- ruby 2.3.x or newer is required
+
 
 1.0.4
 -----
@@ -76,6 +16,7 @@ Changelog
 -----
 
 - Redmine 4 support
+
 
 1.0.2
 -----

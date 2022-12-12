@@ -1,291 +1,330 @@
-# frozen_string_literal: true
+require 'net/http'
 
 class Messenger
   include Redmine::I18n
 
-  class << self
-    def markup_format(text)
-      # TODO: output format should be markdown, but at the moment there is no
-      #       solution without using pandoc (http://pandoc.org/), which requires
-      #       packages on os level
-      #
-      # Redmine::WikiFormatting.html_parser.to_text(text)
+  def self.markup_format(text)
+    # TODO: output format should be markdown, but at the moment there is no
+    #       solution without using pandoc (http://pandoc.org/), which requires
+    #       packages on os level
+    #
+    # Redmine::WikiFormatting.html_parser.to_text(text)
+    ERB::Util.html_escape(text)
+  end
 
-      text = text.to_s.dup
+  def self.default_url_options
+    { only_path: true, script_name: Redmine::Utils.relative_url_root }
+  end
 
-      # @see https://api.slack.com/reference/surfaces/formatting#escaping
+  def self.speak(msg, channels, url, options)
+    url ||= RedmineMessenger.settings[:messenger_url]
 
-      text.gsub! '&', '&amp;'
-      text.gsub! '<', '&lt;'
-      text.gsub! '>', '&gt;'
+    return if url.blank?
+    return if channels.blank?
 
-      text
-    end
+    params = {
+      text: msg,
+      link_names: 1
+    }
 
-    def default_url_options
-      { only_path: true, script_name: Redmine::Utils.relative_url_root }
-    end
+    username = Messenger.textfield_for_project(options[:project], :messenger_username)
+    params[:username] = username if username.present?
+    params[:attachments] = [options[:attachment]] if options[:attachment]&.any?
 
-    def speak(msg, channels, url, options)
-      url ||= RedmineMessenger.setting :messenger_url
-      return if url.blank? || channels.blank?
-
-      params = { text: msg, link_names: 1 }
-      username = textfield_for_project options[:project], :messenger_username
-      params[:username] = username if username.present?
-      params[:attachments] = options[:attachment]&.any? ? [options[:attachment]] : []
-      icon = textfield_for_project options[:project], :messenger_icon
-      if icon.present?
-        if icon.start_with? ':'
-          params[:icon_emoji] = icon
-        else
-          params[:icon_url] = icon
-        end
-      end
-
-      channels.each do |channel|
-        params[:channel] = channel
-        MessengerDeliverJob.perform_later url, params
-      end
-    end
-
-    def object_url(obj)
-      if Setting.host_name.to_s =~ %r{\A(https?://)?(.+?)(:(\d+))?(/.+)?\z}i
-        host = Regexp.last_match 2
-        port = Regexp.last_match 4
-        prefix = Regexp.last_match 5
-        Rails.application.routes.url_for obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix)
+    icon = Messenger.textfield_for_project(options[:project], :messenger_icon)
+    if icon.present?
+      if icon.start_with? ':'
+        params[:icon_emoji] = icon
       else
-        Rails.application.routes.url_for obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: '')
+        params[:icon_url] = icon
       end
     end
 
-    def url_for_project(proj)
-      return if proj.blank?
+    channels.each do |channel|
+      uri = URI(url)
+      params[:channel] = channel
+      http_options = { use_ssl: uri.scheme == 'https' }
+      http_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless RedmineMessenger.setting?(:messenger_verify_ssl)
 
-      # project based
-      pm = proj.messenger_setting
-      return pm.messenger_url if !pm.nil? && pm.messenger_url.present?
-
-      # parent project based
-      parent_url = url_for_project proj.parent
-      return parent_url if parent_url.present?
-      # system based
-      return RedmineMessenger.setting :messenger_url if RedmineMessenger.setting(:messenger_url).present?
-
-      nil
-    end
-
-    def project_url_markdown(project)
-      "<#{object_url project}|#{project.name}>"
-    end
-
-    def url_markdown(obj, name)
-      "<#{object_url obj}|#{name}>"
-    end
-
-    def textfield_for_project(proj, config)
-      return if proj.blank?
-
-      # project based
-      pm = proj.messenger_setting
-      return pm.send config if !pm.nil? && pm.send(config).present?
-
-      default_textfield proj, config
-    end
-
-    def default_textfield(proj, config)
-      # parent project based
-      parent_field = textfield_for_project proj.parent, config
-      return parent_field if parent_field.present?
-      return RedmineMessenger.setting config if RedmineMessenger.setting(config).present?
-
-      ''
-    end
-
-    def channels_for_project(proj)
-      return [] if proj.blank?
-
-      # project based
-      pm = proj.messenger_setting
-      if !pm.nil? && pm.messenger_channel.present?
-        return [] if pm.messenger_channel == '-'
-
-        return pm.messenger_channel.split(',').map!(&:strip).uniq
-      end
-      default_project_channels proj
-    end
-
-    def setting_for_project(proj, config)
-      return false if proj.blank?
-
-      @setting_found = 0
-      # project based
-      pm = proj.messenger_setting
-      unless pm.nil? || pm.send(config).zero?
-        @setting_found = 1
-        return false if pm.send(config) == 1
-        return true if pm.send(config) == 2
-        # 0 = use system based settings
-      end
-      default_project_setting proj, config
-    end
-
-    def default_project_setting(proj, config)
-      if proj.present? && proj.parent.present?
-        parent_setting = setting_for_project proj.parent, config
-        return parent_setting if @setting_found == 1
-      end
-      # system based
-      return true if RedmineMessenger.setting(config).present? && RedmineMessenger.setting?(config)
-
-      false
-    end
-
-    def attachment_text_from_journal(journal)
-      obj = journal.details.detect { |j| j.prop_key == 'description' && j.property == 'attr' }
-      text = obj.value if obj.present?
-      text.present? ? markup_format(text) : nil
-    end
-
-    def detail_to_field(detail, prj = nil)
-      field_format = nil
-      key = nil
-      escape = true
-      value = detail.value.to_s
-      if detail.property == 'cf'
-        key = CustomField.find(detail.prop_key)&.name
-        unless key.nil?
-          title = key
-          field_format = CustomField.find(detail.prop_key)&.field_format
-
-          value = IssuesController.helpers.format_value detail.value, detail.custom_field if detail.value.present?
+      begin
+        req = Net::HTTP::Post.new(uri)
+        req.set_form_data(payload: params.to_json)
+        Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
+          response = http.request(req)
+          Rails.logger.warn(response) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
         end
-      elsif detail.property == 'attachment'
-        key = 'attachment'
-        title = I18n.t :label_attachment
-        value = detail.value.to_s
-      elsif detail.property == 'attr' &&
-            detail.prop_key == 'db_relation'
-        return { short: true } unless setting_for_project prj, :post_db
-
-        title = I18n.t :field_db_relation
-        if detail.value.present?
-          entry = DbEntry.visible.find_by id: detail.value
-          value = entry.present? ? entry.name : detail.value.to_s
-        end
-      elsif detail.property == 'attr' &&
-            detail.prop_key == 'password_relation'
-        return { short: true } unless setting_for_project prj, :post_password
-
-        title = I18n.t :field_password_relation
-        if detail.value.present?
-          entry = Password.visible.find_by id: detail.value
-          value = entry.present? ? entry.name : detail.value.to_s
-        end
-      else
-        key = detail.prop_key.to_s.sub '_id', ''
-        title = case key
-                when 'parent'
-                  I18n.t "field_#{key}_issue"
-                when 'copied_from'
-                  I18n.t "label_#{key}"
-                else
-                  I18n.t "field_#{key}"
-                end
-        value = detail.value.to_s
+      rescue StandardError => e
+        Rails.logger.warn("cannot connect to #{url}")
+        Rails.logger.warn(e)
       end
+    end
+  end
 
-      short = true
-      case key
-      when 'title', 'subject'
-        short = false
-      when 'description'
-        return
-      when 'tracker'
-        value = object_field_value Tracker, detail.value
-      when 'estimated_hours'
-        value = format_hours(value.is_a?(String) ? (value.to_hours || value) : value)
-      when 'project'
-        value = object_field_value Project, detail.value
-      when 'status'
-        value = object_field_value IssueStatus, detail.value
-      when 'priority'
-        value = object_field_value IssuePriority, detail.value
-      when 'category'
-        value = object_field_value IssueCategory, detail.value
-      when 'assigned_to', 'author'
-        value = object_field_value Principal, detail.value
-      when 'fixed_version'
-        value = object_field_value Version, detail.value
-      when 'attachment'
-        attachment = Attachment.find_by id: detail.prop_key
-        value = if attachment.present?
-                  escape = false
-                  "<#{object_url attachment}|#{markup_format attachment.filename}>"
-                else
-                  detail.prop_key.to_s
-                end
+  #for zoho integration
+  def self.speak_zoho(msg, url, options)
+    Rails.logger.info "speak zoho logger"
+    zoho_access_token = Messenger.get_access_token
+    return if zoho_access_token.blank?
+    # zoho_access_token = RedmineMessenger.settings[:zoho_authtoken]
+    headers = {
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Zoho-oauthtoken ' + zoho_access_token
+    }
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, headers)
+    
+    detail = []
+    text = msg
 
-      when 'parent', 'copied_from'
-        issue = Issue.find_by id: detail.value
-        value = if issue.present?
-                  escape = false
-                  "<#{object_url issue}|#{markup_format issue}>"
-                else
-                  detail.value.to_s
-                end
+    if options[:attachment].present?
+      if options[:attachment][:fields].present?
+        options[:attachment][:fields].each {|x| detail << x[:title] + " : " + x[:value] }
       end
+      text += "\r\n" + options[:attachment][:text] if options[:attachment][:text].present?
+    end
 
-      value = object_field_value Version, detail.value if detail.property == 'cf' && field_format == 'version'
-      value = if value.present?
-                if escape
-                  markup_format value
-                else
-                  value
-                end
+    detailTitle = ""
+    if detail != []
+      detailTitle = "Detail"
+    end
+    
+    content = {
+      "text": text,
+      "card": {
+        "theme": "modern-inline"
+      },
+      "slides": [
+        {
+          "type": "list",
+          "title": detailTitle ,
+          "data": detail
+        }
+      ]
+    }.to_json
+
+    request.body = content
+    response = http.request(request)
+  end
+
+  def self.get_access_token
+   params = {}
+   response = nil
+   refresh_token = RedmineMessenger.settings[:zoho_refresh_token]
+   client_id = RedmineMessenger.settings[:zoho_client_id]
+   client_secret = RedmineMessenger.settings[:zoho_client_secret]
+   # params[:redirect_uri] = 'https://support.targetintegration.com/'
+   # params[:scope] = 'ZohoCliq.Channels.CREATE,ZohoCliq.Channels.READ,ZohoCliq.Channels.UPDATE'
+   grant_type = 'refresh_token'
+   uri = URI("https://accounts.zoho.com/oauth/v2/token?refresh_token=#{refresh_token}&client_id=#{client_id}&client_secret=#{client_secret}&grant_type=refresh_token")
+   http_options = { use_ssl: uri.scheme == 'https' }
+   req = Net::HTTP::Post.new(uri)
+   # req.set_form_data(params)
+   Net::HTTP.start(uri.hostname, uri.port, http_options) do |http|
+     response = http.request(req)
+     Rails.logger.warn(response) unless [Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK].include? response
+   end
+   res = JSON.parse(response.body)
+   return res.try(:[],"access_token")
+ end
+
+  def self.zoho_message_url(proj)
+    zoho_token = RedmineMessenger.settings[:zoho_authtoken]
+    channel = RedmineMessenger.settings[:zoho_channel]
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    channel = pm.zoho_channel if !pm.nil? && pm.zoho_channel.present?
+    return "https://cliq.zoho.com/api/v2/channelsbyname/" + channel + "/message"
+  end
+
+  def self.object_url(obj)
+    if Setting.host_name.to_s =~ %r{\A(https?\://)?(.+?)(\:(\d+))?(/.+)?\z}i
+      host = Regexp.last_match(2)
+      port = Regexp.last_match(4)
+      prefix = Regexp.last_match(5)
+      Rails.application.routes.url_for(obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix))
+    else
+      Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: ''))
+    end
+  end
+
+  def self.url_for_project(proj)
+    return if proj.blank?
+
+    # project based
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    return pm.messenger_url if !pm.nil? && pm.messenger_url.present?
+
+    # parent project based
+    parent_url = url_for_project(proj.parent)
+    return parent_url if parent_url.present?
+    # system based
+    return RedmineMessenger.settings[:messenger_url] if RedmineMessenger.settings[:messenger_url].present?
+
+    nil
+  end
+
+  def self.textfield_for_project(proj, config)
+    return if proj.blank?
+
+    # project based
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    return pm.send(config) if !pm.nil? && pm.send(config).present?
+
+    default_textfield(proj, config)
+  end
+
+  def self.default_textfield(proj, config)
+    # parent project based
+    parent_field = textfield_for_project(proj.parent, config)
+    return parent_field if parent_field.present?
+    return RedmineMessenger.settings[config] if RedmineMessenger.settings[config].present?
+
+    ''
+  end
+
+  def self.channels_for_project(proj)
+    return [] if proj.blank?
+
+    # project based
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    if !pm.nil? && pm.messenger_channel.present?
+      return [] if pm.messenger_channel == '-'
+
+      return pm.messenger_channel.split(',').map!(&:strip).uniq
+    end
+    default_project_channels(proj)
+  end
+
+  def self.default_project_channels(proj)
+    # parent project based
+    parent_channel = channels_for_project(proj.parent)
+    return parent_channel if parent_channel.present?
+    # system based
+    if RedmineMessenger.settings[:messenger_channel].present? &&
+       RedmineMessenger.settings[:messenger_channel] != '-'
+      return RedmineMessenger.settings[:messenger_channel].split(',').map!(&:strip).uniq
+    end
+
+    []
+  end
+
+  def self.setting_for_project(proj, config)
+    return false if proj.blank?
+
+    @setting_found = 0
+    # project based
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    unless pm.nil? || pm.send(config).zero?
+      @setting_found = 1
+      return false if pm.send(config) == 1
+      return true if pm.send(config) == 2
+      # 0 = use system based settings
+    end
+    default_project_setting(proj, config)
+  end
+
+  def self.default_project_setting(proj, config)
+    if proj.present? && proj.parent.present?
+      parent_setting = setting_for_project(proj.parent, config)
+      return parent_setting if @setting_found == 1
+    end
+    # system based
+    return true if RedmineMessenger.settings[config].present? && RedmineMessenger.setting?(config)
+
+    false
+  end
+
+  def self.detail_to_field(detail)
+    field_format = nil
+    key = nil
+    escape = true
+
+    if detail.property == 'cf'
+      key = CustomField.find(detail.prop_key).name rescue nil
+      title = key
+      field_format = CustomField.find(detail.prop_key).field_format rescue nil
+    elsif detail.property == 'attachment'
+      key = 'attachment'
+      title = I18n.t :label_attachment
+    else
+      key = detail.prop_key.to_s.sub('_id', '')
+      title = if key == 'parent'
+                I18n.t "field_#{key}_issue"
               else
-                '-'
+                I18n.t "field_#{key}"
               end
-
-      result = { title: title, value: value }
-      result[:short] = true if short
-      result
     end
 
-    def mentions(project, text)
-      names = []
-      textfield_for_project(project, :default_mentions).split(',').each { |m| names.push m.strip }
-      names += extract_usernames text unless text.nil?
-      names.present? ? " To: #{names.uniq.join ', '}" : nil
+    short = true
+    value = detail.value.to_s
+
+    case key
+    when 'title', 'subject', 'description'
+      short = false
+    when 'tracker'
+      tracker = Tracker.find(detail.value)
+      value = tracker.to_s if tracker.present?
+    when 'project'
+      project = Project.find(detail.value)
+      value = project.to_s if project.present?
+    when 'status'
+      status = IssueStatus.find(detail.value)
+      value = status.to_s if status.present?
+    when 'priority'
+      priority = IssuePriority.find(detail.value)
+      value = priority.to_s if priority.present?
+    when 'category'
+      category = IssueCategory.find(detail.value)
+      value = category.to_s if category.present?
+    when 'assigned_to'
+      user = User.find(detail.value)
+      value = user.to_s if user.present?
+    when 'fixed_version'
+      fixed_version = Version.find(detail.value)
+      value = fixed_version.to_s if fixed_version.present?
+    when 'attachment'
+      attachment = Attachment.find(detail.prop_key)
+      value = "<#{Messenger.object_url attachment}|#{ERB::Util.html_escape(attachment.filename)}>" if attachment.present?
+      escape = false
+    when 'parent'
+      issue = Issue.find(detail.value)
+      value = "<#{Messenger.object_url issue}|#{ERB::Util.html_escape(issue)}>" if issue.present?
+      escape = false
     end
 
-    private
-
-    def object_field_value(klass, id)
-      obj = klass.find_by id: id
-      obj.nil? ? id.to_s : obj.to_s
+    if detail.property == 'cf' && field_format == 'version'
+      version = Version.find(detail.value)
+      value = version.to_s if version.present?
     end
 
-    def extract_usernames(text)
-      return [] if text.blank?
+    value = if value.present?
+              if escape
+                ERB::Util.html_escape(value)
+              else
+                value
+              end
+            else
+              '-'
+            end
 
-      # messenger usernames may only contain lowercase letters, numbers,
-      # dashes, dots and underscores and must start with a letter or number.
-      text.scan(/@[a-z0-9][a-z0-9_\-.]*/).uniq
-    end
+    result = { title: title, value: value }
+    result[:short] = true if short
+    result
+  end
 
-    def default_project_channels(proj)
-      # parent project based
-      parent_channel = channels_for_project proj.parent
-      return parent_channel if parent_channel.present?
-      # system based
-      if RedmineMessenger.setting(:messenger_channel).present? &&
-         RedmineMessenger.setting(:messenger_channel) != '-'
-        return RedmineMessenger.setting(:messenger_channel).split(',').map!(&:strip).uniq
-      end
+  def self.mentions(project, text)
+    names = []
+    Messenger.textfield_for_project(project, :default_mentions)
+             .split(',').each { |m| names.push m.strip }
+    names += extract_usernames(text) unless text.nil?
+    names.present? ? ' To: ' + names.uniq.join(', ') : nil
+  end
 
-      []
-    end
+  def self.extract_usernames(text)
+    text = '' if text.nil?
+    # messenger usernames may only contain lowercase letters, numbers,
+    # dashes, dots and underscores and must start with a letter or number.
+    text.scan(/@[a-z0-9][a-z0-9_\-.]*/).uniq
   end
 end
