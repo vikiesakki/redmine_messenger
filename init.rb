@@ -1,7 +1,13 @@
 raise "\n\033[31mredmine_messenger requires ruby 2.3 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.3'
 $LOAD_PATH.unshift "#{File.dirname(__FILE__)}/lib/"
 require 'redmine'
-# require 'redmine_messenger'
+require 'redmine_messenger/patches/contact_patch'
+require 'redmine_messenger/patches/db_entry_patch'
+require 'redmine_messenger/patches/issue_patch'
+require 'redmine_messenger/patches/password_patch'
+require 'redmine_messenger/patches/projects_helper_patch'
+require 'redmine_messenger/patches/wiki_page_patch'
+require 'redmine_messenger/helpers'
 Rails.configuration.to_prepare do
   REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed?('redmine_contacts') ? true : false
   REDMINE_DB_SUPPORT = Redmine::Plugin.installed?('redmine_db') ? true : false
@@ -68,13 +74,12 @@ Rails.configuration.to_prepare do
   # Patches
   Issue.send(:include, RedmineMessenger::Patches::IssuePatch)
   WikiPage.send(:include, RedmineMessenger::Patches::WikiPagePatch)
-  ProjectsController.send :helper, MessengerProjectsHelper
+  ProjectsHelper.send :include, MessengerProjectsHelper
   Contact.send(:include, RedmineMessenger::Patches::ContactPatch) if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
   DbEntry.send(:include, RedmineMessenger::Patches::DbEntryPatch) if RedmineMessenger::REDMINE_DB_SUPPORT
   Password.send(:include, RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')
 
   # Global helpers
-  ActionView::Base.send :include, RedmineMessenger::Helpers
 
   # Hooks
   require_dependency 'redmine_messenger/hooks'
