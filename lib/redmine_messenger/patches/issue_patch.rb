@@ -6,6 +6,8 @@ module RedmineMessenger
         base.class_eval do
           after_create :send_messenger_create
           after_update :send_messenger_update
+          attr_accessor :suppress_notication
+          safe_attributes :suppress_notication
         end
       end
 
@@ -60,6 +62,7 @@ module RedmineMessenger
         def send_messenger_update
           Rails.logger.info "Send messanger update *******"
           return if current_journal.nil?
+          return if self.suppress_notication.to_i.positive?
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project

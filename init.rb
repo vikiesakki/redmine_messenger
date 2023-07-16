@@ -8,6 +8,7 @@ require 'redmine_messenger/patches/password_patch'
 require 'redmine_messenger/patches/projects_helper_patch'
 require 'redmine_messenger/patches/wiki_page_patch'
 require 'redmine_messenger/helpers'
+require 'redmine_messenger/hooks'
 Rails.configuration.to_prepare do
   REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed?('redmine_contacts') ? true : false
   REDMINE_DB_SUPPORT = Redmine::Plugin.installed?('redmine_db') ? true : false

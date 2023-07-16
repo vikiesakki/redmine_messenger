@@ -1,5 +1,12 @@
 module RedmineMessenger::Hooks
   class MessengerListener < Redmine::Hook::Listener
+    def view_issues_edit_notes_bottom(context={ })
+      context[:controller].send(:render_to_string, {
+        :partial => "hooks/suppress_notification",
+        :locals => context
+      })
+    end
+
     def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context = {})
       issue = context[:issue]
       journal = issue.current_journal
