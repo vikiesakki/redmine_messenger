@@ -7,6 +7,13 @@ module RedmineMessenger::Hooks
       })
     end
 
+    def view_issues_bulk_edit_details_bottom(context={ })
+      context[:controller].send(:render_to_string, {
+        :partial => "hooks/bulk_suppress_notification",
+        :locals => context
+      })
+    end
+
     def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context = {})
       issue = context[:issue]
       journal = issue.current_journal
