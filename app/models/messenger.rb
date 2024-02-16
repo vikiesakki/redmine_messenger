@@ -148,6 +148,166 @@ class Messenger
     end
   end
 
+  def self.speak_microsoft_teams(msg, teams_channel, options)
+    Rails.logger.info "speak microsoft teams logger #{teams_channel}"
+    if teams_channel.present?
+      detail = []
+      text = msg
+
+      if options[:attachment].present?
+        if options[:attachment][:fields].present?
+          options[:attachment][:fields].each {|x| detail << x[:title] + " : " + x[:value] }
+        end
+        text += "\r\n" + options[:attachment][:text] if options[:attachment][:text].present?
+      end
+
+      detailTitle = ""
+      if detail != []
+        detailTitle = "Detail"
+      end
+      
+      content = {
+        "text": text,
+        "card": {
+          "theme": "modern-inline"
+        },
+        "slides": [
+          {
+            "type": "list",
+            "title": detailTitle ,
+            "data": detail
+          }
+        ]
+      }.to_json
+
+      # request.body = content
+      # response = http.request(request)
+      Messenger.send_message_to_teams(msg, teams_channel)
+    end
+  end
+
+  def self.teams_channel(proj)
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    channel = pm.teams_channel if !pm.nil? && pm.teams_channel.present?
+  end
+
+  def self.update_microsoft_token
+    if RedmineMessenger.settings[:microsoft_refresh_token].present?
+      access_uri = URI("https://login.microsoftonline.com/#{RedmineMessenger.settings[:microsoft_tennant_id]}/oauth2/v2.0/token")
+      access_params = {'client_id' => RedmineMessenger.settings[:microsoft_client_id],
+      'client_secret' => RedmineMessenger.settings[:microsoft_secret],
+      'redirect_uri' => 'https://targetintegration.com',
+      'scope' => 'https://graph.microsoft.com/.default offline_access',
+      'grant_type' => 'refresh_token',
+      'refresh_token' => RedmineMessenger.settings[:microsoft_refresh_token]}
+      access_encoded_form = URI.encode_www_form(access_params)
+      access_headers = { content_type: "application/x-www-form-urlencoded" }
+      access_http = Net::HTTP.new(access_uri.host, access_uri.port)
+      access_http.use_ssl = true
+      access_token_response = access_http.request_post(access_uri.path, access_encoded_form, access_headers)
+      access_token_data = JSON.parse(access_token_response.body)
+      if access_token_data['access_token'].present?
+        setting = Setting.where(name: 'plugin_redmine_messenger').first
+        setting_value = setting.value
+        setting_value['microsoft_refresh_token'] = access_token_data['refresh_token']
+        setting_value['microsoft_access_token'] = access_token_data['access_token']
+        setting.value = setting_value
+        setting.save
+        Rails.logger.info "Microsoft_Token_Updated_Success Refresh token updated successfully"
+      else
+        Rails.logger.info "Microsoft_Token_Update error response got #{access_token_response}"  
+      end
+    else
+      Rails.logger.info "Microsoft_Token_Update Refresh token not found. Please update it from the plugin configuration"
+    end
+  end
+
+  def self.send_message_to_teams(msg, teams_channel)
+
+    microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
+    return if microsoft_access_token.blank?
+    chat_headers = {
+        'Authorization' => 'Bearer ' + microsoft_access_token
+    }
+    chat_record = {}
+    chat_url = "https://graph.microsoft.com/v1.0/users/882d7d1f-37fc-46f7-b8ca-96d875f4e1c7/chats"
+    chat_uri = URI(chat_url)
+    chat_http = Net::HTTP.new(chat_uri.host, chat_uri.port)
+    chat_http.use_ssl = true
+    chat_request = Net::HTTP::Get.new(chat_uri.path, chat_headers)
+    chat_response = chat_http.request(chat_request)
+    chats = JSON.parse(chat_response.body)
+    if chats['value'].present?
+      chats['value'].each do |chat|
+        if chat['topic'] == teams_channel
+          chat_record = chat
+          break
+        end
+      end
+    else
+      Rails.logger.info "send_message_to_teams Chat not found #{teams_channel}"
+      return 
+    end
+
+    if chat_record.blank?
+      Rails.logger.info "send_message_to_teams Chat not found #{teams_channel}"
+      return 
+    end
+
+    headers = {
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' + microsoft_access_token
+    }
+    url = "https://graph.microsoft.com/v1.0/chats/#{chat_record['id']}/messages"
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, headers)
+    
+    detail = []
+    text = msg
+
+    # if options[:attachment].present?
+    #   if options[:attachment][:fields].present?
+    #     options[:attachment][:fields].each {|x| detail << x[:title] + " : " + x[:value] }
+    #   end
+    #   text += "\r\n" + options[:attachment][:text] if options[:attachment][:text].present?
+    # end
+
+    # detailTitle = ""
+    # if detail != []
+    #   detailTitle = "Detail"
+    # end
+    
+    content = {
+        "body":{
+          "content": msg
+        }
+      }.to_json
+
+    request.body = content
+    response = http.request(request)
+  end
+
+  def self.zoho_message_url(proj)
+    zoho_token = RedmineMessenger.settings[:zoho_authtoken]
+    channel = RedmineMessenger.settings[:zoho_channel]
+    pm = MessengerSetting.find_by(project_id: proj.id)
+    channel = pm.zoho_channel if !pm.nil? && pm.zoho_channel.present?
+    return "https://cliq.zoho.com/api/v2/channelsbyname/" + channel + "/message"
+  end
+
+  def self.object_url(obj)
+    if Setting.host_name.to_s =~ %r{\A(https?\://)?(.+?)(\:(\d+))?(/.+)?\z}i
+      host = Regexp.last_match(2)
+      port = Regexp.last_match(4)
+      prefix = Regexp.last_match(5)
+      Rails.application.routes.url_for(obj.event_url(host: host, protocol: Setting.protocol, port: port, script_name: prefix))
+    else
+      Rails.application.routes.url_for(obj.event_url(host: Setting.host_name, protocol: Setting.protocol, script_name: ''))
+    end
+  end
+
   def self.url_for_project(proj)
     return if proj.blank?
 

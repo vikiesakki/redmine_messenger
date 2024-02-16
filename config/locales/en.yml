@@ -62,6 +62,18 @@ en:
   label_settings_zoho_refresh_token: Refresh Token for Zoho Cliq
   label_settings_zoho_authtoken: Authtoken for Zoho Cliq
   label_settings_zoho_channel: Zoho Cliq channel
+  label_teams_setting: Microsoft Teams
+  label_settings_microsoft_client_id: Client ID for Microsoft Teams
+  label_settings_microsoft_tenant_id: Tenant ID for Microsoft Teams
+  label_settings_microsoft_client_secret: Client Secret for Microsoft Teams
+  label_settings_microsoft_token_url: Token url for Microsoft Teams
+  label_settings_microsoft_auth_url: Auth url for Microsoft Teams
+  label_settings_microsoft_refresh_token: Refresh Token
+  label_settings_microsoft_access_token: Access Token
+  label_settings_microsoft_redirect_uri: Redirect URI
+  label_settings_teams_channel: Teams Channel
+  label_settings_microsoft_from_email: Email
+  label_settings_microsoft_email_password: Email Password
   messenger_channel_info_html: 'Here you have to specify the channel, which should be used. You can define multible channels, seperated by comma'
   messenger_contacts_intro: Activate the changes for Issues that should be sent to the pre-defined Messenger channel.
   messenger_db_intro: Activate the changes for DB that should be sent to the pre-defined Messenger channel.

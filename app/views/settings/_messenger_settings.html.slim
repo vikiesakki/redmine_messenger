@@ -41,6 +41,70 @@ p
  = content_tag(:label, l(:label_settings_zoho_refresh_token))
  = text_field_tag('settings[zoho_refresh_token]', @settings[:zoho_refresh_token], size:30)
 
+br
+h3 = l(:label_teams_setting)
+br
+
+ruby:
+  if params['code'].present?
+    uri = URI("https://login.microsoftonline.com/#{@settings[:microsoft_tennant_id]}/oauth2/v2.0/token")
+    token_params = {'client_id' => @settings[:microsoft_client_id],
+    'client_secret' => @settings[:microsoft_secret],
+    'redirect_uri' => @settings[:microsoft_redirect_uri],
+    'scope' => 'https://graph.microsoft.com/.default offline_access',
+    'grant_type' => 'authorization_code',
+    'code' => params['code']}
+    encoded_form = URI.encode_www_form(token_params)
+    headers = { content_type: "application/x-www-form-urlencoded" }
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    response = http.request_post(uri.path, encoded_form, headers)
+    token_response = JSON.parse(response.body)
+    if token_response['refresh_token'].present?
+      @settings[:microsoft_refresh_token] = token_response['refresh_token']
+      access_uri = URI("https://login.microsoftonline.com/#{@settings[:microsoft_tennant_id]}/oauth2/v2.0/token")
+      access_params = {'client_id' => @settings[:microsoft_client_id],
+      'client_secret' => @settings[:microsoft_secret],
+      'redirect_uri' => @settings[:microsoft_redirect_uri],
+      'scope' => 'https://graph.microsoft.com/.default offline_access',
+      'grant_type' => 'refresh_token',
+      'refresh_token' => token_response['refresh_token']}
+      access_encoded_form = URI.encode_www_form(access_params)
+      access_headers = { content_type: "application/x-www-form-urlencoded" }
+      access_http = Net::HTTP.new(access_uri.host, access_uri.port)
+      access_http.use_ssl = true
+      access_token_response = http.request_post(access_uri.path, access_encoded_form, access_headers)
+      access_token_data = JSON.parse(access_token_response.body)
+      if access_token_data['access_token'].present?
+        setting = Setting.where(name: 'plugin_redmine_messenger').first
+        setting_value = setting.value
+        @settings[:microsoft_refresh_token] = setting_value['microsoft_refresh_token'] = access_token_data['refresh_token']
+        @settings[:microsoft_access_token] = setting_value['microsoft_access_token'] = access_token_data['access_token']
+        setting.value = setting_value
+        setting.save
+      end
+    end
+  end
+
+a href="https://login.microsoftonline.com/#{@settings[:microsoft_tennant_id]}/oauth2/v2.0/authorize?client_id=#{@settings[:microsoft_client_id]}&response_type=code&redirect_uri=https://targetintegration.com&response_mode=query&scope=https://graph.microsoft.com/.default offline_access&state=12345" class='btn btn-primary' Fetch Refresh Token.
+p
+  = content_tag(:label, l(:label_settings_microsoft_client_id))
+  = text_field_tag('settings[microsoft_client_id]', @settings[:microsoft_client_id], size:30)
+p
+  = content_tag(:label, l(:label_settings_microsoft_tenant_id))
+  = text_field_tag('settings[microsoft_tennant_id]', @settings[:microsoft_tennant_id], size:30)
+p
+ = content_tag(:label, l(:label_settings_microsoft_client_secret))
+ = text_field_tag('settings[microsoft_secret]', @settings[:microsoft_secret], size:30)
+p
+ = content_tag(:label, l(:label_settings_microsoft_redirect_uri))
+ = text_field_tag('settings[microsoft_redirect_uri]', @settings[:microsoft_redirect_uri], size:30)
+p
+ = content_tag(:label, l(:label_settings_microsoft_refresh_token))
+ = text_field_tag('settings[microsoft_refresh_token]', @settings[:microsoft_refresh_token], size:30, readonly: true)
+p
+ = content_tag(:label, l(:label_settings_microsoft_access_token))
+ = text_field_tag('settings[microsoft_access_token]', @settings[:microsoft_access_token], size:30, readonly: true)
 
 h3 = l(:label_issue_plural)
 .info = t(:messenger_issue_intro)

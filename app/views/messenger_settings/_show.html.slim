@@ -26,6 +26,10 @@
       = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :zoho_channel, size: 20 }
 
       br
+      h3 = l(:label_teams_setting)
+      = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :teams_channel, size: 20 }
+
+      br
       h3 = l(:label_issue_plural)
       .info = t(:messenger_issue_intro)
       br

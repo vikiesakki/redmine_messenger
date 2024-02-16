@@ -16,9 +16,6 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
-          return unless channels.present? && url
-          return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
-
           set_language_if_valid Setting.default_language
 
           attachment = {}
@@ -45,6 +42,14 @@ module RedmineMessenger
             }
           end
 
+          Messenger.speak_microsoft_teams(l(:label_messager_issue_zoho_created,
+                                project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+                                url: send_messenger_mention_zoho_url(project, description),
+                                user: author), Messenger.teams_channel(project), attachment: attachment, project: project)
+
+          return unless channels.present? && url
+          return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
+
           Messenger.speak(l(:label_messenger_issue_created,
                             project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
                             url: send_messenger_mention_url(project, description),
@@ -57,15 +62,21 @@ module RedmineMessenger
                                 project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
                                 url: send_messenger_mention_zoho_url(project, description),
                                 user: author), Messenger.zoho_message_url(project), attachment: attachment, project: project)
+
         end
 
         def send_messenger_update
           Rails.logger.info "Send messanger update *******"
-          return if current_journal.nil?
-          return if self.suppress_notication.to_i.positive?
+          # return if current_journal.nil?
+          # return if self.suppress_notication.to_i.positive?
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
+
+          Messenger.speak_microsoft_teams(l(:label_messenger_issue_zoho_updated,
+                                project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+                                url: send_messenger_mention_zoho_url(project, current_journal.notes),
+                                user: current_journal.user), Messenger.teams_channel(project), attachment: {}, project: project)
 
           return unless channels.present? && url && Messenger.setting_for_project(project, :post_updates)
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
