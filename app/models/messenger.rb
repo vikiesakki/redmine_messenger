@@ -1,7 +1,10 @@
 require 'net/http'
 
-class Messenger
-  include Redmine::I18n
+class Messenger  
+  include ActionView::Helpers
+  include IssuesHelper
+  include CustomFieldsHelper
+  # include Redmine::I18n
 
   def self.markup_format(text)
     # TODO: output format should be markdown, but at the moment there is no
@@ -191,6 +194,14 @@ class Messenger
     channel = pm.teams_channel if !pm.nil? && pm.teams_channel.present?
   end
 
+  def teams_message(issue, type)
+    if type == 'created'
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.subject}</a> created by #{issue.author.name}</p><hr>#{textilizable(issue, :description, :only_path => false)}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
+    else
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.subject}</a> updated by #{issue.author.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{textilizable(issue.current_journal, :notes, :only_path => false)}</p>\n\n</div>\n\n\n</div>\n</div>"
+    end
+  end
+
   def self.update_microsoft_token
     if RedmineMessenger.settings[:microsoft_refresh_token].present?
       access_uri = URI("https://login.microsoftonline.com/#{RedmineMessenger.settings[:microsoft_tennant_id]}/oauth2/v2.0/token")
@@ -281,6 +292,7 @@ class Messenger
     
     content = {
         "body":{
+          "contentType": "html",
           "content": msg
         }
       }.to_json
