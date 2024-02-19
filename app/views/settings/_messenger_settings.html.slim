@@ -86,7 +86,7 @@ ruby:
     end
   end
 
-a href="https://login.microsoftonline.com/#{@settings[:microsoft_tennant_id]}/oauth2/v2.0/authorize?client_id=#{@settings[:microsoft_client_id]}&response_type=code&redirect_uri=https://targetintegration.com&response_mode=query&scope=https://graph.microsoft.com/.default offline_access&state=12345" class='btn btn-primary' Fetch Refresh Token.
+a href="https://login.microsoftonline.com/#{@settings[:microsoft_tennant_id]}/oauth2/v2.0/authorize?client_id=#{@settings[:microsoft_client_id]}&response_type=code&redirect_uri=#{@settings[:microsoft_redirect_uri]}&response_mode=query&scope=https://graph.microsoft.com/.default offline_access&state=12345" class='btn btn-primary' Fetch Refresh Token.
 p
   = content_tag(:label, l(:label_settings_microsoft_client_id))
   = text_field_tag('settings[microsoft_client_id]', @settings[:microsoft_client_id], size:30)
