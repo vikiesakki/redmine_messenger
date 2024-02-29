@@ -19,6 +19,11 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
+          Messenger.speak_microsoft_teams(l(:label_messenger_password_created,
+                            project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
+                            url: "<#{Messenger.object_url self}|#{name}>",
+                            user: User.current), Messenger.teams_channel(project), attachment: {}, project: project)
+
           return unless channels.present? && url
 
           Messenger.speak(l(:label_messenger_password_created,
@@ -42,6 +47,11 @@ module RedmineMessenger
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
+
+          Messenger.speak_microsoft_teams(l(:label_messenger_password_updated,
+                            project_url: "<#{Messenger.object_url project}|#{ERB::Util.html_escape(project)}>",
+                            url: "<#{Messenger.object_url self}|#{name}>",
+                            user: User.current), Messenger.teams_channel(project), attachment: {}, project: project)
 
           return unless channels.present? && url
 

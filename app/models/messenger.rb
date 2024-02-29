@@ -198,7 +198,7 @@ class Messenger
     if type == 'created'
       "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{issue.author.name}</p><hr>#{textilizable(issue, :description, :only_path => false)}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
     else
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{issue.author.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{textilizable(issue.current_journal, :notes, :only_path => false)}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{issue.author.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? textilizable(issue.current_journal, :notes, :only_path => false) : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
     end
   end
 
@@ -234,7 +234,7 @@ class Messenger
   end
 
   def self.send_message_to_teams(msg, teams_channel)
-
+    begin
     microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
     return if microsoft_access_token.blank?
     chat_headers = {
