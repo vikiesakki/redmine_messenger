@@ -248,6 +248,7 @@ class Messenger
     chat_request = Net::HTTP::Get.new(chat_uri.path, chat_headers)
     chat_response = chat_http.request(chat_request)
     chats = JSON.parse(chat_response.body)
+    Rails.logger.info "chat_response_from_microsoft #{chats}"
     if chats['value'].present?
       chats['value'].each do |chat|
         if chat['topic'] == teams_channel
