@@ -69,7 +69,7 @@ module RedmineMessenger
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
-          Messenger.speak_microsoft_teams(Messenger.new.teams_issue_message(self, 'updated'), Messenger.teams_channel(project), attachment: {}, project: project)
+          Messenger.speak_microsoft_teams(Messenger.new.teams_message(self, 'updated'), Messenger.teams_channel(project), attachment: {}, project: project)
 
           return unless channels.present? && url && Messenger.setting_for_project(project, :post_updates)
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
