@@ -18,7 +18,7 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
-          Messenger.speak_microsoft_teams(Messenger.new.teams_common_message(self, 'created', User.current), Messenger.teams_channel(project), attachment: {}, project: project)
+          MessengerTeamsJob.perform_later(Messenger.new.teams_common_message(self, 'created', User.current), Messenger.teams_channel(project))
 
           return unless channels.present? && url
 
@@ -43,7 +43,7 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
-          Messenger.speak_microsoft_teams(Messenger.new.teams_common_message(self, 'updated', User.current), Messenger.teams_channel(project), attachment: {}, project: project)
+          MessengerTeamsJob.perform_later(Messenger.new.teams_common_message(self, 'updated', User.current), Messenger.teams_channel(project))
 
           return unless channels.present? && url
 
