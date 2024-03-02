@@ -194,11 +194,19 @@ class Messenger
     channel = pm.teams_channel if !pm.nil? && pm.teams_channel.present?
   end
 
-  def teams_message(issue, type)
+  def teams_message(issue, type, user)
     if type == 'created'
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{issue.author.name}</p><hr>#{textilizable(issue, :description, :only_path => false)}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{user.name}</p><hr>#{textilizable(issue, :description, :only_path => false)}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
     else
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{issue.author.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? textilizable(issue.current_journal, :notes, :only_path => false) : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{user.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? textilizable(issue.current_journal, :notes, :only_path => false) : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
+    end
+  end
+
+  def teams_common_message(object, type, user)
+    if type == 'created'
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:name).present? ? object.try(:name) : object.try(:title)}</a> created by #{user.name}</p></div>\n</div></div>"
+    else
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:name).present? ? object.try(:name) : object.try(:title)}</a> updated by #{user.name}</p></div>\n</div></div>"
     end
   end
 
