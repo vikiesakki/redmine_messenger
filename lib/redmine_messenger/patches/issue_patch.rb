@@ -42,7 +42,10 @@ module RedmineMessenger
             }
           end
 
-          MessengerTeamsJob.perform_later(Messenger.new.teams_message(self, 'created', User.current), Messenger.teams_channel(project))
+          teams_channel = Messenger.teams_channel(project)
+          if teams_channel.present?
+            MessengerTeamsJob.perform_later(Messenger.new.teams_message(self, 'created', User.current), teams_channel)
+          end
 
           return unless channels.present? && url
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
@@ -69,7 +72,10 @@ module RedmineMessenger
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
-          MessengerTeamsJob.perform_later(Messenger.new.teams_message(self, 'updated', User.current), Messenger.teams_channel(project))
+          teams_channel = Messenger.teams_channel(project)
+          if teams_channel.present?
+            MessengerTeamsJob.perform_later(Messenger.new.teams_message(self, 'updated', User.current), teams_channel)
+          end
 
           return unless channels.present? && url && Messenger.setting_for_project(project, :post_updates)
           return if is_private? && !Messenger.setting_for_project(project, :post_private_issues)
