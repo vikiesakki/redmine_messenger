@@ -73,6 +73,7 @@ module RedmineMessenger
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
           teams_channel = Messenger.teams_channel(project)
+          Rails.logger.info "Project Channel #{teams_channel} *******"
           if teams_channel.present?
             MessengerTeamsJob.perform_later(Messenger.new.teams_message(self, 'updated', User.current), teams_channel)
           end
