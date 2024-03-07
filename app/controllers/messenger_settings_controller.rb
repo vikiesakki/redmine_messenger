@@ -1,6 +1,28 @@
 class MessengerSettingsController < ApplicationController
-  before_action :find_project_by_project_id
-  before_action :authorize
+  before_action :find_project_by_project_id, only: :update
+  before_action :authorize, only: :update
+
+  accept_api_auth :notify_all
+
+  def notify_all
+    request_ip = request.remote_ip
+    channel_name = request.headers["ChannelName"]
+    message = request.headers["Message"]
+    respond_to do |format|
+      format.api do 
+        if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
+          if channel_name.present? && message.present? 
+            MessengerTeamsJob.perform_later(message, channel_name)
+            render json: {success: "Message sent success"}
+          else
+            render json: {error: "Invalid channel or message"}  
+          end
+        else
+          render json: {error: "IP is not whitelisted"}
+        end
+      end
+    end
+  end
 
   def update
     setting = MessengerSetting.find_or_create(@project.id)

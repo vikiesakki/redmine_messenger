@@ -68,6 +68,7 @@ en:
   label_settings_microsoft_client_secret: Client Secret for Microsoft Teams
   label_settings_microsoft_token_url: Token url for Microsoft Teams
   label_settings_microsoft_auth_url: Auth url for Microsoft Teams
+  label_settings_whitelist_ip: Whitelist IPs
   label_settings_microsoft_refresh_token: Refresh Token
   label_settings_microsoft_access_token: Access Token
   label_settings_microsoft_redirect_uri: Redirect URI
