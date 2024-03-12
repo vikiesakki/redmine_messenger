@@ -67,8 +67,8 @@ module RedmineMessenger
 
         def send_messenger_update
           Rails.logger.info "Send messanger update *******"
-          # return if current_journal.nil?
-          # return if self.suppress_notication.to_i.positive?
+          return if current_journal.nil?
+          return if self.suppress_notication.to_i.positive?
 
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
