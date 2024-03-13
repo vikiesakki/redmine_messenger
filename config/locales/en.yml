@@ -31,6 +31,7 @@ en:
   label_messenger_wiki_updated: "[%{project_url}] Wiki %{url} updated by *%{user}*"
   label_messenger_wiki_zoho_created: "%{project_url} Wiki %{url} created by *%{user}*"
   label_messenger_wiki_zoho_updated: "%{project_url} Wiki %{url} updated by *%{user}*"
+  label_messenger_overtime_issue: "%{time}% of estimated time has been spent on ticket %{url}"
 
   label_messenger: Messenger
   label_settings_auto_mentions: Convert names to mentions?

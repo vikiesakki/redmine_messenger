@@ -7,6 +7,7 @@ require 'redmine_messenger/patches/issue_patch'
 require 'redmine_messenger/patches/password_patch'
 require 'redmine_messenger/patches/projects_helper_patch'
 require 'redmine_messenger/patches/wiki_page_patch'
+require 'redmine_messenger/patches/time_entry_patch'
 require 'redmine_messenger/helpers'
 require 'redmine_messenger/hooks'
 Rails.configuration.to_prepare do
@@ -79,6 +80,7 @@ Rails.configuration.to_prepare do
   Contact.send(:include, RedmineMessenger::Patches::ContactPatch) if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
   DbEntry.send(:include, RedmineMessenger::Patches::DbEntryPatch) if RedmineMessenger::REDMINE_DB_SUPPORT
   Password.send(:include, RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')
+  TimeEntry.send(:include, RedmineMessenger::Patches::TimeEntryPatch)
 
   # Global helpers
   
