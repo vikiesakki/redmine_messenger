@@ -158,7 +158,7 @@ class Messenger
 
   def teams_message(issue, type, user)
     if type == 'created'
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{user.name}</p><hr>#{textilizable(issue, :description, :only_path => false)}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{user.name}</p><hr>#{issue.description}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
     else
       "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{user.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? issue.current_journal.notes : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
     end
