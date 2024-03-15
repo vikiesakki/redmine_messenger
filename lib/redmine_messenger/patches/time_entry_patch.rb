@@ -13,13 +13,14 @@ module RedmineMessenger
             module InstanceMethods
                 def notify_pm
                   estimated_hours = self.issue.estimated_hours
+                  return if estimated_hours.to_i.zero?
                   spent_hours = self.issue.time_entries.pluck(:hours).sum
                   spent_per = ((spent_hours / estimated_hours.to_f) * 100).to_i
                   if spent_per >= 80
                     channels = Messenger.channels_for_project project
                     url = Messenger.url_for_project project
                     teams_channel = Messenger.teams_channel(project)
-                    
+
                     Rails.logger.info "Project Channel #{teams_channel} *******"
                     if teams_channel.present?
                       MessengerTeamsJob.perform_later("#{spent_per}% of estimated time has been spent on ticket <a href='#{Messenger.object_url(issue)}'>##{self.issue_id}</a>", teams_channel)
