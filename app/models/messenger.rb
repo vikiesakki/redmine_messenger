@@ -157,10 +157,11 @@ class Messenger
   end
 
   def teams_message(issue, type, user)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
     if type == 'created'
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{user.name}</p><hr>#{issue.description}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> created by #{user.name}</p><hr>#{markdown.render(issue.description.to_s).html_safe}<p>#{render_email_issue_attributes(issue, issue.author, true)}</p>\n\n</div>\n\n\n</div>\n</div>"
     else
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{user.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? issue.current_journal.notes : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(issue.project)}'>#{issue.project.name}</a> issue <a href='#{Messenger.object_url(issue)}'>#{issue.tracker.name} #{issue.id}: #{issue.subject}</a> updated by #{user.name}</p><hr><p>#{render_email_issue_attributes(issue, issue.author, true)} #{issue.current_journal.present? ? markdown.render(issue.current_journal.notes).html_safe : ''}</p>\n\n</div>\n\n\n</div>\n</div>"
     end
   end
 
