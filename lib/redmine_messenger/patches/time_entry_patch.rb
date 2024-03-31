@@ -8,6 +8,9 @@ module RedmineMessenger
                   unloadable
                   after_save :notify_pm
                   after_destroy :notify_pm
+
+                  after_save :notify_time_on_account
+
                 end
             end
             module InstanceMethods
@@ -21,7 +24,7 @@ module RedmineMessenger
                     url = Messenger.url_for_project project
                     teams_channel = Messenger.teams_channel(project)
 
-                    Rails.logger.info "Project Channel #{teams_channel} *******"
+                    Rails.logger.info "notify_pm Project Channel #{teams_channel} *******"
                     if teams_channel.present?
                       MessengerTeamsJob.perform_later("#{spent_per}% of estimated time has been spent on ticket <a href='#{Messenger.object_url(issue)}'>##{self.issue_id}</a>", teams_channel)
                     end
@@ -30,7 +33,7 @@ module RedmineMessenger
                             time: "#{spent_per}",
                             url: self.issue.send(:send_messenger_mention_url,project, "")),
                           channels, url, attachment: {}, project: project)
-                    Rails.logger.info "Send notification to the zoho"
+                    Rails.logger.info "notify_pm Send notification to the zoho"
 
                     #send the updated issue to zoho
                     Messenger.speak_zoho(l(:label_messenger_overtime_issue,
@@ -38,6 +41,20 @@ module RedmineMessenger
                                 url: self.issue.send(:send_messenger_mention_zoho_url,project, "")), Messenger.zoho_message_url(project), attachment: {}, project: project)
 
                   end
+                end
+
+                def notify_time_on_account
+                    time_on_account = self.project.custom_field_value(27)
+                    if time_on_account.to_i < 5
+                        channels = Messenger.channels_for_project project
+                        url = Messenger.url_for_project project
+                        teams_channel = Messenger.teams_channel(project)
+
+                        Rails.logger.info "notify_time_on_account Project Channel #{teams_channel} *******"
+                        if teams_channel.present?
+                          MessengerTeamsJob.perform_later("The TOA on this project is lower than 5 hour <a href='#{Messenger.object_url(self.project)}'>#{self.project.name}</a>", teams_channel)
+                        end
+                    end
                 end
             end
         end
