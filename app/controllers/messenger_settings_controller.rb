@@ -1,6 +1,6 @@
 class MessengerSettingsController < ApplicationController
-  before_action :find_project_by_project_id, only: :update
-  before_action :authorize, only: :update
+  before_action :find_project_by_project_id, only: [:update, :create_chat]
+  before_action :authorize, only: [:update, :create_chat]
 
   accept_api_auth :notify_all
 
@@ -22,6 +22,33 @@ class MessengerSettingsController < ApplicationController
         end
       end
     end
+  end
+
+  def create_chat
+    chat_request = { "chatType"=> "group", "topic"=> @project.name }
+    chat_request["members"] = [{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('882d7d1f-37fc-46f7-b8ca-96d875f4e1c7')"},{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('3757671c-9b01-4c6e-a0b8-fdfb130c8755')"}]
+    microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
+    return if microsoft_access_token.blank?
+    headers = {
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' + microsoft_access_token
+    }
+    uri = URI('https://graph.microsoft.com/v1.0/chats')
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, headers)
+    content = chat_request.to_json
+    request.body = content
+    response = http.request(request)
+    res = JSON.parse(response.body)
+    if res['id'].present?
+      setting = MessengerSetting.where(project_id: @project.id).first
+      setting.update(teams_channel: res['id'])
+      flash[:notice] = "Channel created successfully"
+    else
+      flash[:error] = response.body
+    end
+    redirect_back_or_default(settings_project_path(@project, tab: 'messenger'))
   end
 
   def update

@@ -101,6 +101,7 @@ Redmine::Plugin.register :redmine_messenger do
 
   permission :manage_messenger, projects: :settings, messenger_settings: :update
   permission :suppress_messenger_notification, messenger_settings: :update
+  permission :create_chat_on_teams, messenger_settings: :create_chat
 
   settings default: {
     messenger_url: '',
