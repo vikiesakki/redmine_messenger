@@ -27,10 +27,9 @@
 
       br
       h3 = l(:label_teams_setting)
-      - if @messenger_setting.teams_channel.present?
-          = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :teams_channel, size: 20 }
+      = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :teams_channel, size: 20 }
       
-      - else
+      - if @messenger_setting.teams_channel.blank?
           = link_to 'Create Chat', create_chat_path(@project)
 
       br
