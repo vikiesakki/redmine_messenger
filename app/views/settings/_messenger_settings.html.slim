@@ -105,9 +105,7 @@ p
 p
  = content_tag(:label, l(:label_settings_microsoft_access_token))
  = text_field_tag('settings[microsoft_access_token]', @settings[:microsoft_access_token], size:30, readonly: true)
-p
- = content_tag(:label, l(:label_settings_whitelist_ip))
- = text_field_tag('settings[whitelist_ips]', @settings[:whitelist_ips], size:30)
+
 
 h3 = l(:label_issue_plural)
 .info = t(:messenger_issue_intro)

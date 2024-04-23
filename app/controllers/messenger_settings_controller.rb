@@ -10,16 +10,16 @@ class MessengerSettingsController < ApplicationController
     message = request.headers["Message"]
     respond_to do |format|
       format.api do 
-        if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
+        # if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
           if channel_name.present? && message.present? 
             MessengerTeamsJob.perform_later(message, channel_name)
             render json: {success: "Message sent success"}
           else
             render json: {error: "Invalid channel or message"}  
           end
-        else
-          render json: {error: "IP is not whitelisted"}
-        end
+        # else
+        #   render json: {error: "IP is not whitelisted"}
+        # end
       end
     end
   end
