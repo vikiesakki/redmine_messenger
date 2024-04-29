@@ -27,6 +27,10 @@ class MessengerSettingsController < ApplicationController
   def create_chat
     chat_request = { "chatType"=> "group", "topic"=> @project.name }
     chat_request["members"] = [{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('882d7d1f-37fc-46f7-b8ca-96d875f4e1c7')"},{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('3757671c-9b01-4c6e-a0b8-fdfb130c8755')"}]
+    micro_user = fetch_user_data
+    if micro_user['id'].present?
+      chat_request["members"] << {"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('#{micro_user['id']}')"}
+    end
     microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
     return if microsoft_access_token.blank?
     headers = {
@@ -94,4 +98,22 @@ class MessengerSettingsController < ApplicationController
                                     :post_password,
                                     :post_password_updates
   end
+
+  def fetch_user_data
+    microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
+    return {} if microsoft_access_token.blank?
+
+      headers = {
+          'Content-Type' => 'application/json',
+          'Authorization' => 'Bearer ' + microsoft_access_token
+      }
+    url = "https://graph.microsoft.com/v1.0/users('#{User.current.mail}')"
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Get.new(uri.path, headers)
+    response = http.request(request)
+    return JSON.parse(response.body)
+  end
+
 end
