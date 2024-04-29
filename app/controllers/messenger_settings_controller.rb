@@ -29,7 +29,9 @@ class MessengerSettingsController < ApplicationController
     chat_request["members"] = [{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('882d7d1f-37fc-46f7-b8ca-96d875f4e1c7')"},{"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('3757671c-9b01-4c6e-a0b8-fdfb130c8755')"}]
     micro_user = fetch_user_data
     if micro_user['id'].present?
-      chat_request["members"] << {"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('#{micro_user['id']}')"}
+      unless ['882d7d1f-37fc-46f7-b8ca-96d875f4e1c7','3757671c-9b01-4c6e-a0b8-fdfb130c8755'].include?(micro_user['id'])
+        chat_request["members"] << {"@odata.type"=> "#microsoft.graph.aadUserConversationMember", "roles"=> ["owner"], "user@odata.bind"=>"https://graph.microsoft.com/v1.0/users('#{micro_user['id']}')"}
+      end
     end
     microsoft_access_token = RedmineMessenger.settings[:microsoft_access_token]
     return if microsoft_access_token.blank?
