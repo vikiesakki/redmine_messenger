@@ -45,14 +45,15 @@ module RedmineMessenger
 
                 def notify_time_on_account
                     time_on_account = self.project.custom_field_value(27)
-                    if time_on_account.to_i < 5
+                    external_project = self.project.custom_field_value(16)
+                    if time_on_account.to_i < 5 && external_project.to_s.downcase != "internal"
                         channels = Messenger.channels_for_project project
                         url = Messenger.url_for_project project
                         teams_channel = Messenger.teams_channel(project)
 
                         Rails.logger.info "notify_time_on_account Project Channel #{teams_channel} *******"
                         if teams_channel.present?
-                          MessengerTeamsJob.perform_later("The TOA on this project is lower than 5 hour <a href='#{Messenger.object_url(self.project)}'>#{self.project.name}</a>", teams_channel)
+                          MessengerTeamsJob.perform_later("The TOA on this project (#{time_on_account.to_i}) is lower than 5 hour <a href='#{Messenger.object_url(self.project)}'>#{self.project.name}</a>", teams_channel)
                         end
                     end
                 end
