@@ -32,7 +32,7 @@ class MessengerSettingsController < ApplicationController
     message = uptime_message
     Rails.logger.info "uptime_notification ***** IP address #{request_ip} Host *********** #{host}"
     respond_to do |format|
-      format.api do 
+      format.html do 
         # if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
           if channel_name.present?
             MessengerTeamsJob.perform_later(uptime_message, channel_name)
