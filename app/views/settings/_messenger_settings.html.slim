@@ -105,6 +105,9 @@ p
 p
  = content_tag(:label, l(:label_settings_microsoft_access_token))
  = text_field_tag('settings[microsoft_access_token]', @settings[:microsoft_access_token], size:30, readonly: true)
+p
+ = content_tag(:label, "Uptime chat ID")
+ = text_field_tag('settings[uptime_chat_id]', @settings[:uptime_chat_id], size:30)
 
 
 h3 = l(:label_issue_plural)

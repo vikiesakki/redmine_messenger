@@ -1,6 +1,7 @@
 class MessengerSettingsController < ApplicationController
   before_action :find_project_by_project_id, only: [:update, :create_chat]
   before_action :authorize, only: [:update, :create_chat]
+  skip_before_action :check_if_login_required, only: [:uptime_notification]
 
   accept_api_auth :notify_all
 
@@ -13,6 +14,28 @@ class MessengerSettingsController < ApplicationController
         # if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
           if channel_name.present? && message.present? 
             MessengerTeamsJob.perform_later(message, channel_name)
+            render json: {success: "Message sent success"}
+          else
+            render json: {error: "Invalid channel or message"}  
+          end
+        # else
+        #   render json: {error: "IP is not whitelisted"}
+        # end
+      end
+    end
+  end
+
+  def uptime_notification
+    request_ip = request.remote_ip
+    host = request.host
+    channel_name = RedmineMessenger.settings[:uptime_chat_id]
+    message = uptime_message
+    Rails.logger.info "uptime_notification ***** IP address #{request_ip} Host *********** #{host}"
+    respond_to do |format|
+      format.api do 
+        # if RedmineMessenger.settings[:whitelist_ips].split(',').include?(request_ip)
+          if channel_name.present?
+            MessengerTeamsJob.perform_later(uptime_message, channel_name)
             render json: {success: "Message sent success"}
           else
             render json: {error: "Invalid channel or message"}  
@@ -72,6 +95,10 @@ class MessengerSettingsController < ApplicationController
   end
 
   private
+
+  def uptime_message
+    "Monitor is #{params["alertTypeFriendlyName"].upcase}: #{params["monitorFriendlyName"]} - It was #{params["alertTypeFriendlyName"].upcase} for #{params['alertFriendlyDuration']}."
+  end
 
   def allowed_params
     params.require(:setting).permit :messenger_url,
