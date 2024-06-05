@@ -97,7 +97,8 @@ class MessengerSettingsController < ApplicationController
   private
 
   def uptime_message
-    "<div><div>\n<div><p>Monitor is <span style='color: white;background: #{params['alertTypeFriendlyName'].downcase == 'up' ? 'green' : 'red'};'>#{params['alertTypeFriendlyName'].upcase}</span>: Envirobuild: #{params["monitorFriendlyName"]} - URL: <a href='#{params['monitorURL']}'>#{params['monitorURL']}</a> - Reason: #{params['alertDetails'].upcase} - It was  <span style='color: white;background: #{params['alertTypeFriendlyName'].downcase == 'up' ? 'green' : 'red'};'> #{params["alertTypeFriendlyName"].upcase} </span> for #{params['alertFriendlyDuration']}.</p>\n\n</div>\n\n\n</div>\n</div>"
+    server_urls = params["monitorFriendlyName"].scan(/\b(?:https?:\/\/)?(?:www\.)?[\w\-]+(?:\.[\w\-]+)+\S*/i)
+    return "<div><div>\n<div><p>Monitor is <span style='color: white;background: #{params['alertTypeFriendlyName'].downcase == 'up' ? 'green' : 'red'};'>#{params['alertTypeFriendlyName'].upcase}</span>: Envirobuild: #{params["monitorFriendlyName"]} - Server: <a href='#{server_urls[0]}'>#{server_urls[0]}</a> - URL: <a href='#{params['monitorURL']}'>#{params['monitorURL']}</a> - Reason: #{params['alertDetails'].upcase} - It was  <span style='color: white;background: #{params['alertTypeFriendlyName'].downcase == 'up' ? 'green' : 'red'};'> #{params["alertTypeFriendlyName"].upcase} </span> for #{params['alertFriendlyDuration']}.</p>\n\n</div>\n\n\n</div>\n</div>"
   end
 
   def allowed_params
