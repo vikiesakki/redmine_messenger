@@ -97,7 +97,7 @@ class MessengerSettingsController < ApplicationController
   private
 
   def uptime_message
-    "Monitor is #{params["alertTypeFriendlyName"].upcase}: #{params["monitorFriendlyName"]} - It was #{params["alertTypeFriendlyName"].upcase} for #{params['alertFriendlyDuration']}."
+    "<div><div>\n<div><p>Monitor is #{params['alertTypeFriendlyName'].upcase}: Envirobuild: #{params["monitorFriendlyName"]} - URL: <a href='#{params['monitorURL']}'>#{params['monitorURL']}</a> - Reason: #{params['alertDetails'].upcase} @Everyone</p>\n\n</div>\n\n\n</div>\n</div>"
   end
 
   def allowed_params
