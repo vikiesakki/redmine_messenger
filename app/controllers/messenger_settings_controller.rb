@@ -100,7 +100,7 @@ class MessengerSettingsController < ApplicationController
     server_urls = params["monitorFriendlyName"].scan(/\b(?:https?:\/\/)?(?:www\.)?[\w\-]+(?:\.[\w\-]+)+\S*/i)
     str = "<div><div>\n<div><p>Monitor is <span style='color: white;background: #{params['alertTypeFriendlyName'].downcase == 'up' ? 'green' : 'red'};'>#{params['alertTypeFriendlyName'].upcase}</span>: #{params["monitorFriendlyName"]} - Server: <a href='#{server_urls[0]}'>#{server_urls[0]}</a> - URL: <a href='#{params['monitorURL']}'>#{params['monitorURL']}</a> - Reason: #{params['alertDetails'].upcase}"
     if params['alertTypeFriendlyName'].downcase == 'up'
-      str = "#{str}  - It was  <span style='color: white;background: red;'> DOWN </span> for #{params['alertFriendlyDuration']}"
+      str = "#{str}  - It was DOWN for #{params['alertFriendlyDuration']}"
     end
     str = "#{str}.</p>\n\n</div>\n\n\n</div>\n</div>"
     return str
