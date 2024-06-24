@@ -46,7 +46,8 @@ module RedmineMessenger
                 def notify_time_on_account
                     time_on_account = self.project.custom_field_value(27)
                     external_project = self.project.custom_field_value(16)
-                    if time_on_account.to_i < 5 && external_project.to_s.downcase != "internal"
+                    tm_project = self.project.custom_field_value(13)
+                    if time_on_account.to_i < 5 && external_project.to_s.downcase != "internal" && (tm_project.to_s.downcase.include?("t&m"))
                         channels = Messenger.channels_for_project project
                         url = Messenger.url_for_project project
                         teams_channel = Messenger.teams_channel(project)
