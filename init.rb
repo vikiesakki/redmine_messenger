@@ -8,6 +8,7 @@ require 'redmine_messenger/patches/password_patch'
 require 'redmine_messenger/patches/projects_helper_patch'
 require 'redmine_messenger/patches/wiki_page_patch'
 require 'redmine_messenger/patches/time_entry_patch'
+require 'redmine_messenger/patches/news_patch'
 require 'redmine_messenger/helpers'
 require 'redmine_messenger/hooks'
 Rails.configuration.to_prepare do

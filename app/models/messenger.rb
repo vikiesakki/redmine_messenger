@@ -165,6 +165,10 @@ class Messenger
     end
   end
 
+  def teams_news_message(object,user)
+      "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> New #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:name).present? ? object.try(:name) : object.try(:title)}</a> posted by #{user.name}</p></div>\n</div></div>"
+  end
+
   def teams_common_message(object, type, user)
     if type == 'created'
       "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:name).present? ? object.try(:name) : object.try(:title)}</a> created by #{user.name}</p></div>\n</div></div>"
