@@ -1,0 +1,9 @@
+<% if @project.present? && MessengerSetting.where(project_id: @project.id).first.try(:disable_chat) %>
+	<style>
+		#main-menu.tabs>ul {
+			background-color: red !important;
+		}
+
+
+	</style>
+<% end %>

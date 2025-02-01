@@ -1,0 +1,7 @@
+p
+  = f.select mf, project_messenger_boolean_options(@messenger_setting.send(mf).to_s), label: l("label_settings_#{mf}")
+  '
+  em.info[style="display: inline;"]
+    = l(:label_default)
+    ' :
+    = 'No'

@@ -15,6 +15,9 @@ module RedmineMessenger
             end
             module InstanceMethods
                 def notify_pm
+                  setting = MessengerSetting.where(project_id: project.id).first
+                  return if setting.disable_chat
+                  
                   estimated_hours = self.issue.estimated_hours
                   return if estimated_hours.to_i.zero?
                   spent_hours = self.issue.time_entries.pluck(:hours).sum
@@ -44,6 +47,9 @@ module RedmineMessenger
                 end
 
                 def notify_time_on_account
+                    setting = MessengerSetting.where(project_id: project.id).first
+                    return if setting.disable_chat
+
                     time_on_account = self.project.custom_field_value(27)
                     external_project = self.project.custom_field_value(16)
                     tm_project = self.project.custom_field_value(13)

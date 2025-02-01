@@ -12,6 +12,8 @@ module RedmineMessenger
       module InstanceMethods
         def send_messenger_create
           return unless Messenger.setting_for_project(project, :post_wiki)
+          setting = MessengerSetting.where(project_id: project.id).first
+          return if setting.disable_chat
 
           set_language_if_valid Setting.default_language
 
@@ -40,7 +42,9 @@ module RedmineMessenger
 
         def send_messenger_update
           return unless Messenger.setting_for_project(project, :post_wiki_updates)
-
+          setting = MessengerSetting.where(project_id: project.id).first
+          return if setting.disable_chat
+          
           set_language_if_valid Setting.default_language
 
           channels = Messenger.channels_for_project project

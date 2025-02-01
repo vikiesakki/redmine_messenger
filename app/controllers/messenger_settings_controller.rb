@@ -117,6 +117,7 @@ class MessengerSettingsController < ApplicationController
                                     :default_mentions,
                                     :display_watchers,
                                     :teams_channel,
+                                    :disable_chat,
                                     :post_updates,
                                     :new_include_description,
                                     :updated_include_description,

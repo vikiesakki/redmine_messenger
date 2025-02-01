@@ -13,6 +13,9 @@ module RedmineMessenger
 
       module InstanceMethods
         def send_messenger_create
+          setting = MessengerSetting.where(project_id: project.id).first
+          return if setting.disable_chat
+
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
 
@@ -66,10 +69,12 @@ module RedmineMessenger
         end
 
         def send_messenger_update
-          Rails.logger.info "Send messanger update *******"
           return if current_journal.nil?
           return if self.suppress_notication.to_i.positive?
-
+          setting = MessengerSetting.where(project_id: project.id).first
+          return if setting.disable_chat
+          Rails.logger.info "Send messanger update *******"
+          
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
           teams_channel = Messenger.teams_channel(project)
