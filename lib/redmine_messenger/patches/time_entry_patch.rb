@@ -17,7 +17,7 @@ module RedmineMessenger
                 def notify_pm
                   setting = MessengerSetting.where(project_id: project.id).first
                   return if setting.disable_chat
-                  
+
                   estimated_hours = self.issue.estimated_hours
                   return if estimated_hours.to_i.zero?
                   spent_hours = self.issue.time_entries.pluck(:hours).sum
@@ -50,10 +50,13 @@ module RedmineMessenger
                     setting = MessengerSetting.where(project_id: project.id).first
                     return if setting.disable_chat
 
+                    field_team = CustomField.find 16
                     time_on_account = self.project.custom_field_value(27)
                     external_project = self.project.custom_field_value(16)
                     tm_project = self.project.custom_field_value(13)
-                    if time_on_account.to_i < 5 && external_project.to_s.downcase != "internal" && (tm_project.to_s.downcase.include?("t&m"))
+                    option = field_team.enumerations.find { |v| v.id == external_project.to_i }
+                    return if option.try(:name).to_s.downcase == "internal"
+                    if time_on_account.to_i < 5 && (tm_project.to_s.downcase.include?("t&m"))
                         channels = Messenger.channels_for_project project
                         url = Messenger.url_for_project project
                         teams_channel = Messenger.teams_channel(project)

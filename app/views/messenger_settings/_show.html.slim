@@ -9,6 +9,7 @@
     .box
       .info = t(:messenger_settings_project_intro)
       br
+      = render partial: 'messenger_settings/messenger_boolean', locals: { f: f, mf: :disable_chat }
       p
         = f.text_field :messenger_url, size: 60, label: l(:label_settings_messenger_url)
         em.info
@@ -28,7 +29,6 @@
       br
       h3 = l(:label_teams_setting)
       = render partial: 'messenger_settings/messenger_text', locals: { f: f, mf: :teams_channel, size: 20 }
-      = render partial: 'messenger_settings/messenger_boolean', locals: { f: f, mf: :disable_chat }
       
       - if @messenger_setting.teams_channel.blank?
           = link_to 'Create Chat', create_chat_path(@project)

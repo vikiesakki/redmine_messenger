@@ -74,7 +74,7 @@ en:
   label_settings_microsoft_access_token: Access Token
   label_settings_microsoft_redirect_uri: Redirect URI
   label_settings_teams_channel: Teams Channel
-  label_settings_disable_chat: Disable Chat
+  label_settings_disable_chat: Disable Messenger
   label_settings_microsoft_from_email: Email
   label_settings_microsoft_email_password: Email Password
   messenger_channel_info_html: 'Here you have to specify the channel, which should be used. You can define multible channels, seperated by comma'
