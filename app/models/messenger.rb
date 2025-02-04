@@ -166,7 +166,8 @@ class Messenger
   end
 
   def teams_news_message(object,user)
-      "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> New #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:name).present? ? object.try(:name) : object.try(:title)}</a> posted by #{user.name}</p></div>\n</div></div>"
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
+    "<div><div>\n<div><p><a href='#{Messenger.object_url(object.project)}'>#{object.project.name}</a> New #{object.class.to_s.downcase} <a href='#{Messenger.object_url(object)}'>#{object.try(:title)}</a> posted by #{user.name}</p><hr><p>#{markdown.render(object.description.to_s.truncate(200)).html_safe}</p>\n\n</div>\n</div></div>"
   end
 
   def teams_common_message(object, type, user)

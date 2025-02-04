@@ -22,6 +22,8 @@ Features
 * overwrite messenger settings at project level
 * parent project support (inherit messenger settings from parent project)
 * multiple channel support (define one or more channels to deliver note)
+* Adding news to be notified to the Teams channel
+* Adding Teams notification If the TOA below < 5
 
 Screenshot
 ----------
