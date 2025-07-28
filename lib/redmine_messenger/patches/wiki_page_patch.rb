@@ -33,11 +33,11 @@ module RedmineMessenger
                             user: User.current),
                           channels, url, project: project)
 
-          Messenger.speak_zoho(l(:label_messenger_wiki_zoho_created,
-                            project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                            url: "[#{title}](#{Messenger.object_url self})",
-                            user: User.current),
-                          Messenger.zoho_message_url(project), project: project)
+          # Messenger.speak_zoho(l(:label_messenger_wiki_zoho_created,
+          #                   project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                   url: "[#{title}](#{Messenger.object_url self})",
+          #                   user: User.current),
+          #                 Messenger.zoho_message_url(project), project: project)
         end
 
         def send_messenger_update
@@ -68,11 +68,11 @@ module RedmineMessenger
                             url: "<#{Messenger.object_url self}|#{title}>",
                             user: content.author),
                           channels, url, project: project, attachment: attachment)
-          Messenger.speak_zoho(l(:label_messenger_wiki_zoho_updated,
-                            project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                            url: "[#{title}](#{Messenger.object_url self})",
-                            user: content.author),
-                           Messenger.zoho_message_url(project), project: project, attachment: attachment)
+          # Messenger.speak_zoho(l(:label_messenger_wiki_zoho_updated,
+          #                   project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                   url: "[#{title}](#{Messenger.object_url self})",
+          #                   user: content.author),
+          #                  Messenger.zoho_message_url(project), project: project, attachment: attachment)
         end
       end
     end

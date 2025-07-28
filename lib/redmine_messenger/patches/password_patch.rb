@@ -34,11 +34,11 @@ module RedmineMessenger
                             user: User.current),
                           channels, url, project: project)
 
-          Messenger.speak_zoho(l(:label_messenger_password_zoho_created,
-                            project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                            url: "[#{name}](#{Messenger.object_url self})",
-                            user: User.current),
-                          Messenger.zoho_message_url(project), project: project)
+          # Messenger.speak_zoho(l(:label_messenger_password_zoho_created,
+          #                   project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                   url: "[#{name}](#{Messenger.object_url self})",
+          #                   user: User.current),
+          #                 Messenger.zoho_message_url(project), project: project)
         end
 
         def send_messenger_update
@@ -65,11 +65,11 @@ module RedmineMessenger
                             user: User.current),
                           channels, url, project: project)
 
-          Messenger.speak_zoho(l(:label_messenger_password_zoho_updated,
-                            project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                            url: "[#{name}](#{Messenger.object_url self})",
-                            user: User.current),
-                          Messenger.zoho_message_url(project), project: project)
+          # Messenger.speak_zoho(l(:label_messenger_password_zoho_updated,
+          #                   project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                   url: "[#{name}](#{Messenger.object_url self})",
+          #                   user: User.current),
+          #                 Messenger.zoho_message_url(project), project: project)
         end
       end
     end

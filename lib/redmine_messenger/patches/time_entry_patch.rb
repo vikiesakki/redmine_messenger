@@ -39,9 +39,9 @@ module RedmineMessenger
                     Rails.logger.info "notify_pm Send notification to the zoho"
 
                     #send the updated issue to zoho
-                    Messenger.speak_zoho(l(:label_messenger_overtime_issue,
-                                time: "#{spent_per}",
-                                url: self.issue.send(:send_messenger_mention_zoho_url,project, "")), Messenger.zoho_message_url(project), attachment: {}, project: project)
+                    # Messenger.speak_zoho(l(:label_messenger_overtime_issue,
+                    #             time: "#{spent_per}",
+                    #             url: self.issue.send(:send_messenger_mention_zoho_url,project, "")), Messenger.zoho_message_url(project), attachment: {}, project: project)
 
                   end
                 end

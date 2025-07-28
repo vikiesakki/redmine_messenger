@@ -61,10 +61,10 @@ module RedmineMessenger
    
 
           #send the created issue to zoho
-          Messenger.speak_zoho(l(:label_messager_issue_zoho_created,
-                                project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                                url: send_messenger_mention_zoho_url(project, description),
-                                user: author), Messenger.zoho_message_url(project), attachment: attachment, project: project)
+          # Messenger.speak_zoho(l(:label_messager_issue_zoho_created,
+          #                       project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                       url: send_messenger_mention_zoho_url(project, description),
+          #                       user: author), Messenger.zoho_message_url(project), attachment: attachment, project: project)
 
         end
 
@@ -121,10 +121,10 @@ module RedmineMessenger
           Rails.logger.info "Send notification to the zoho"
 
           #send the updated issue to zoho
-          Messenger.speak_zoho(l(:label_messenger_issue_zoho_updated,
-                                project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                                url: send_messenger_mention_zoho_url(project, current_journal.notes),
-                                user: current_journal.user), Messenger.zoho_message_url(project), attachment: attachment, project: project)
+          # Messenger.speak_zoho(l(:label_messenger_issue_zoho_updated,
+          #                       project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                       url: send_messenger_mention_zoho_url(project, current_journal.notes),
+          #                       user: current_journal.user), Messenger.zoho_message_url(project), attachment: attachment, project: project)
         end
 
         private

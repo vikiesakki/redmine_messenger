@@ -66,49 +66,49 @@ class Messenger
   #for zoho integration
   def self.speak_zoho(msg, url, options)
     Rails.logger.info "speak zoho logger"
-    zoho_access_token = Messenger.get_access_token
-    return if zoho_access_token.blank?
-    # zoho_access_token = RedmineMessenger.settings[:zoho_authtoken]
-    headers = {
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Zoho-oauthtoken ' + zoho_access_token
-    }
-    uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.path, headers)
+    # zoho_access_token = Messenger.get_access_token
+    # return if zoho_access_token.blank?
+    # # zoho_access_token = RedmineMessenger.settings[:zoho_authtoken]
+    # headers = {
+    #     'Content-Type' => 'application/json',
+    #     'Authorization' => 'Zoho-oauthtoken ' + zoho_access_token
+    # }
+    # uri = URI(url)
+    # http = Net::HTTP.new(uri.host, uri.port)
+    # http.use_ssl = true
+    # request = Net::HTTP::Post.new(uri.path, headers)
     
-    detail = []
-    text = msg
+    # detail = []
+    # text = msg
 
-    if options[:attachment].present?
-      if options[:attachment][:fields].present?
-        options[:attachment][:fields].each {|x| detail << x[:title] + " : " + x[:value] }
-      end
-      text += "\r\n" + options[:attachment][:text] if options[:attachment][:text].present?
-    end
+    # if options[:attachment].present?
+    #   if options[:attachment][:fields].present?
+    #     options[:attachment][:fields].each {|x| detail << x[:title] + " : " + x[:value] }
+    #   end
+    #   text += "\r\n" + options[:attachment][:text] if options[:attachment][:text].present?
+    # end
 
-    detailTitle = ""
-    if detail != []
-      detailTitle = "Detail"
-    end
+    # detailTitle = ""
+    # if detail != []
+    #   detailTitle = "Detail"
+    # end
     
-    content = {
-      "text": text,
-      "card": {
-        "theme": "modern-inline"
-      },
-      "slides": [
-        {
-          "type": "list",
-          "title": detailTitle ,
-          "data": detail
-        }
-      ]
-    }.to_json
+    # content = {
+    #   "text": text,
+    #   "card": {
+    #     "theme": "modern-inline"
+    #   },
+    #   "slides": [
+    #     {
+    #       "type": "list",
+    #       "title": detailTitle ,
+    #       "data": detail
+    #     }
+    #   ]
+    # }.to_json
 
-    request.body = content
-    response = http.request(request)
+    # request.body = content
+    # response = http.request(request)
   end
 
   def self.get_access_token

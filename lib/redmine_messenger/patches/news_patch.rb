@@ -32,11 +32,11 @@ module RedmineMessenger
                             user: User.current),
                           channels, url, project: project)
 
-          Messenger.speak_zoho(l(:label_messenger_contact_created,
-                            project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
-                            url: "[#{name}](#{Messenger.object_url self})",
-                            user: User.current),
-                          channels, url, project: project)
+          # Messenger.speak_zoho(l(:label_messenger_contact_created,
+          #                   project_url: "[#{ERB::Util.html_escape(project)}](#{Messenger.object_url project})",
+          #                   url: "[#{name}](#{Messenger.object_url self})",
+          #                   user: User.current),
+          #                 channels, url, project: project)
         end
       end
     end
