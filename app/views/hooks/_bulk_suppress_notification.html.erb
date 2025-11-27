@@ -1,4 +1,4 @@
-<% if User.current.allowed_to?(:suppress_messenger_notification, @project) %>
+<% if User.current.allowed_to?(:suppress_messenger_notification, @project, global: true) %>
 	<p>
 		<label for="issue_suppress_notication">Suppress messenger notification</label><%= check_box_tag 'issue[suppress_notication]', '1' %>
 	</p>
