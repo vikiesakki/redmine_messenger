@@ -5,7 +5,6 @@ module RedmineMessenger
                 base.send(:include, InstanceMethods)
 
                 base.class_eval do
-                  unloadable
                   after_save :notify_pm
                   after_destroy :notify_pm
 
