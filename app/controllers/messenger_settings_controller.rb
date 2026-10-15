@@ -1,22 +1,9 @@
 class MessengerSettingsController < ApplicationController
-  before_action :find_project_by_project_id, only: [:update, :create_chat, :teams_channel]
-  before_action :authorize, only: [:update, :create_chat, :teams_channel]
+  before_action :find_project_by_project_id, only: [:update, :create_chat]
+  before_action :authorize, only: [:update, :create_chat]
   skip_before_action :check_if_login_required, only: [:uptime_notification]
 
-  accept_api_auth :notify_all, :teams_channel
-
-  def teams_channel
-    channel_id = Messenger.teams_channel(@project)
-    respond_to do |format|
-      format.api do
-        if channel_id.present?
-          render json: { project_id: @project.id, project_identifier: @project.identifier, teams_channel: channel_id }
-        else
-          render json: { error: 'Teams channel not configured for this project' }, status: :not_found
-        end
-      end
-    end
-  end
+  accept_api_auth :notify_all
 
   def notify_all
     request_ip = request.remote_ip

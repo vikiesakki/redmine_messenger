@@ -100,7 +100,7 @@ Redmine::Plugin.register :redmine_messenger do
 
   requires_redmine version_or_higher: '3.0.0'
 
-  permission :manage_messenger, projects: :settings, messenger_settings: [:update, :teams_channel]
+  permission :manage_messenger, projects: :settings, messenger_settings: :update
   permission :suppress_messenger_notification, messenger_settings: :update
   permission :create_chat_on_teams, messenger_settings: :create_chat
 
